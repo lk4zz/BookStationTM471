@@ -1,0 +1,9 @@
+model Comments {
+    id  Int @id @default(autoincrement())
+    userId Int
+    bookId Int
+    commenter User @relation(fields: [userId], references: [id])
+    commentOn Books @relation(fields: [bookId], references: [id])
+    text String
+
+}

@@ -1,0 +1,12 @@
+model LibraryBook {
+  id        Int     @id @default(autoincrement())
+  bookId    Int
+  libraryId Int
+  
+  // Relations
+  book      Books   @relation(fields: [bookId], references: [id])
+  library   Library @relation(fields: [libraryId], references: [id])
+
+  @@unique([bookId, libraryId]) // Prevent duplicate entries
+  @@map("library_books") // This keeps your table name as library_books in DB
+}

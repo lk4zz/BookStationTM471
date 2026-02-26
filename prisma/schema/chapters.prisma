@@ -1,0 +1,12 @@
+model Chapters {
+    id  Int @id @default(autoincrement())
+    userId Int
+    bookId Int
+    contains Books @relation(fields: [bookId], references: [id])
+    chapterNum Int
+    isLocked Int @default(0)
+    title String
+    
+    pages Pages[]
+
+}
