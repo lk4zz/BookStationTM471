@@ -5,7 +5,7 @@ model Books {
     name String @unique
     description String
     price Int
-    veiws Int
+    views Int
     rating Float
 
     chapters Chapters[]

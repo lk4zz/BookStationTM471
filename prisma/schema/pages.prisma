@@ -2,7 +2,7 @@ model Pages {
     id  Int @id @default(autoincrement())
     chapterId Int
     contains Chapters @relation(fields: [chapterId], references: [id])
-    text String
+    text String @db.LongText
     pageNum Int
 
 
