@@ -1,3 +1,7 @@
+
+BigInt.prototype.toJSON = function () {  //dealing with bigInt serialization issue
+  return this.toString();
+};
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
