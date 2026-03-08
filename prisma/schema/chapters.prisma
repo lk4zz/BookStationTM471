@@ -1,11 +1,13 @@
 model Chapters {
     id  Int @id @default(autoincrement())
     bookId Int
-    contains Books @relation(fields: [bookId], references: [id])
-    chapterNum Int
+    book Books @relation(fields: [bookId], references: [id])
+    chapterNum Int 
     isLocked Boolean @default(false)
     title String
     
+    @@unique([bookId, chapterNum])
     pages Pages[]
+    chapterUnlocks ChapterUnlocks[]
 
 }

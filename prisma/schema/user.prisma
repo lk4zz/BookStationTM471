@@ -11,6 +11,7 @@ model User {
     updatedAt DateTime @updatedAt
 
     books Books[]
+    chapterUnlocks ChapterUnlocks[]
     libraries Library[]
     comments Comments[]
     following Followers[] @relation("FollowerRelation")
