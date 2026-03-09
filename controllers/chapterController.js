@@ -18,6 +18,9 @@ const createChapter = async (req, res) => {
         if (error.message.includes('Book not Found')) {
             return res.status(404).json({ error: error.message });
         }
+        if (error.code === 'P2002') {
+            return res.status(400).json({ error: "A book with this title already exists. Please choose a different title." });
+        }
         if (error.message.includes('Not the author')) {
             return res.status(403).json({ error: error.message });
         }
