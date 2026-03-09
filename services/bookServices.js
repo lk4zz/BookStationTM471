@@ -1,6 +1,6 @@
 const prisma = require('../db');
 
-const createBook = async (title, description, price, authorId) => {
+const createBook = async (title, description, authorId) => {
 
     const existingBook = await prisma.books.findFirst({
         where: { 
@@ -17,11 +17,10 @@ const createBook = async (title, description, price, authorId) => {
         data: {
             name: title,
             description: description || "",
-            price: price ?? 0,
             userId: authorId,
             views: 0,
             ratingAverage: 0,
-            ratingCount: 0
+            ratingCount: 0,
         }
     });
 
@@ -51,7 +50,7 @@ const getBooksByAuthor = async (authorId) => {
     return books;
 };
 
-const updateBook = async (id, currentUserId, title, description, price) => {
+const updateBook = async (id, currentUserId, title, description) => {
     const book = await prisma.books.findUnique({
         where: { id: parseInt(id) }
     });
@@ -82,7 +81,6 @@ const updateBook = async (id, currentUserId, title, description, price) => {
         data: {
             name: title,
             description: description,
-            price: price
         }
     });
 

@@ -30,6 +30,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/books', booksRouter);
+app.use('/chapters', require('./routes/chapters'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

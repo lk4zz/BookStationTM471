@@ -2,10 +2,10 @@ const bookService = require('../services/bookServices');  //import service
 
 const createBook = async (req, res) => {
     try {
-        const { title, description, price } = req.body;
+        const { title, description } = req.body;
         const authorId = req.user.userId;
 
-        const newBook = await bookService.createBook(title, description, price, authorId);
+        const newBook = await bookService.createBook(title, description, authorId);
 
         res.status(201).json({
             message: "Book published successfully!",
@@ -15,9 +15,6 @@ const createBook = async (req, res) => {
      
         console.error(error);
         
-        if (error.message.includes("already exists")) {
-             return res.status(400).json({ error: error.message });
-        }
         if (error.code === 'P2002') {
             return res.status(400).json({ error: "A book with this title already exists. Please choose a different title." });
         }
@@ -76,9 +73,9 @@ const updateBook = async (req, res) => {
     try {
         const { id } = req.params;
         const currentUserId = req.user.userId;
-        const { title, description, price } = req.body;
+        const { title, description } = req.body;
 
-        const updatedBook = await bookService.updateBook(id, currentUserId, title, description, price);
+        const updatedBook = await bookService.updateBook(id, currentUserId, title, description);
 
         res.status(200).json({
             success: true,
