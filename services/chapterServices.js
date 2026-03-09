@@ -8,6 +8,7 @@ const createChapter = async (bookId, title, currentUserId, price) => {
     if (!book) throw new Error('Book not Found');
     if (book.userId !== currentUserId) throw new Error("You are not the author of this book.");
 
+
     const chapterPrice = price ?? 0
     let calculatedIsLocked = false;
     if (chapterPrice > 0) {
