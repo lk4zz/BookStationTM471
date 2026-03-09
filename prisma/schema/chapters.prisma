@@ -2,9 +2,12 @@ model Chapters {
     id  Int @id @default(autoincrement())
     bookId Int
     book Books @relation(fields: [bookId], references: [id])
-    chapterNum Int 
+    chapterNum Int
     isLocked Boolean @default(false)
     title String
+    price Int @default(0)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
     
     @@unique([bookId, chapterNum])
     pages Pages[]
