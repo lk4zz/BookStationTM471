@@ -103,9 +103,8 @@ const deleteChapter = async (chapterId, currentUserId) => {
 
     for (let i = 0; i < remainingChapters.length; i++) {
         const correctChapterNum = i + 1;
-    
 
-    await prisma.chapters.update({
+        await prisma.chapters.update({
             where: { 
                 id: remainingChapters[i].id 
             },

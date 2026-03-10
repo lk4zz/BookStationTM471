@@ -31,6 +31,7 @@ app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/books', booksRouter);
 app.use('/chapters', require('./routes/chapters'));
+app.use('/pages', require('./routes/pages'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
