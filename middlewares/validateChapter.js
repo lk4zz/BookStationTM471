@@ -1,34 +1,33 @@
-const validateChapter = async (req, res, next) => {
+const BadRequestError = require('../errors/BadRequestError');
 
-    let { title, price } = req.body;
+const validateChapter = async (req, res, next) => {
+    let { title, requestedPrice } = req.body;
 
     if (!title) {
-        return res.status(400).json({error: "title is required"});
+        return next(new BadRequestError("Title is required"));
     }
+    
     if (typeof title !== 'string' || title.trim().length === 0) {
-        return res.status(400).json({error: "Title must be a non-empty string"});
+        return next(new BadRequestError("Title must be a non-empty string"));
     }
 
     if (title.length > 200) {
-        return res.status(400).json({error: "Title must be less than 200 characters"});
+        return next(new BadRequestError("Title must be less than 200 characters"));
     }
 
-    if (price !== undefined) {
-        
-        if (typeof price !== 'number') {
-            return res.status(400).json({error: "Price must be a valid number"});
+    if (requestedPrice !== undefined) {
+        if (typeof requestedPrice !== 'number') {
+            return next(new BadRequestError("Price must be a valid number"));
         }
 
-        if (price < 0) {
-            return res.status(400).json({error: "Price cannot be a negative number"});
+        if (requestedPrice < 0) {
+            return next(new BadRequestError("Price cannot be a negative number"));
         }
     }
 
-    req.body.title = title.trim().toLowerCase().replace(/\s+/g, '') ;
+    req.body.title = title.trim().toLowerCase().replace(/\s+/g, '');
 
     next();
-
 };
 
 module.exports = validateChapter;
-

@@ -1,7 +1,8 @@
 const { get } = require('http');
 const pageServices = require('../services/pageServices');
+const catchAsync = require('../middlewares/catchAsync');
 
-const createPage = async (req, res) => {
+const createPage = catchAsync(async (req, res) => {
     try{
         const currentUserId = req.user.userId;
         const {chapterId} = req.params;
@@ -26,10 +27,10 @@ const createPage = async (req, res) => {
         res.status(500).json({ error: "Something went wrong while creating the page." });
 
     };
-};
+});
 
 
-const updatePage = async (req, res) => {
+const updatePage = catchAsync(async (req, res) => {
     try{
 
         const currentUserId = req.user.userId;
@@ -55,30 +56,37 @@ const updatePage = async (req, res) => {
         res.status(500).json({ error: "Something went wrong while updating the page." });
 
     }
-}
+});
 
-getPagesByChapter = async (req, res) => {
+const getPagesByChapter = catchAsync(async (req, res) => {
     try {
     const ChapterId = req.params.chapterId;
-    const pages = await pageServices.getPagesByChapter(ChapterId);
+    const currentUserId = req.user ? req.user.userId : null;
+    const pages = await pageServices.getPagesByChapter(ChapterId, currentUserId);
     res.status(200).json({
         success: true,
-        count: pages.length,
+        count: pages.pages.length,
         data: pages
         });
     } catch (error) {
         console.error(error);
-        if (error.message === "Chapter not found") {
-            return res.status(404).json({ error: error.message });
+        let statusCode = 500;
+        
+        if (error.message === "Chapter not found" || error.message === "This chapter has no pages.") {
+            statusCode = 404;
+        } else if (error.message === "Chapter is not published") {
+            statusCode = 403; // Forbidden
+        } else if (error.message === "Log in required.") {
+            statusCode = 401; // Unauthorized
+        } else if (error.message.includes("Payment Required")) {
+            statusCode = 402; // Payment Required
         }
-        if (error.message === "This chapter has no pages.") {
-            return res.status(404).json({ error: error.message });
-        }
-        res.status(500).json({ error: "Something went wrong while fetching the pages." });
-    }
-};
 
-const deletePage = async (req, res) => {
+        res.status(statusCode).json({ success: false, error: error.message });
+    }
+});
+
+const deletePage = catchAsync(async (req, res) => {
     try {
     const PageId = req.params.id;
     const currentUserId = req.user.userId;
@@ -103,7 +111,7 @@ const deletePage = async (req, res) => {
     }
 
 
-}
+});
 
 
 module.exports = {

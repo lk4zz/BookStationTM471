@@ -1,6 +1,7 @@
 const bookGenreService = require('../services/bookGenreServices');
+const catchAsync = require('../middlewares/catchAsync');
 
-const tagBook = async (req, res) => {
+const tagBook = catchAsync(async (req, res) => {
     try {
         const { bookId } = req.params;
         const currentUserId = req.user.userId; 
@@ -26,7 +27,7 @@ const tagBook = async (req, res) => {
         }
         res.status(500).json({ error: "Something went wrong while tagging the book." });
     }
-};
+});
 
 module.exports = {
     tagBook
