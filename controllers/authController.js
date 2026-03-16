@@ -1,6 +1,7 @@
 const authServices = require('../services/authServices');
+const catchAsync = require('../middlewares/catchAsync');
 
-const signup = async (req, res) => {
+const signup = catchAsync(async (req, res) => {
     try {
         const { name, email, password } = req.body;
         
@@ -23,9 +24,9 @@ const signup = async (req, res) => {
         console.error(error);
         res.status(500).json({ error: "Something went wrong creating the account." });
     }
-};
+});
 
-const login = async (req, res) => {
+const login = catchAsync(async (req, res) => {
     try {
         const { email, password } = req.body;
 
@@ -49,6 +50,6 @@ const login = async (req, res) => {
         console.error(error);
         res.status(500).json({ error: "Something went wrong during login." });
     }
-};
+});
 
 module.exports = { signup, login };

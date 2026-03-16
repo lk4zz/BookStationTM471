@@ -1,124 +1,123 @@
-const bookService = require('../services/bookServices');  //import service
+const bookService = require("../services/bookServices"); //import service
+const catchAsync = require('../middlewares/catchAsync');
 
-const createBook = async (req, res) => {
-    try {
-        const { title, description } = req.body;
-        const authorId = req.user.userId;
+const createBook = catchAsync(async (req, res) => {
+  const { title, description } = req.body;
+  const authorId = req.user.userId;
 
-        const newBook = await bookService.createBook(title, description, authorId);
+  const newBook = await bookService.createBook(title, description, authorId);
 
-        res.status(201).json({
-            message: "Book published successfully!",
-            book: newBook
-        });
-    } catch (error) {
-     
-        console.error(error);
-        if (error.code === 'P2002') {
-            return res.status(400).json({ error: "A book with this title already exists. Please choose a different title." });
-        }
-        res.status(500).json({ error: "Something went wrong while publishing the book." });
-    }
-};
+  res.status(201).json({
+    message: "Book published successfully!",
+    book: newBook,
+  });
+});
 
-const getAllBooks = async (req, res) => {
-    try {
-        const books = await bookService.getAllBooks();
+const getAllBooksByGenre = catchAsync(async (req, res) => {
+  const { genreId } = req.params;
+  const books = await bookService.getBookByGenre(parseInt(genreId, 10));
+  res.status(200).json({
+    success: true,
+    count: books.length,
+    data: books,
+  });
+});
 
-        res.status(200).json({
-            success: true,
-            count: books.length,
-            data: books
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, message: "Server Error: Could not fetch the BookStation library." });
-    }
-};
+const getAllPublicBooks = catchAsync(async (req, res) => {
+  const books = await bookService.getAllPublicBooks();
 
-const getBookById = async (req, res) => {
-    try {
-        const book = await bookService.getBookById(req.params.id);
+  res.status(200).json({
+    success: true,
+    count: books.length,
+    data: books,
+  });
+});
 
-        res.status(200).json({
-            success: true,
-            data: book
-        });
-    } catch (error) {
-        console.error(error);
-        if (error.message === "Book not found") {
-            return res.status(404).json({ error: error.message });
-        }
-        res.status(500).json({ success: false, message: "Server Error: Could not fetch the book." });
-    }
-};
+const getDraftedPrivateBooks = catchAsync(async (req, res) => {
+  const currentUserId = req.user.userId;
+  const books = await bookService.getDraftedPrivateBooks(currentUserId);
+  res.status(200).json({
+    success: true,
+    count: books.length,
+    data: books,
+  });
+});
 
-const getBooksByAuthor = async (req, res) => {
-    try {
-        const books = await bookService.getBooksByAuthor(req.params.authorId);
-        
-        res.status(200).json({
-            success: true,
-            count: books.length,
-            data: books
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, message: "Server Error: Could not fetch the books." });
-    }
-};
+const getBookById = catchAsync(async (req, res) => {
+  const book = await bookService.getBookById(req.params.bookId);
 
-const updateBook = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const currentUserId = req.user.userId;
-        const { title, description } = req.body;
+  res.status(200).json({
+    success: true,
+    data: book,
+  });
+});
 
-        const updatedBook = await bookService.updateBook(id, currentUserId, title, description);
+const getBooksByAuthor = catchAsync(async (req, res) => {
+  const books = await bookService.getBooksByAuthor(req.params.authorId);
 
-        res.status(200).json({
-            success: true,
-            message: "Book successfully updated!",
-            data: updatedBook
-        });
-    } catch (error) {
-        console.error(error);
-        if (error.message === "Book not found") return res.status(404).json({ error: error.message });
-        if (error.message === "You are not the owner of this book.") return res.status(403).json({ error: error.message });
-        if (error.message.includes("already exists")) return res.status(400).json({ error: error.message });
-        if (error.code === 'P2002') {
-            return res.status(400).json({ error: "A book with this title already exists. Please choose a different title." });
-        }
-        
-        res.status(500).json({ success: false, message: "Server Error: Could not update the book." });
-    }
-};
+  res.status(200).json({
+    success: true,
+    count: books.length,
+    data: books,
+  });
+});
 
-const deleteBook = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const currentUserId = req.user.userId;
+const updateBook = catchAsync(async (req, res) => {
+  const { bookId } = req.params;
+  const currentUserId = req.user.userId;
+  const { title, description } = req.body;
 
-        await bookService.deleteBook(id, currentUserId);
+  const updatedBook = await bookService.updateBook(
+    bookId,
+    currentUserId,
+    title,
+    description,
+  );
 
-        res.status(200).json({
-            success: true,
-            message: "Book successfully deleted!"
-        });
-    } catch (error) {
-        console.error(error);
-        if (error.message === "Book not found") return res.status(404).json({ error: error.message });
-        if (error.message === "You are not the owner of this book.") return res.status(403).json({ error: error.message });
-        
-        res.status(500).json({ success: false, message: "Server Error: Could not delete the book." });
-    }
-};
+  res.status(200).json({
+    success: true,
+    message: "Book successfully updated!",
+    data: updatedBook,
+  });
+});
+
+const deleteBook = catchAsync(async (req, res) => {
+  const { bookId } = req.params;
+  const currentUserId = req.user.userId;
+
+  await bookService.deleteBook(bookId, currentUserId);
+
+  res.status(200).json({
+    success: true,
+    message: "Book successfully deleted!",
+  });
+});
+
+const updateBookStatus = catchAsync(async (req, res) => {
+  const bookId = parseInt(req.params.bookId);
+  const currentUserId = req.user.userId;
+  const { requestedStatus } = req.body;
+  const updatedStatus = await bookService.updateBookStatus(
+    bookId,
+    currentUserId,
+    requestedStatus,
+  );
+
+  res.status(200).json({
+    success: true,
+    message: `Book successfully updated to ${requestedStatus}!`,
+    data: updatedStatus,
+  });
+});
 
 module.exports = {
-    createBook,
-    getAllBooks,
-    getBookById,
-    getBooksByAuthor,
-    updateBook,
-    deleteBook,
+  createBook,
+  getDraftedPrivateBooks,
+  getAllPublicBooks,
+  getBookById,
+  getBooksByAuthor,
+  updateBook,
+  deleteBook,
+  getAllBooksByGenre,
+  updateBookStatus,
 };

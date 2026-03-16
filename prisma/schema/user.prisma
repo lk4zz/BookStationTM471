@@ -3,6 +3,7 @@ model User {
     name String
     email String @unique
     password String
+    coinBalance Int @default(0)
     
     roleId Int 
     role UserRole @relation(fields: [roleId], references: [id])
@@ -14,6 +15,8 @@ model User {
     chapterUnlocks ChapterUnlocks[]
     libraries Library[]
     comments Comments[]
+    transactions   TransactionLedger[]
     following Followers[] @relation("FollowerRelation")
     followers Followers[] @relation("FollowingRelation")
+    
 }

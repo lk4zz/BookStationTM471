@@ -1,6 +1,7 @@
 const genreService = require('../services/genreServices');
+const catchAsync = require('../middlewares/catchAsync');
 
-const createGenre = async (req, res) => {
+const createGenre = catchAsync(async (req, res) => {
     try {
         const { type } = req.body;
         
@@ -12,16 +13,16 @@ const createGenre = async (req, res) => {
         const newGenre = await genreService.createGenre(type);
         
         res.status(201).json({ 
-            message: "Genre added to the menu!", 
+            message: "Genre created successfully!", 
             genre: newGenre 
         });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Something went wrong while creating the genre." });
     }
-};
+});
 
-const getAllGenres = async (req, res) => {
+const getAllGenres = catchAsync(async (req, res) => {
     try {
         const genres = await genreService.getAllGenres();
         res.status(200).json(genres);
@@ -29,7 +30,7 @@ const getAllGenres = async (req, res) => {
         console.error(error);
         res.status(500).json({ error: "Something went wrong while fetching genres." });
     }
-};
+});
 
 module.exports = {
     createGenre,

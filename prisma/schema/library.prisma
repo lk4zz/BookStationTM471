@@ -1,8 +1,9 @@
 model Library {
     id  Int @id @default(autoincrement())
-    userId Int
-    owner User @relation(fields: [userId], references: [id])
+    userId Int @unique
+    owner User @relation(fields: [userId], references: [id], onDelete: Cascade)
     
     libraryBooks LibraryBook[]
+
 
 }
