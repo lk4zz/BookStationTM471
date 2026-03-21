@@ -110,6 +110,20 @@ const updateBookStatus = catchAsync(async (req, res) => {
   });
 });
 
+
+const updateBookCover = catchAsync(async (req, res) => {
+  const bookId = parseInt(req.params.bookId);
+  const coverImage = req.file.path;
+  const currentUserId = parseInt(req.user.userId);
+  const updatedBook = await bookService.updateBookCover(bookId, coverImage, currentUserId);
+  res.status(200).json({
+    success: true,
+    message: "Book cover successfully updated!",
+    data: updatedBook,
+  });
+});
+
+
 module.exports = {
   createBook,
   getDraftedPrivateBooks,
@@ -120,4 +134,5 @@ module.exports = {
   deleteBook,
   getAllBooksByGenre,
   updateBookStatus,
+  updateBookCover,
 };

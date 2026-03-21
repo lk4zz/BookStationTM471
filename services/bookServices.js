@@ -2,14 +2,18 @@ const prisma = require("../db");
 const BadRequestError = require("../errors/BadRequestError");
 const NotFoundError = require("../errors/NotFoundError");
 const { getOwnedBook } = require("../utils/BookOwnership");
+const { checkBookReceipts, checkChapterRreceipt } = require("../utils/checkReceipt");
+
 
 const createBook = async (title, description, authorId) => {
-  const existingBook = await prisma.books.findFirst({
+  normalizedTitle = title.trim().toLowerCase().replace(/\s+/g, '');
+  const books = await prisma.books.findMany({
     where: {
-      userId: authorId,
-      name: title,
-    },
+      userId: authorId },
+      select: { id: true , name: true},
   });
+
+  const existingBook = books.find(b => b.name.toLowerCase().replace(/\s+/g, '') === normalizedTitle);
 
   if (existingBook) {
     throw new BadRequestError("TITLE ALREADY EXISTS");
@@ -36,16 +40,14 @@ const getAllPublicBooks = async () => {
     },
     orderBy: { createdAt: "desc" },
     include: {
-      bookGenres: {
-        include: { bookGenre: true },
-      },
+      author: { select: { name: true}, },
+      bookGenres: { include: { bookGenre: true }, },
       _count: {
-        select: { chapters: true },
-      },
+        select: { chapters: true }, },
     },
   });
 
-  // Fixed: Check length instead of truthiness for arrays
+  
   if (books.length === 0) throw new NotFoundError("NO PUBLIC BOOKS FOUND");
   return books;
 };
@@ -94,13 +96,13 @@ const getBookByGenre = async (genreId) => {
 };
 
 const getBookById = async (id) => {
-  // Fixed: Changed to findFirst to allow filtering by status alongside ID
   const book = await prisma.books.findFirst({
     where: {
       id: parseInt(id, 10),
       NOT: { status: "DRAFT" },
     },
     include: {
+      author: { select: { name: true } },
       bookGenres: {
         include: { bookGenre: true },
       },
@@ -175,7 +177,7 @@ const updateBook = async (bookId, currentUserId, title, description) => {
 
 const deleteBook = async (bookId, currentUserId) => {
   await getOwnedBook(bookId, currentUserId);
-
+  await checkBookReceipts(bookId);
   await prisma.books.delete({
     where: { id: parseInt(bookId) },
   });
@@ -188,13 +190,28 @@ const updateBookStatus = async (bookId, currentUserId, requestedStatus) => {
 
   if (book.status === requestedStatus)
     throw new BadRequestError(`BOOK IS ALREADY ${requestedStatus}`);
-
+  if (requestedStatus === "DRAFT") {
+    await checkChapterRreceipt(bookId);
+  }
   const updatedStatus = await prisma.books.update({
     where: { id: bookId },
     data: { status: requestedStatus },
   });
   return updatedStatus;
 };
+
+const updateBookCover = async (bookId, coverImage, currentUserId) => {
+  await getOwnedBook(bookId, currentUserId);
+  const normalizedPath = coverImage.replace(/\\/g, '/');
+  const updatedBook = await prisma.books.update({
+    where: { id: bookId},
+    data: {
+      coverImage: normalizedPath,
+    }
+  });
+  return updatedBook;
+}
+
 
 module.exports = {
   createBook,
@@ -206,4 +223,5 @@ module.exports = {
   getBookByGenre,
   getDraftedPrivateBooks,
   updateBookStatus,
+  updateBookCover,
 };

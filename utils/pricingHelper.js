@@ -6,11 +6,15 @@ const validateChapterPricing = (pages, requestedPrice, chapterNum) => {
     const wordCount = fullText.split(/\s+/).filter(word => word.length > 0).length;
 
     // clean the price input
-    let finalPrice = requestedPrice !== undefined && requestedPrice !== null 
-        ? parseInt(requestedPrice, 10) 
-        : 0;
+    let finalPrice;
 
-    if (finalPrice < 0) throw new BadRequestError("Price cannot be negative.");
+    if (requestedPrice !== undefined && requestedPrice !== null) {
+    finalPrice = parseInt(requestedPrice, 10);
+    } else {
+    finalPrice = chapter.price; // fallback to existing value
+    }
+
+    if (finalPrice < 0) throw new BadRequestError("PRICE CANNOT BE NEGATIVE.");
 
     // enforce the constraints
     if (chapterNum === 1) {
@@ -27,7 +31,7 @@ const validateChapterPricing = (pages, requestedPrice, chapterNum) => {
 
         // enforce the ceiling
         if (finalPrice > maxAllowedPrice) {
-            throw new BadRequestError(`Chapter is ${wordCount} word(s). The maximum allowed price is ${maxAllowedPrice} coins.`);
+            throw new BadRequestError("Invalid pricing", "INVALID_PRICING_TO_WORDCOUNT_RATIO"), wordCount, maxAllowedPrice;
         }
     }
 

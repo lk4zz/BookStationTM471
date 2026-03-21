@@ -35,8 +35,8 @@ const validateBook = async (req, res, next) => {
         }
     }
     
-    req.body.title = title.trim().toLowerCase().replace(/\s+/g, '');
-    
+    req.body.title = title.trim();
+    req.body.normalizedTitle = title.trim().toLowerCase().replace(/\s+/g, '');
     if (description) {
         req.body.description = description.trim();
     }
@@ -44,4 +44,36 @@ const validateBook = async (req, res, next) => {
     next();
 };
 
-module.exports = validateBook;
+const validateBookCover = (req, res, next) => {
+    const { file } = req; // multer gives you req.file
+    const bookId = parseInt(req.params.bookId);
+
+    if (!file || !file.path) {
+        return next(new BadRequestError("Please upload a cover image."));
+    }
+
+    if (isNaN(bookId)) {
+        return next(new BadRequestError("Invalid book ID."));
+    }
+
+    next();
+};
+
+const validateStatus = (req, res, next) => {
+
+    const { requestedStatus } = req.body;
+    const validStatuses = ['ONGOING', 'COMPLETED', 'DRAFT'];
+    if (!validStatuses.includes(requestedStatus)) {
+        return next(new BadRequestError("Invalid status."));
+    }
+
+next();
+};
+
+
+
+module.exports = {
+    validateBook,
+    validateStatus,
+    validateBookCover,
+}
