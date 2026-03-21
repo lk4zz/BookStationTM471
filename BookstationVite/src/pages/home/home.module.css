@@ -1,0 +1,28 @@
+
+
+.bookcards {
+    max-width: 90%;
+    margin: 3% 4%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 10px;
+
+}
+
+.topPicks{
+    height: 400px;
+    padding: 0;
+    margin: 0;
+
+}
+
+.loading{
+    align-self: center;
+    font-size: 4rem;
+    color: white;
+}
+
+.error{
+    font-size: 4rem;
+    color: white;
+}
