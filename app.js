@@ -3,6 +3,7 @@ BigInt.prototype.toJSON = function () {  // dealing with bigInt serialization is
 };
 
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -25,6 +26,13 @@ const errorHandler = require('./middlewares/errorHandler');
 const NotFoundError = require('./errors/NotFoundError');
 
 const app = express();
+
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}))
+// for image uploading (bookcovers)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

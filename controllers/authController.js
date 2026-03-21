@@ -2,7 +2,7 @@ const authServices = require('../services/authServices');
 const catchAsync = require('../middlewares/catchAsync');
 
 const signup = catchAsync(async (req, res) => {
-    try {
+
         const { name, email, password } = req.body;
         
         const { newUser, token } = await authServices.signupUser(name, email, password);
@@ -17,17 +17,10 @@ const signup = catchAsync(async (req, res) => {
             token: token
         });
 
-    } catch (error) {
-        if (error.message === "Email is already in use") {
-            return res.status(400).json({ error: error.message });
-        }
-        console.error(error);
-        res.status(500).json({ error: "Something went wrong creating the account." });
-    }
 });
 
 const login = catchAsync(async (req, res) => {
-    try {
+ 
         const { email, password } = req.body;
 
         const { user, token } = await authServices.loginUser(email, password);
@@ -43,13 +36,6 @@ const login = catchAsync(async (req, res) => {
             token: token
         });
 
-    } catch (error) {
-        if (error.message === "Email isnt registered" || error.message === "Incorrect password") {
-            return res.status(400).json({ error: error.message });
-        }
-        console.error(error);
-        res.status(500).json({ error: "Something went wrong during login." });
-    }
 });
 
 module.exports = { signup, login };

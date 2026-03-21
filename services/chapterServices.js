@@ -6,6 +6,7 @@ const NotFoundError = require("../errors/NotFoundError");
 const BadRequestError = require("../errors/BadRequestError");
 const ForbiddenError = require("../errors/ForbiddenError");
 const PaymentRequiredError = require("../errors/PaymentRequiredError");
+const { checkChapterRreceipt } = require("../utils/checkReceipt");
 
 const createChapter = async (bookId, title, currentUserId) => {
   BookOwnership(bookId, currentUserId);
@@ -92,29 +93,31 @@ const getChapterById = async (chapterId, userId) => {
   };
 };
 
-const updateChapter = async (
-  chapterId,
-  title,
-  currentUserId,
-  requestedPrice,
-) => {
+const updateChapter = async ( chapterId, title, currentUserId, requestedPrice, ) => {
   // fetch the chapter include book (for ownership), include pages (for the function to calculate)
   const chapter = await prisma.chapters.findUnique({
     where: { id: parseInt(chapterId, 10) },
     include: { book: true, pages: true },
   });
 
-  if (!chapter) throw new NotFoundError("Chapter not found");
+  if (!chapter) throw new NotFoundError("CHAPTER NOT FOUND");
   BookOwnership(chapter.book.id, currentUserId);
 
   // default values in case they only want to update the title
-  let finalPrice = chapter.price;
   let finalIsLocked = chapter.isLocked;
   let finalWordCount = chapter.wordCount;
+  let finalPrice = chapter.price;
 
-  if (requestedPrice !== undefined) {
-    if (chapter.isPublished) {
-      // check for price constraints
+  if (chapter.isPublished) {
+    // if user is trying to change price
+    if (requestedPrice !== undefined && requestedPrice !== chapter.price) {
+      if (requestedPrice !== 0) {
+        throw new BadRequestError(
+          "PUBLISHED CHAPTERS CAN ONLY BE SET TO FREE.",
+        );
+      }
+    }
+    try {
       const pricingData = validateChapterPricing(
         chapter.pages,
         requestedPrice,
@@ -123,12 +126,19 @@ const updateChapter = async (
       finalPrice = pricingData.finalPrice;
       finalIsLocked = pricingData.isLocked;
       finalWordCount = pricingData.wordCount; // update word count just incase user edits texts
-    } else {
-      // It's a draft. Just save the intended price for now, it will be validated on publish.
-      finalPrice = parseInt(requestedPrice, 10);
-      if (chapter.chapterNum === 1) finalPrice = 0;
-      finalIsLocked = finalPrice > 0;
+    } catch (err) {
+      if (err.code === "INVALID_PRICING_TO_WORDCOUNT_RATIO") {
+        throw new BadRequestError(
+          "Word Count Must remain within the same limit for price set.",
+        );
+      }
+      throw err;
     }
+  } else {
+    // It's a draft. Just save the intended price for now, it will be validated on publish.
+    finalPrice = parseInt(requestedPrice, 10);
+    if (chapter.chapterNum === 1) finalPrice = 0;
+    finalIsLocked = finalPrice > 0;
   }
 
   const updatedChapter = await prisma.chapters.update({
@@ -166,6 +176,10 @@ const publishChapter = async (chapterId, currentUserId, requestedPrice) => {
     priceToValidate,
     chapter.chapterNum,
   );
+  if (err.code === "INVALID_PRICING_TO_WORDCOUNT_RATIO") {
+        throw new BadRequestError(
+          `your chapter is ${wordCount} word(s), maximum price is ${maxAllowedPrice}`,
+        ); }
 
   const publishedChapter = await prisma.chapters.update({
     where: { id: parseInt(chapterId, 10) },
@@ -227,8 +241,9 @@ const deleteChapter = async (chapterId, currentUserId) => {
     where: { id: parseInt(chapterId, 10) },
     include: { book: true },
   });
-  if (!chapter) throw new NotFoundError("Chapter not found");
+  if (!chapter) throw new NotFoundError("CHAPTER NOT FOUND");
   BookOwnership(chapter.book.id, currentUserId);
+  checkChapterRreceipt(chapterId);
 
   await prisma.chapters.delete({
     where: { id: parseInt(chapterId, 10) },
