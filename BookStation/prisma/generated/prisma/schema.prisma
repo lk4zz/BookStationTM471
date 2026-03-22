@@ -1,0 +1,136 @@
+model BookGenre {
+  id          Int   @id @default(autoincrement())
+  bookId      Int
+  genreId     Int
+  bookGenre   Genre @relation(fields: [genreId], references: [id])
+  labeledBook Books @relation(fields: [bookId], references: [id])
+
+  @@map("book_genres")
+}
+
+model Books {
+  id          Int    @id @default(autoincrement())
+  userId      Int
+  author      User   @relation(fields: [userId], references: [id])
+  name        String @unique
+  description String
+  price       Int
+  views       Int
+  rating      Float
+
+  chapters     Chapters[]
+  comments     Comments[]
+  bookGenres   BookGenre[]
+  libraryBooks LibraryBook[]
+}
+
+model Chapters {
+  id         Int     @id @default(autoincrement())
+  bookId     Int
+  contains   Books   @relation(fields: [bookId], references: [id])
+  chapterNum Int
+  isLocked   Boolean @default(false)
+  title      String
+
+  pages Pages[]
+}
+
+model Comments {
+  id        Int    @id @default(autoincrement())
+  userId    Int
+  bookId    Int
+  commenter User   @relation(fields: [userId], references: [id])
+  commentOn Books  @relation(fields: [bookId], references: [id])
+  text      String
+}
+
+model Followers {
+  id          Int  @id @default(autoincrement())
+  followerId  Int
+  followingId Int
+  follower    User @relation("FollowerRelation", fields: [followerId], references: [id])
+  following   User @relation("FollowingRelation", fields: [followingId], references: [id])
+}
+
+model Genre {
+  id   Int    @id @default(autoincrement())
+  type String
+
+  bookGenres BookGenre[]
+}
+
+model Library {
+  id     Int  @id @default(autoincrement())
+  userId Int
+  owner  User @relation(fields: [userId], references: [id])
+
+  libraryBooks LibraryBook[]
+}
+
+model LibraryBook {
+  id        Int @id @default(autoincrement())
+  bookId    Int
+  libraryId Int
+
+  // Relations
+  book    Books   @relation(fields: [bookId], references: [id])
+  library Library @relation(fields: [libraryId], references: [id])
+
+  @@unique([bookId, libraryId]) // Prevent duplicate entries
+  @@map("library_books") // This keeps your table name as library_books in DB
+}
+
+model Pages {
+  id        Int      @id @default(autoincrement())
+  chapterId Int
+  contains  Chapters @relation(fields: [chapterId], references: [id])
+  text      String   @db.LongText
+  pageNum   Int
+}
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  name     String
+  email    String @unique
+  password String
+
+  roleId Int
+  role   UserRole @relation(fields: [roleId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  books     Books[]
+  libraries Library[]
+  comments  Comments[]
+  following Followers[] @relation("FollowerRelation")
+  followers Followers[] @relation("FollowingRelation")
+}
+
+// prisma/schema/userRole.prisma
+model UserRole {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  users User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("user_role")
+}
