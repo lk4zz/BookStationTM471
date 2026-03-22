@@ -1,0 +1,9 @@
+model BookGenre {
+    id  Int @id @default(autoincrement())
+    bookId Int
+    genreId Int
+    bookGenre Genre @relation(fields: [genreId], references: [id])
+    labeledBook Books @relation(fields: [bookId], references: [id])
+    
+@@map("book_genres")
+}

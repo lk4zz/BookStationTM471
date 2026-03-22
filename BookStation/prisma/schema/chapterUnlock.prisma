@@ -1,0 +1,10 @@
+model ChapterUnlocks {
+  id        Int      @id @default(autoincrement()) 
+  userId    Int
+  chapterId Int
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chapter   Chapters @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, chapterId]) // prevent unlocking the same chapter twice
+}

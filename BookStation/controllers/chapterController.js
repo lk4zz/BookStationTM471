@@ -1,0 +1,110 @@
+const chapterServices = require('../services/chapterServices');
+const catchAsync = require('../middlewares/catchAsync');
+
+const createChapter = catchAsync(async (req, res) => {
+    const { bookId } = req.params;
+    const { title } = req.body;
+    const currentUserId = req.user.userId;
+
+    const newChapter = await chapterServices.createChapter(bookId, title, currentUserId);
+
+    res.status(201).json({
+        success: true,
+        message: "Chapter created successfully!",
+        data: newChapter
+    });
+});
+
+const getChaptersByBook = catchAsync(async (req, res) => {
+    const bookId = parseInt(req.params.bookId, 10);
+    const currentUserId = req.user ? req.user.userId : null;
+    
+    const chapters = await chapterServices.getChaptersByBook(bookId, currentUserId);
+
+    res.status(200).json({
+        success: true,
+        count: chapters.length,
+        data: chapters
+    });
+});
+
+const getChapterById = catchAsync(async (req, res) => {
+    const { chapterId } = req.params;
+    const userId = req.user ? req.user.userId : null; 
+
+    const chapter = await chapterServices.getChapterById(chapterId, userId);
+
+    res.status(200).json({
+        success: true,
+        data: chapter
+    });
+});
+
+const updateChapter = catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const { title, price } = req.body;
+    const currentUserId = req.user.userId;
+
+    const updatedChapter = await chapterServices.updateChapter(id, title, currentUserId, price);
+    
+    res.status(200).json({
+        success: true,
+        message: "Chapter updated successfully!",
+        data: updatedChapter
+    });
+});
+
+const publishChapter = catchAsync(async (req, res) => {
+    const chapterId = req.params.id;
+    const currentUserId = req.user.userId; 
+    const { price } = req.body; 
+
+    const publishedChapter = await chapterServices.publishChapter(
+        chapterId, 
+        currentUserId, 
+        price
+    );
+
+    res.status(200).json({
+        success: true,
+        message: `Chapter successfully published${publishedChapter.isLocked ? ` and locked for ${publishedChapter.price} coins` : ' for free'}!`,
+        data: publishedChapter
+    });
+});
+
+const unlockChapter = catchAsync(async (req, res) => {
+    const chapterId = req.params.id;
+    const currentUserId = req.user.userId;
+
+    const { updatedUserWallet } = await chapterServices.unlockChapter(currentUserId, chapterId);
+
+    res.status(200).json({
+        success: true,
+        message: "Chapter successfully unlocked! Happy reading.",
+        data: {
+            newCoinBalance: updatedUserWallet.coinBalance 
+        }
+    });
+});
+
+const deleteChapter = catchAsync(async (req, res) => {
+    const currentUserId = req.user.userId;
+    const chapterId = req.params.id;
+    
+    await chapterServices.deleteChapter(chapterId, currentUserId);
+    
+    res.status(200).json({ 
+        success: true, 
+        message: "Chapter deleted!" 
+    });
+});
+
+module.exports = {
+    createChapter,
+    getChaptersByBook,
+    getChapterById,
+    updateChapter,
+    deleteChapter,
+    publishChapter,
+    unlockChapter,
+};
