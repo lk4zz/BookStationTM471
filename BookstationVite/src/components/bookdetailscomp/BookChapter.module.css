@@ -1,0 +1,21 @@
+:root{
+    --font-body: 'Inter', sans-serif;
+
+}
+
+
+.chapter {
+    display: flex;
+    font-family: var(--font-body);
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding-left: 20px;
+    font-size: 1.1rem;
+    border-radius: 12px;
+    background-color: #27272a;
+    margin-bottom: 10px;
+    height: 55px;
+    color: white;
+    margin-right: 10px;
+}

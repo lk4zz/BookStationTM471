@@ -1,5 +1,65 @@
+.page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column; /* Stacks upper and lower containers vertically */
+  background-color: #0a0a0a; /* Add a dark background to the whole page instead */
+}
+
+.upperContainer {
+  flex: 0 0 50%; /*takes 50% of the top screen*/
+  display: flex;
+  align-items: flex-end; /* Pushes the content to the bottom of this section */
+  border-bottom: 1px solid #333; /* Optional: A nice divider line */
+}
 .descCONTAINER{
-    height: 400px;
-    max-width: 35%;
+    height: 100%;
+    max-width: 100%;
     margin-left: 4%;
+}
+
+.chapterContainer{
+    background-color: #121212;
+    width: 100%;
+    overflow-y: auto;
+    height: 100%;
+}
+
+.commentsContainer{
+    background-color: #cc0000;
+    width: 100%;
+    overflow-y: auto;
+    max-height: 100%;
+    padding: 15px;
+}
+
+.chapterContainer::-webkit-scrollbar {
+
+  width: 13px;
+}
+
+/* 3. The Track (The groove) */
+.chapterContainer::-webkit-scrollbar-track {
+  background: #333333; /* A very light, subtle grey */
+  border-radius: 10px; /* Rounds the top and bottom of the track */
+}
+
+/* 4. The Thumb (The handle you grab) */
+.chapterContainer::-webkit-scrollbar-thumb {
+  background: #888888; /* A darker grey so it stands out */
+  border-radius: 10px; /* Rounds the handle so it looks like a pill */
+}
+
+/* 5. The Hover Effect (Optional but highly recommended!) */
+.chapterContainer::-webkit-scrollbar-thumb:hover {
+  background: #555555; /* Gets darker when the user hovers over it */
+}
+
+
+.lowerContainer{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; 
+  gap: 50px;
+  padding: 50px 0;
+  height: 39vh;
 }
