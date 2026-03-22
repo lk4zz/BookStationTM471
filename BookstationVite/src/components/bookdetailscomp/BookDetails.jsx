@@ -23,17 +23,13 @@ function BookDetails({ book }) {
   const authorName = author?.name || "Unknown";
 
   return (
-    <section className={styles.container}>
+    <div className={styles.container}>
       <div className={styles.bgImage} style={bgStyle} />
-      <div className={styles.overlay} />
-
       <div className={styles.contentWrapper}>
         <div className={styles.bookdetails}>
           <h2 className={styles.bookTitle}>{name}</h2>
-          <p>by {authorName}</p>    
+          <p className={styles.authorText}>by {authorName}</p>
           <div className={styles.bookinsights}>
-            
-
             <div className={styles.statItem}>
               <Rating
                 initialValue={ratingAverage}
@@ -59,6 +55,7 @@ function BookDetails({ book }) {
             <button className={styles.secondaryBtn}>Add to Library</button>
           </div>
         </div>
+
         <div className={styles.bookcover}>
           <img
             src={coverUrl}
@@ -68,7 +65,7 @@ function BookDetails({ book }) {
           />
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 
