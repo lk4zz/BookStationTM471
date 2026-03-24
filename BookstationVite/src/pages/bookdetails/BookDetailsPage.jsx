@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getBookById } from "../../api/books";
 import { getChaptersFromBook } from "../../api/chapters";
-import { getCommentsByBook, addComment } from "../../api/comments";
+import { getCommentsByBook, PostComment } from "../../api/comments";
 import { useParams, useNavigate } from "react-router-dom";
 import BookDetails from "../../components/bookdetailscomp/BookDetails";
 import BookDescription from "../../components/bookdetailscomp/BookDescription";
@@ -12,7 +12,6 @@ import { getViews } from "../../api/views";
 import { useState } from "react";
 
 function BookDetailsPage() {
-  const [commentInput, setCommentInput] = useState("");
   const { id } = useParams();
   const numericId = Number(id);
   const navigate = useNavigate();
@@ -49,13 +48,28 @@ function BookDetailsPage() {
     enabled: Number.isFinite(numericId),
   });
 
-  if (isBookLoading) return <p className={styles.loading}>Loading...</p>;
-  if (bookError) return <p className={styles.error}>Error loading data.</p>;
-
   const book = bookData?.data ?? bookData;
   const chapters = chaptersData?.data ?? chaptersData ?? [];
-  const comments = commentsData?.data ?? commentsData ?? [];
   const totalViews = viewsData?.data || 0;
+
+  const [commentInput, setCommentInput] = useState("");
+  const [comments, setComments] = useState(comments || []);
+
+  useEffect(() => {
+    const fetchedComments = commentsData?.data ?? commentsData;
+    if (fetchedComments && Array.isArray(fetchedComments)) {
+      setCommentSection(fetchedComments);
+    }
+  }, [commentsData]);
+
+  const addComment = (comment) => {
+    PostComment(book.id, commentInput);
+    setCommentSection([...comments, comment]);
+    setCommentInput("");
+  };
+
+  if (isBookLoading) return <p className={styles.loading}>Loading...</p>;
+  if (bookError) return <p className={styles.error}>Error loading data.</p>;
 
   return (
     <div className={styles.page}>
@@ -92,7 +106,7 @@ function BookDetailsPage() {
           <h3 className={styles.sectionTitle}>User Comments</h3>
           <div className={styles.scrollList}>
             {comments.length > 0 ? (
-              comments.map((comment) => (
+              commentsecton.map((comment) => (
                 <Comments key={comment.id} comment={comment} />
               ))
             ) : (
@@ -110,7 +124,8 @@ function BookDetailsPage() {
             />
             <button
               className={styles.commentSubmitButton}
-              onClick={() => addComment(book.id, commentInput)}
+              onClick={() => addComment(commentInput)}
+              disabled={!commentInput.trim()}
             >
               Submit
             </button>

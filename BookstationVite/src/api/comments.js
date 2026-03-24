@@ -6,7 +6,7 @@ export const getCommentsByBook = async (id) => {
     return res.data;
 }
 
-export const addComment = async (id, comment) => {
+export const PostComment = async (id, comment) => {
     console.log("Adding comment to book with id:", id);
     await privateApi.post(`/comments/${id}`, { comment });
 }
