@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAllBooks } from "../../api/books";
-import Styles from "./home.module.css";
-import BookCard from "../../components/HomePageComp/BookCard";
+import Styles from "./explore.module.css";
+import BookCard from "../../components/ExplorePageComp/BookCard";
 import NavBar from "../../components/NavBar";
-import TopPicks from "../../components/HomePageComp/TopPicks";
+import TopPicks from "../../components/ExplorePageComp/TopPicks";
 
-function Home() {
+function Explore() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["books"],
     queryFn: getAllBooks,
@@ -30,4 +30,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Explore;

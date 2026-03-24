@@ -1,21 +1,27 @@
-:root{
-    --font-body: 'Inter', sans-serif;
+.chapterCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-radius: 8px;
+  background-color: #27272a;
+  color: #d4d4d8;
+  transition: background-color 0.2s;
+  cursor: pointer;
 
 }
 
+.chapterCard:hover {
+  background-color: #3f3f46;
+}
 
-.chapter {
-    display: flex;
-    font-family: var(--font-body);
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    padding-left: 20px;
-    font-size: 1.1rem;
-    border-radius: 12px;
-    background-color: #27272a;
-    margin-bottom: 10px;
-    height: 55px;
-    color: white;
-    margin-right: 10px;
+.chapterTitle {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.icon {
+  width: 18px;
+  height: 30px;
+  color: #a1a1aa;
 }

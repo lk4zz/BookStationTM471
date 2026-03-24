@@ -1,21 +1,71 @@
-.comment {
-    font-family: var(--font-body);
-    padding: 10px 20px;
-    font-size: 1.1rem;
-    height: fit-content;
-    color: white;
-    margin-right: 10px;
-
+.commentCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #27272a;
 }
 
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 10px;
-    height: auto;
-    border: white inset 1px;
-    
-    
+.commentCard:last-child {
+  border-bottom: none;
+}
+
+.avatarPlaceholder {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #3f3f46;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: white;
+  flex-shrink: 0;
+  font-size: 0.9rem;
+}
+
+.commentContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.name {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #e4e4e7;
+}
+
+.text {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: #a1a1aa;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.time {
+  font-size: 0.75rem;
+  color: #71717a;
+  margin-top: 4px;
+}
+
+.likeSection {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #71717a;
+  cursor: pointer;
+  padding-top: 20px;
+}
+
+.likeIcon {
+  width: 14px;
+  height: 14px;
+}
+
+.likeCount {
+  font-size: 0.8rem;
 }

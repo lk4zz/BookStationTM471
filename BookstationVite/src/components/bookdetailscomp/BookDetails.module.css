@@ -1,73 +1,116 @@
-:root {
-  --font-primary: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --text-main: #ffffff;
-  --text-muted: #a1a1aa;
-  --accent: #3b82f6;
-  --accent-hover: #2563eb;
-  --border-dark: #3f3f46;
-}
-
 .container {
   position: relative;
-  width: 100%;
-  height: 100%; /* Tells it to perfectly fill the parent's box */
+  width: auto;
+  height: 100%;
   display: flex;
-  align-items: center; /* Vertically centers the content inside */
+  align-items: center;
   overflow: hidden;
-  font-family: var(--font-primary);
-  color: var(--text-main);
-  
-  /* Optional: Add some padding here so the text doesn't touch the edge of the screen */
-  padding: 0 5%; 
+  padding: 0 5%;
 }
 
-/* Keep these exactly as they are in your file: */
 .bgImage {
   position: absolute;
-  inset: 0;
+  inset: -10%; /* Prevents blurry white edges */
   background-size: cover;
   background-position: center;
-  filter: blur(6px);
-  transform: scale(1.1);
+  filter: blur(15px);
   z-index: 0;
-  margin: 0;
 }
 
 .overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0.95) 0%,
-    rgba(0, 0, 0, 0.75) 50%,
-    rgba(0, 0, 0, 0.4) 100%
-  );
+  background: linear-gradient(90deg, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.7) 60%, rgba(10,10,10,0.3) 100%);
   z-index: 1;
 }
 
-/* Update contentWrapper to make sure it sits ON TOP of the background */
 .contentWrapper {
-  position: relative; /* Add this so z-index works */
-  z-index: 2;         /* Keeps the text on top of the overlay */
+  position: relative;
+  z-index: 2;
   display: flex;
-  gap: 40px; 
+  justify-content: space-between;
   align-items: center;
   width: 100%;
-  justify-content: space-between; 
+  padding: 3% 0;
 }
 
-/* Image */
-.bookcover {
-  width: 220px;
-  aspect-ratio: 2 / 3;
-  border-radius: 10px;
-  overflow: hidden;
-  flex-shrink: 0;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Add a nice shadow since the background is gone */
+.bookInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  max-width: 600px;
 }
+
+.bookTitle {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  font-weight: 700;
+  margin: 0 0 5px 0;
+}
+
 .authorText {
+  font-family: var(--font-body);
   color: #a1a1aa;
-  margin-bottom: 20px;
+  font-size: 1.1rem;
+  margin: 0 0 20px 0;
+}
+
+.statsRow {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  color: #a1a1aa;
+  font-size: 0.9rem;
+  margin-bottom: 30px;
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.iconEye {
+  width: 18px;
+  height: 18px;
+  color: white;
+}
+
+.buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.buttons button {
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  transition: 0.2s;
+}
+
+.primaryBtn {
+  background: #3b82f6;
+  color: white;
+}
+.primaryBtn:hover { background: #2563eb; }
+
+.secondaryBtn {
+  background: transparent;
+  border: 1px solid #3f3f46 !important;
+  color: white;
+}
+.secondaryBtn:hover { background: rgba(255,255,255,0.1); }
+
+.coverWrapper {
+  width: 260px;
+  aspect-ratio: 2/3;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+  flex-shrink: 0;
 }
 
 .cover {
@@ -76,110 +119,22 @@
   object-fit: cover;
 }
 
-/* Text */
-.bookdetails {
-  flex: 1; /* Takes up remaining space */
-  display: flex;
-  flex-direction: column;
-}
-.bookTitle {
-  font-size: 2.4rem;
-  font-weight: 700;
-  margin: 0 0 10px 0;
-  color: #ffffff;
-}
-
-/* Stats */
-.bookinsights {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  color: var(--text-muted);
-  margin-bottom: 20px;
-}
-
-.statItem {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.iconStar {
-  width: 16px;
-  height: 16px;
-  fill: #eab308;
-}
-
-.iconEye {
-  width: 16px;
-  height: 16px;
-  stroke: currentColor;
-  fill: none;
-}
-
-/* Description */
-.description {
-  line-height: 1.6;
-  color: #d4d4d8;
-  margin-bottom: 24px;
-
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* Buttons */
-.buttons {
-  display: flex;
-  gap: 16px;
-}
-
-.buttons button {
-  font-weight: 600;
-  padding: 12px 20px;
+.goBackBtn{
+  max-width: 100px;
+  background-color: transparent;
+  color: white;
+  border: 1px solid #3f3f46 !important;
+  box-shadow: none;
+  padding: 8px 8px;
+  margin-bottom: 40px;
   border-radius: 8px;
-  cursor: pointer;
-  transition: 0.2s;
+  
 }
 
-.primaryBtn {
-  background: var(--accent);
-  border: none;
-  color: white;
-}
-
-.primaryBtn:hover {
-  background: var(--accent-hover);
-}
-
-.secondaryBtn {
-  background: transparent;
-  border: 1px solid var(--border-dark);
-  color: white;
-}
-
-.secondaryBtn:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-/* Responsive */
 @media (max-width: 768px) {
   .contentWrapper {
-    flex-direction: column;
-    text-align: center;
+    flex-direction: column-reverse;
+    gap: 30px;
   }
-
-  .bookinsights {
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .buttons {
-    width: 100%;
-  }
-
-  .buttons button {
-    flex: 1;
-  }
+  .coverWrapper { width: 180px; }
 }
