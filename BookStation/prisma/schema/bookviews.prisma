@@ -1,0 +1,7 @@
+model BookViews {
+    id Int @id @default(autoincrement())
+    userId Int
+    bookId Int
+    viewedbook Books @relation(fields: [bookId], references: [id], onDelete: Cascade)
+    veiwer User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

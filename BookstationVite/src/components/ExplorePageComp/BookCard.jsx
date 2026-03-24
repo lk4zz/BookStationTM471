@@ -2,10 +2,11 @@ import styles from "./BookCard.module.css";
 import { Link } from "react-router-dom";
 const BASE_URL = import.meta.env.VITE_API_URL || "";
 import { StarIcon } from "../UI/IconLibrary";
+import { addView } from "../../api/views";
 
 function BookCard({ book }) {
   return (
-    <Link className={styles.link} to={`/book/${book.id}`}>
+    <Link onClick= { () => addView(book.id)} className={styles.link} to={`/book/${book.id}`}>
       <div className={styles.card}>
         <div className={styles.imageContainer}>
           <img

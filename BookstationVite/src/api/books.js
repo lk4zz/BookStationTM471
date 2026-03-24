@@ -1,8 +1,8 @@
-import api from "./axios"; 
+import { publicApi, privateApi } from "./axios";
 
 export const getAllBooks = async () => {
 
-    const res = await api.get("/books");
+    const res = await publicApi.get("/books");
 
     return res.data;
 }
@@ -10,7 +10,7 @@ export const getAllBooks = async () => {
 export const getBookById = async (id) => {
 
     console.log("Fetching book with id:", id);
-    const res = await api.get(`/books/${id}`);
+    const res = await publicApi.get(`/books/${id}`);
 
     return  res.data;
 }
