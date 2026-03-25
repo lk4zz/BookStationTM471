@@ -5,7 +5,7 @@ export const useLibraryBooks = () => {
   return useQuery({
     queryKey: ["library"],
     queryFn: fetchLibraryBooks,
-    // Do not retry on 404 (Empty Library) or 401/403 (Auth Errors)
+    // do not retry on 404 (Empty Library) or 401/403 (Auth Errors)
     retry: (failureCount, error) => {
       if (error.response?.status === 404 || error.response?.status === 401) return false;
       return failureCount < 2;
@@ -33,5 +33,9 @@ export const useAddToLibrary = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["library"] });
     },
+    onError: (error) => {
+      const backendError = error.response?.data?.message || "Failed to add book";
+      console.log("Backend says:", backendError);
+    }
   });
 };
