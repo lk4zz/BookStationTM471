@@ -24,7 +24,6 @@ const createBook = async (title, description, authorId) => {
       name: title,
       description: description || "",
       userId: authorId,
-      views: 0,
       ratingAverage: 0,
       ratingCount: 0,
     },

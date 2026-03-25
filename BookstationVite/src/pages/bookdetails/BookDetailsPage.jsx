@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getBookById } from "../../api/books";
 import { getChaptersFromBook } from "../../api/chapters";
 import { getCommentsByBook, PostComment } from "../../api/comments";
@@ -15,6 +15,8 @@ function BookDetailsPage() {
   const { id } = useParams();
   const numericId = Number(id);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const [commentInput, setCommentInput] = useState("");
 
   const {
     data: bookData,
@@ -48,25 +50,26 @@ function BookDetailsPage() {
     enabled: Number.isFinite(numericId),
   });
 
+  const submitCommentMutation = useMutation({
+    mutationFn: (newComment) => PostComment(numericId, newComment),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["comments", numericId] });
+      setCommentInput("");
+    },
+    onError: (error) => {
+      console.error("Failed to post comment", error)
+    }
+  })
+
+  const handleAddComment = () => {
+    if (!commentInput.trim()) return;
+    submitCommentMutation.mutate(commentInput);
+  };
+
   const book = bookData?.data ?? bookData;
   const chapters = chaptersData?.data ?? chaptersData ?? [];
   const totalViews = viewsData?.data || 0;
-
-  const [commentInput, setCommentInput] = useState("");
-  const [comments, setComments] = useState(comments || []);
-
-  useEffect(() => {
-    const fetchedComments = commentsData?.data ?? commentsData;
-    if (fetchedComments && Array.isArray(fetchedComments)) {
-      setCommentSection(fetchedComments);
-    }
-  }, [commentsData]);
-
-  const addComment = (comment) => {
-    PostComment(book.id, commentInput);
-    setCommentSection([...comments, comment]);
-    setCommentInput("");
-  };
+  const comments = commentsData?.data ?? commentsData ?? [];
 
   if (isBookLoading) return <p className={styles.loading}>Loading...</p>;
   if (bookError) return <p className={styles.error}>Error loading data.</p>;
@@ -102,11 +105,11 @@ function BookDetailsPage() {
           </div>
         </div>
 
-        <div className={`${styles.column} ${styles.commentsColumn}`}>
+        <div className={styles.commetscolumn}>
           <h3 className={styles.sectionTitle}>User Comments</h3>
           <div className={styles.scrollList}>
             {comments.length > 0 ? (
-              commentsecton.map((comment) => (
+              comments.map((comment) => (
                 <Comments key={comment.id} comment={comment} />
               ))
             ) : (
@@ -118,13 +121,14 @@ function BookDetailsPage() {
             <input
               type="text"
               value={commentInput}
+              onKeyDown={(e) => e.key === "Enter" && handleAddComment()}
               onChange={(e) => setCommentInput(e.target.value)}
               placeholder="Add a Comment"
               className={styles.commentInput}
             />
             <button
               className={styles.commentSubmitButton}
-              onClick={() => addComment(commentInput)}
+              onClick={handleAddComment}
               disabled={!commentInput.trim()}
             >
               Submit

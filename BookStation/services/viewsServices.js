@@ -30,9 +30,6 @@ const addView = async (bookId, currentUserId) => {
       return true;
     }
 
-    console.log(
-      `user ${currentUserId} is ${checkIfGuest.isGuest} and the book is ${parsedBookId}`,
-    );
   } catch (err) {
     console.error("Error in addView service:", err);
     throw err;
