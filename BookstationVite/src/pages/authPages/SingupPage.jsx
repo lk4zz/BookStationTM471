@@ -6,7 +6,7 @@ import { useAuthForm } from "../../hooks/useAuthForm";
 import { InputField } from "../../components/UI/InputField";
 
 function SignupPage() {
-  // 1. Pull logic from the custom hook (pass 'signup' API and initial state)
+  // from the custom hook (I pass signup(apifunction) and initialdata(input) and the route after signup)
   const { formData, error, isLoading, handleChange, handleSubmit } = useAuthForm(
     signup, 
     { name: "", email: "", password: "" }, 
@@ -26,7 +26,7 @@ function SignupPage() {
           <p className={styles.subtitle}>Join the community of readers and writers.</p>
         </div>
 
-        {/* 2. Form UI is drastically simplified using InputField */}
+        {/* 2. these are the input fields where data go (name or emailetcc) */}
         <form onSubmit={handleSubmit} className={styles.form}>
           <InputField 
             label="Full Name" 
