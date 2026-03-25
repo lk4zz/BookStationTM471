@@ -55,7 +55,7 @@ function BookDetailsPage() {
           <h3 className={styles.sectionTitle}>Chapters</h3>
           <div className={styles.scrollList}>
             {isChapterLoading ? (
-              <p className={styles.loading}>Loading...</p>
+              <p className="loading">Loading...</p>
             ) : chapters?.length > 0 ? (
               chapters.map((chapter) => (
                 <BookChapters key={chapter.id} chapter={chapter} />
@@ -74,7 +74,7 @@ function BookDetailsPage() {
                 <Comments key={comment.id} comment={comment} />
               ))
             ) : (
-              <p className={styles.emptyState}>No comments yet.</p>
+              <p className="loading">No comments yet.</p>
             )}
           </div>
           <div className={styles.commentInputWrapper}>

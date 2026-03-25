@@ -11,6 +11,7 @@ function LibraryPage() {
   const isGuest = !localStorage.getItem("token");
   
   const { data: libraryItems, isLoading, isError, error } = useLibraryBooks(); //fetch books
+  
 
   if (isGuest) {
     return (
@@ -24,21 +25,18 @@ function LibraryPage() {
     );
   }
 
-  // 2. Handle Loading State
   if (isLoading) {
     return (
       <div className={styles.pageWrapper}>
         <NavBar />
         <main className={styles.centeredContent}>
-          {/* Using your provided loading class context */}
+
           <div className="loading">Loading library...</div> 
         </main>
       </div>
     );
   }
 
-  // 3. Handle Empty State / Backend 404s
-  // Your backend throws 404 with "YOUR LIBRARY IS EMPTY." or "YOU DONT HAVE A LIBRARY YET."
   if (isError && error.response?.status === 404) {
     return (
       <div className={styles.pageWrapper}>
@@ -51,7 +49,6 @@ function LibraryPage() {
     );
   }
 
-  // 4. Handle generic errors
   if (isError) {
     return (
       <div className={styles.pageWrapper}>
@@ -63,7 +60,6 @@ function LibraryPage() {
     );
   }
 
-  // 5. Render Success State
   return (
     <div className={styles.pageWrapper}>
       <NavBar />
