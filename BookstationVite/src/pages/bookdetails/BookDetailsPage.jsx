@@ -1,76 +1,36 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getBookById } from "../../api/books";
-import { getChaptersFromBook } from "../../api/chapters";
-import { getCommentsByBook, PostComment } from "../../api/comments";
 import { useParams, useNavigate } from "react-router-dom";
 import BookDetails from "../../components/bookdetailscomp/BookDetails";
 import BookDescription from "../../components/bookdetailscomp/BookDescription";
 import BookChapters from "../../components/bookdetailscomp/BookChapters";
 import Comments from "../../components/bookdetailscomp/Comments";
 import styles from "./BookDetailsPage.module.css";
-import { getViews } from "../../api/views";
+import { useViews } from "../../hooks/useViews";
 import { useState } from "react";
+import { useBookById } from "../../hooks/useBooks";
+import { useChaptersByBook } from "../../hooks/useChapters";
+import { useCommentsByBook } from "../../hooks/useComments";
+import { useAddComment } from "../../hooks/useComments";
 
 function BookDetailsPage() {
   const { id } = useParams();
   const numericId = Number(id);
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const [commentInput, setCommentInput] = useState("");
-
-  const {
-    data: bookData,
-    isLoading: isBookLoading,
-    error: bookError,
-  } = useQuery({
-    queryKey: ["book", numericId],
-    queryFn: () => getBookById(numericId),
-    enabled: Number.isFinite(numericId),
-  });
-
-  const {
-    data: chaptersData,
-    isLoading: isChapterLoading,
-    error: chapterError,
-  } = useQuery({
-    queryKey: ["chapters", numericId],
-    queryFn: () => getChaptersFromBook(numericId),
-    enabled: Number.isFinite(numericId),
-  });
-
-  const { data: commentsData } = useQuery({
-    queryKey: ["comments", numericId],
-    queryFn: () => getCommentsByBook(numericId),
-    enabled: Number.isFinite(numericId),
-  });
-
-  const { data: viewsData } = useQuery({
-    queryKey: ["views", numericId],
-    queryFn: () => getViews(numericId),
-    enabled: Number.isFinite(numericId),
-  });
-
-  const submitCommentMutation = useMutation({
-    mutationFn: (newComment) => PostComment(numericId, newComment),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["comments", numericId] });
-      setCommentInput("");
-    },
-    onError: (error) => {
-      console.error("Failed to post comment", error)
-    }
-  })
+  const submitCommentMutation = useAddComment(numericId);
 
   const handleAddComment = () => {
     if (!commentInput.trim()) return;
-    submitCommentMutation.mutate(commentInput);
+    submitCommentMutation.mutate(commentInput, {
+      onSuccess: () => {
+        setCommentInput(""); 
+      }
+    });
   };
 
-  const book = bookData?.data ?? bookData;
-  const chapters = chaptersData?.data ?? chaptersData ?? [];
-  const totalViews = viewsData?.data || 0;
-  const comments = commentsData?.data ?? commentsData ?? [];
-  
+  const { book, isBookLoading, bookError } = useBookById(numericId);
+  const { chapters, isChapterLoading } = useChaptersByBook(numericId);
+  const { comments, isCommentsLoading } = useCommentsByBook(numericId);
+  const { totalViews } = useViews(numericId);
 
   if (isBookLoading) return <p className={styles.loading}>Loading...</p>;
   if (bookError) return <p className={styles.error}>Error loading data.</p>;
@@ -96,7 +56,7 @@ function BookDetailsPage() {
           <div className={styles.scrollList}>
             {isChapterLoading ? (
               <p className={styles.loading}>Loading...</p>
-            ) : chapters.length > 0 ? (
+            ) : chapters?.length > 0 ? (
               chapters.map((chapter) => (
                 <BookChapters key={chapter.id} chapter={chapter} />
               ))
@@ -109,7 +69,7 @@ function BookDetailsPage() {
         <div className={styles.commetscolumn}>
           <h3 className={styles.sectionTitle}>User Comments</h3>
           <div className={styles.scrollList}>
-            {comments.length > 0 ? (
+            {comments?.length > 0 ? (
               comments.map((comment) => (
                 <Comments key={comment.id} comment={comment} />
               ))
