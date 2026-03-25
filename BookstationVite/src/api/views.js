@@ -7,7 +7,8 @@ export const getViews = async (id) => {
 };
 
 export const addView = async (id) => {
-  await publicApi.post(`/views/${id}`);
+  const res = await privateApi.post(`/views/${id}`);
+  console.log(res.data)
 };
 
 export default { getViews, addView };
