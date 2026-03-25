@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "./TopPicks.module.css";
 import { StarIcon, EyeIcon } from "../UI/IconLibrary";
-
 const BASE_URL = import.meta.env.VITE_API_URL || "";
 
 function TopPicks({ book }) {

@@ -70,6 +70,7 @@ function BookDetailsPage() {
   const chapters = chaptersData?.data ?? chaptersData ?? [];
   const totalViews = viewsData?.data || 0;
   const comments = commentsData?.data ?? commentsData ?? [];
+  
 
   if (isBookLoading) return <p className={styles.loading}>Loading...</p>;
   if (bookError) return <p className={styles.error}>Error loading data.</p>;
