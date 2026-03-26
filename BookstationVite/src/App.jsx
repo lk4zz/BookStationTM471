@@ -6,6 +6,7 @@ import BookDetailsPage from "./pages/bookdetails/BookDetailsPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import LoginPage from "./pages/authPages/LoginPage";
 import SingupPage from "./pages/authPages/SingupPage";
+import LibraryPage from "./pages/LibraryPage/LibraryPage";
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SingupPage />} />
         <Route path="/explore" element={<Explore />} />
+        <Route path="/library" element={<LibraryPage />} />
         <Route path="/book/:id" element={<BookDetailsPage />} />
       </Routes>
     </BrowserRouter>

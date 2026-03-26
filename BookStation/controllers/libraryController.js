@@ -19,7 +19,6 @@ const saveBook = catchAsync(async (req, res) => {
 });
 
 const getlibraryBooks = catchAsync(async(req, res) => {
-    try {
         const currentUserId = req.user.userId;
         const libraryBooks = await libraryServices.getLibraryBooks(currentUserId);
         res.status(200).json({
@@ -28,14 +27,6 @@ const getlibraryBooks = catchAsync(async(req, res) => {
             data: libraryBooks
         })
 
-    } catch (error) {
-        console.error(error);
-        if (error.message === "Your library is empty.") {
-            return res.status(404).json({ error: error.message });
-        }
-        res.status(500).json({ error: "Something went wrong while fetching the library." });
-
-    }
 });
 
 const removeBookFromLibrary = catchAsync(async (req, res) => {
