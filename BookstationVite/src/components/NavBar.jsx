@@ -1,18 +1,22 @@
 import Styles from "./NavBar.module.css";
 import React, { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; // i am using react-router-dom (do research)
 import { BookLogo, NotifButton, SearchButton } from "./UI/IconLibrary";
 
 function NavBar() {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [isSearchActive, setIsSearchActive] = useState(false);
   const searchInputRef = useRef(null);
+
   const handleSearchClick = () => {
     setIsSearchActive(true);
     setTimeout(() => {
       searchInputRef.current?.focus();
     }, 10);
   };
+  const isActive = (path) => location.pathname === path;
   return (
     <nav className={Styles.navBar}>
       {/* logo Section */}
@@ -27,13 +31,13 @@ function NavBar() {
           onClick={() => {
             navigate("/explore");
           }}
-          className={`${Styles.navItem} ${Styles.active}`}
+          className={`${Styles.navItem} ${isActive("/explore") ? Styles.active : ""}`}
         >
           Explore
         </button>
         <button
-          className={Styles.navItem}
-          onClick={() => {
+          className={`${Styles.navItem} ${isActive("/library") ? Styles.active : ""}`}
+          onClick={(e) => {
             navigate("/library");
           }}
         >
@@ -42,8 +46,9 @@ function NavBar() {
         <button
           onClick={() => {
             navigate("/write");
+            { handlePageClick }
           }}
-          className={Styles.navItem}
+          className={`${Styles.navItem} ${isActive("/write") ? Styles.active : ""}`}
         >
           Write
         </button>
@@ -73,7 +78,7 @@ function NavBar() {
         </div>
 
         <button className={Styles.iconButton} aria-label="Notifications">
-            <NotifButton/>
+          <NotifButton />
         </button>
 
         {/* profile Avatar  */}
