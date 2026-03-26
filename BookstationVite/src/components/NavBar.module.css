@@ -1,4 +1,4 @@
-/* global Variables */
+/* might need to remove this later since ihave global css plus clean this file */
 .navBar {
     --bg-color: #121212; 
     --text-primary: #ffffff;

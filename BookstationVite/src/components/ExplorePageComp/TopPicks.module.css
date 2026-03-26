@@ -16,7 +16,7 @@
   color: var(--text-main);
 }
 
-/* Background */
+/* background */
 .bgImage {
   position: absolute;
   inset: 0;
@@ -39,7 +39,7 @@
   z-index: 1;
 }
 
-/* Layout */
+/* layout */
 .contentWrapper {
   position: relative;
   z-index: 2;
@@ -49,7 +49,7 @@
   align-items: center;
 }
 
-/* Image */
+/* image */
 .bookcover {
   width: 220px;
   aspect-ratio: 2 / 3;
@@ -64,7 +64,7 @@
   object-fit: cover;
 }
 
-/* Text */
+/* text */
 .bookdetails {
   max-width: 600px;
   display: flex;
@@ -84,7 +84,7 @@
   margin: 10px 0;
 }
 
-/* Stats */
+/* stats */
 .bookinsights {
   display: flex;
   align-items: center;
@@ -112,7 +112,7 @@
   fill: none;
 }
 
-/* Description */
+/* description */
 .description {
   line-height: 1.6;
   color: #d4d4d8;
@@ -124,7 +124,7 @@
   overflow: hidden;
 }
 
-/* Buttons */
+/* buttons */
 .buttons {
   display: flex;
   gap: 16px;
@@ -158,7 +158,7 @@
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* Responsive */
+/* ressponsive */
 @media (max-width: 768px) {
   .contentWrapper {
     flex-direction: column;

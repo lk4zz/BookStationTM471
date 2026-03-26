@@ -26,7 +26,6 @@ function SignupPage() {
           <p className={styles.subtitle}>Join the community of readers and writers.</p>
         </div>
 
-        {/* 2. these are the input fields where data go (name or emailetcc) */}
         <form onSubmit={handleSubmit} className={styles.form}>
           <InputField 
             label="Full Name" 

@@ -7,7 +7,7 @@ function BookDescription({ book }) {
 
   const { description } =
     formattedBook;
-  // mocking progress for visual matching
+  // mocking progress for visual matching remove later or make it dynamic
   const current = 154;
   const total = 226;
   const percentage = Math.round((current / total) * 100);

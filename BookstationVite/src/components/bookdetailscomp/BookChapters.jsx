@@ -1,6 +1,7 @@
 import styles from "./BookChapter.module.css";
 
 function BookChapters({ chapter }) {
+  //fix icons add them to icon library
   return (
     <div className={styles.chapterCard}>
       <span className={styles.chapterTitle}>

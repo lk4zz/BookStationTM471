@@ -8,9 +8,8 @@ import { useLibraryBooks } from "../../hooks/useLibrary";
 function BookDetails({ book, onBack, views }) {
   const formattedBook = formatBookData(book);
   if (!formattedBook) return null;
-  const { data: libraryBooks, isLoading, isError, error } = useLibraryBooks();
-  const { name, bookId, coverUrl, ratingAverage, ratingCount, authorName } =
-    formattedBook;
+  const { name, bookId, coverUrl, ratingAverage, ratingCount, authorName } = formattedBook;
+  const { data: libraryBooks } = useLibraryBooks();
 
   const isBookInLibrary = libraryBooks?.some((book) => book.bookId === bookId);
 
@@ -20,6 +19,7 @@ function BookDetails({ book, onBack, views }) {
   const handleAddToLibrary = () => {
     if (isBookInLibrary) {
       removeFromLibraryMutation.mutate(bookId);
+
     } else {
       addToLibraryMutation.mutate(bookId);
     }
@@ -67,7 +67,7 @@ function BookDetails({ book, onBack, views }) {
             <button
               className={styles.secondaryBtn}
               onClick={handleAddToLibrary}
-              disabled={addToLibraryMutation.isPending}
+              disabled={addToLibraryMutation.isPending || removeFromLibraryMutation.isPending}
             >
               {isBookInLibrary ? "Remove from Library" : "Add to Library"}
             </button>

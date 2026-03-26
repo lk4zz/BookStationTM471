@@ -1,5 +1,5 @@
 import React from "react";
-import BookCard from "../ExplorePageComp/BookCard"; // Adjust path to your BookCard
+import BookCard from "../ExplorePageComp/BookCard";
 import styles from "./LibraryGrid.module.css";
 
 function LibraryGrid({ libraryItems }) {

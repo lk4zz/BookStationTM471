@@ -18,8 +18,12 @@ export const useRemoveFromLibrary = () => {
 
   return useMutation({
     mutationFn: removeBook,
-    onSuccess: () => {
-      // Invalidate and refetch library data immediately after a successful delete
+    onSuccess: (_, deletedBookId) => {
+      
+      queryClient.setQueryData( ["library"], (oldData)  =>  {
+        if(!oldData) return[];
+        return oldData.filter((item)  =>Number(item.bookId) !== Number(deletedBookId));
+      });
       queryClient.invalidateQueries({ queryKey: ["library"] });
     },
   });

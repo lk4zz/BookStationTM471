@@ -10,7 +10,7 @@ import { useBookById } from "../../hooks/useBooks";
 import { useChaptersByBook } from "../../hooks/useChapters";
 import { useCommentsByBook } from "../../hooks/useComments";
 import { useAddComment } from "../../hooks/useComments";
-
+//might need toclean could useless jsx and  they could be added to components
 function BookDetailsPage() {
   const { id } = useParams();
   const numericId = Number(id);

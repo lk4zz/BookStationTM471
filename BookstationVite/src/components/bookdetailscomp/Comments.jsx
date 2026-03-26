@@ -1,6 +1,7 @@
 import styles from "./Comments.module.css";
 
 function Comments({ comment }) {
+  //implement later on actual profile photo (not included in data base yet)
   return (
     <div className={styles.commentCard}>
       <div className={styles.avatarPlaceholder}>
