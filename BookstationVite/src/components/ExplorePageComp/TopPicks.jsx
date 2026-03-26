@@ -1,25 +1,14 @@
 import React from "react";
 import styles from "./TopPicks.module.css";
 import { StarIcon, EyeIcon } from "../UI/IconLibrary";
+import { formatBookData } from "../../utils/bookUtils";
 const BASE_URL = import.meta.env.VITE_API_URL || "";
 
 function TopPicks({ book }) {
-  if (!book) return null;
+  const formattedBook  = formatBookData(book);
+  if (!formattedBook) return null;
 
-  const {
-    name = "Untitled",
-    description = "",
-    coverImage = "",
-    ratingAverage = 0,
-    views = 0,
-    author,
-  } = book;
-
-  const authorName = author?.name || "Unknown";
-
-  const coverUrl = coverImage
-    ? `${BASE_URL}/${coverImage}`
-    : "/fallback-cover.jpg";
+  const { name, coverUrl, ratingAverage, authorName } = formattedBook;
 
   const bgStyle = {
     backgroundImage: `url(${coverUrl})`,

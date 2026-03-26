@@ -1,4 +1,3 @@
-// ICONS.JSX - Only holds the icon definitions!
 import React from "react";
 
 export const StarIcon = (props) => (
@@ -55,7 +54,7 @@ export const BookLogo = (props) => (
         
 export const SearchButton = (props) => (
   <svg
-    {...props} /* This unpacks onClick, className, etc. onto the SVG */
+    {...props} 
     xmlns="http://www.w3.org/2000/svg"
     width="20"
     height="20"

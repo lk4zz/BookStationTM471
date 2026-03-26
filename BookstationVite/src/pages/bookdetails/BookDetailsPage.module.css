@@ -67,7 +67,7 @@
   flex: 1;
 }
 
-/* Custom Scrollbar */
+/* custom Scrollbar */
 .scrollList::-webkit-scrollbar {
   width: 6px;
 }
@@ -86,7 +86,7 @@
   background: #52525b;
 }
 
-/* Add Comment Input */
+/* add Comment Input */
 .commentInputWrapper {
   display: flex;
   align-items: center;

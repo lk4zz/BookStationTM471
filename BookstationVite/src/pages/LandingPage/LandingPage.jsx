@@ -10,8 +10,8 @@ function LandingPage() {
 
   const navigate = useNavigate();
   const { books, isBooksLoading, booksError } = useAllBooks()
-  if (isBooksLoading) return <p /*className={Styles.loading}*/> Loading...</p>;
-  if (booksError) return <p /*className={Styles.error}*/> {booksError.message}</p>;
+  if (isBooksLoading) return <p className="loading"> Loading...</p>;
+  if (booksError) return <p className="loading"> {booksError.message}</p>;
 
 
   //  this only shows a sample edit later to be all books and genres so guest can explore
@@ -56,8 +56,6 @@ function LandingPage() {
           Start Reading Now
         </button>
       </header>
-
-      {/* features Section these can be grouped into one reusable component*/}
 
       <section className={styles.features}>
         <FeaturesCard Icon={SparklesIcon} header="AI-Powered Experience"

@@ -10,7 +10,7 @@
 
 .bgImage {
   position: absolute;
-  inset: -10%; /* Prevents blurry white edges */
+  inset: -10%; /* pprevents blurry white edges */
   background-size: cover;
   background-position: center;
   filter: blur(15px);

@@ -5,6 +5,7 @@ import { StarIcon } from "../UI/IconLibrary";
 import { addView } from "../../api/views";
 
 function BookCard({ book }) {
+  //link works but might as well change it to navigate later since i am already using it in other files
   return (
     <Link onClick= { () => addView(book.id)} className={styles.link} to={`/book/${book.id}`}>
       <div className={styles.card}>

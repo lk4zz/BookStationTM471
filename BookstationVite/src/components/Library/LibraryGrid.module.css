@@ -1,6 +1,5 @@
 .gridContainer {
   display: grid;
-  /* Using the CSS you provided for context */
   grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
   gap: var(--space-4);
   width: 100%;
