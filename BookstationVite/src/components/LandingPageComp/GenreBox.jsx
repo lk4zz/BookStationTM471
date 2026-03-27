@@ -7,7 +7,7 @@ function GenreBox({ genre }) {
       action: "#630101",    // Red
       fantasy: "#40007c",   // Purple
       romance: "#610032",   // Pink
-      sciFi: "#3b82f6",     // Blue
+      scifi: "#0053d8",     // Blue
       horror: "#111827",    // Dark Gray/Black
       comedy: "#eab308",    // Yellow
       mystery: "#14b8a6",   // Teal

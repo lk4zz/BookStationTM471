@@ -22,8 +22,8 @@ function BookDetailsPage() {
     if (!commentInput.trim()) return;
     submitCommentMutation.mutate(commentInput, {
       onSuccess: () => {
-        setCommentInput(""); 
-      }
+        setCommentInput("");
+      },
     });
   };
 
@@ -49,21 +49,6 @@ function BookDetailsPage() {
         <div className={styles.column}>
           <h3 className={styles.sectionTitle}>Book Description</h3>
           <BookDescription book={book} />
-        </div>
-
-        <div className={styles.chaptercolumn}>
-          <h3 className={styles.sectionTitle}>Chapters</h3>
-          <div className={styles.scrollList}>
-            {isChapterLoading ? (
-              <p className="loading">Loading...</p>
-            ) : chapters?.length > 0 ? (
-              chapters.map((chapter) => (
-                <BookChapters key={chapter.id} chapter={chapter} />
-              ))
-            ) : (
-              <p className={styles.emptyState}>No chapters available.</p>
-            )}
-          </div>
         </div>
 
         <div className={styles.commetscolumn}>
@@ -94,6 +79,20 @@ function BookDetailsPage() {
             >
               Submit
             </button>
+          </div>
+        </div>
+        <div className={styles.chaptercolumn}>
+          <h3 className={styles.sectionTitle}>Chapters</h3>
+          <div className={styles.scrollList}>
+            {isChapterLoading ? (
+              <p className="loading">Loading...</p>
+            ) : chapters?.length > 0 ? (
+              chapters.map((chapter) => (
+                <BookChapters key={chapter.id} chapter={chapter} />
+              ))
+            ) : (
+              <p className={styles.emptyState}>No chapters available.</p>
+            )}
           </div>
         </div>
       </div>

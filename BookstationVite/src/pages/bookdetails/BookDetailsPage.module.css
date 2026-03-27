@@ -15,7 +15,7 @@
 .lowerContainer {
   display: flex;
   justify-content: space-between;
-  gap: 5%;
+  gap: 3%;
   padding: 2% 5%;
   max-height: 20%;
   background-color: #121212;
@@ -43,7 +43,7 @@
 .column {
   display: flex;
   flex-direction: column;
-  flex: 2.5;
+  flex: 2;
   height: 40vh;
   min-height: 300px;
   width: 100%;
