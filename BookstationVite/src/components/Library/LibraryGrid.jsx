@@ -8,7 +8,7 @@ function LibraryGrid({ libraryItems }) {
   }
 
   return (
-    <div className={styles.gridContainer}>
+    <div className="gridContainer">
       {libraryItems.map((item) => (
         // item is the LibraryBook record, item.book is the actual Books record
         <BookCard key={item.id} book={item.book} />

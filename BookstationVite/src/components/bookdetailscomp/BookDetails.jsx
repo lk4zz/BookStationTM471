@@ -2,29 +2,14 @@ import styles from "./BookDetails.module.css";
 import { EyeIcon } from "../UI/IconLibrary";
 import { Rating } from "react-simple-star-rating";
 import { formatBookData } from "../../utils/bookUtils";
-import { useAddToLibrary, useRemoveFromLibrary } from "../../hooks/useLibrary";
-import { useLibraryBooks } from "../../hooks/useLibrary";
+import AddToLibraryBtn from "../UI/AddToLibraryBtn";
 
 function BookDetails({ book, onBack, views }) {
   const formattedBook = formatBookData(book);
   if (!formattedBook) return null;
   const { name, bookId, coverUrl, ratingAverage, ratingCount, authorName } = formattedBook;
-  const { data: libraryBooks } = useLibraryBooks();
-
-  const isBookInLibrary = libraryBooks?.some((book) => book.bookId === bookId);
-
-  const addToLibraryMutation = useAddToLibrary();
-  const removeFromLibraryMutation = useRemoveFromLibrary();
-
-  const handleAddToLibrary = () => {
-    if (isBookInLibrary) {
-      removeFromLibraryMutation.mutate(bookId);
-
-    } else {
-      addToLibraryMutation.mutate(bookId);
-    }
-  };
-
+  console.log(bookId)
+  
   return (
     <div className={styles.container}>
       <div
@@ -64,13 +49,7 @@ function BookDetails({ book, onBack, views }) {
             <button className={styles.primaryBtn}>
               Continue Reading (68%)
             </button>
-            <button
-              className={styles.secondaryBtn}
-              onClick={handleAddToLibrary}
-              disabled={addToLibraryMutation.isPending || removeFromLibraryMutation.isPending}
-            >
-              {isBookInLibrary ? "Remove from Library" : "Add to Library"}
-            </button>
+              <AddToLibraryBtn bookId={bookId}/>
           </div>
         </div>
 

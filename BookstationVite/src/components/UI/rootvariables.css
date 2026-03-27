@@ -52,3 +52,20 @@
   --duration-fast: 0.2s;
   --duration-normal: 0.25s;
 }
+
+.loading {
+  color: white;
+  font-size: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+}
+
+.gridContainer {
+  max-width: 90%;
+  margin: 3% 4%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+}

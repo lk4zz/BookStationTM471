@@ -1,26 +1,24 @@
 import React from "react";
-import NavBar from "../../components/NavBar";
+import NavBar from "../../components/UI/NavBar";
 import LibraryGrid from "../../components/Library/LibraryGrid";
 import { useLibraryBooks } from "../../hooks/useLibrary";
 import styles from "./LibraryPage.module.css";
 import IsGuestLibrary from "../../components/Library/IsGuestLibrary";
 
 function LibraryPage() {
-  
+
   // quick guest check (el backend already prevent unauthorized entries)
   const isGuest = !localStorage.getItem("token");
-  
   const { data: libraryItems, isLoading, isError, error } = useLibraryBooks(); //fetch books
-  
 
   if (isGuest) {
     return (
       <div className={styles.pageWrapper}>
         <NavBar />
         <IsGuestLibrary title={"Log in to view your Library"}
-        body={"Log in to view your Library"}
-        suggestion={"Login"}
-        path={"/login"} />
+          body={"Log in to view your Library"}
+          suggestion={"Login"}
+          path={"/login"} />
       </div>
     );
   }
@@ -31,7 +29,7 @@ function LibraryPage() {
         <NavBar />
         <main className={styles.centeredContent}>
 
-          <div className="loading">Loading library...</div> 
+          <div className="loading">Loading library...</div>
         </main>
       </div>
     );
@@ -42,9 +40,9 @@ function LibraryPage() {
       <div className={styles.pageWrapper}>
         <NavBar />
         <IsGuestLibrary title={"Your Library is Empty"}
-        body={"You haven't added any books to your library yet."}
-        suggestion={"Explore Books"}
-        path={"/explore"} />
+          body={"You haven't added any books to your library yet."}
+          suggestion={"Explore Books"}
+          path={"/explore"} />
       </div>
     );
   }
@@ -70,7 +68,7 @@ function LibraryPage() {
             {libraryItems.length} {libraryItems.length === 1 ? "Book" : "Books"}
           </span>
         </div>
-        
+
         <LibraryGrid libraryItems={libraryItems} />
       </main>
     </div>

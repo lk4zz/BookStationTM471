@@ -5,9 +5,10 @@ export const useLibraryBooks = () => {
   return useQuery({
     queryKey: ["library"],
     queryFn: fetchLibraryBooks,
-    // do not retry on 404 (Empty Library) or 401/403 (Auth Errors)
     retry: (failureCount, error) => {
-      if (error.response?.status === 404 || error.response?.status === 401) return false;
+      if (error.message.includes("401") || error.message.includes("403")) {
+        return false; 
+      }
       return failureCount < 2;
     },
   });
@@ -18,12 +19,21 @@ export const useRemoveFromLibrary = () => {
 
   return useMutation({
     mutationFn: removeBook,
-    onSuccess: (_, deletedBookId) => {
-      
-      queryClient.setQueryData( ["library"], (oldData)  =>  {
-        if(!oldData) return[];
-        return oldData.filter((item)  =>Number(item.bookId) !== Number(deletedBookId));
+    onMutate: async (deletedBookId) => {
+      await queryClient.cancelQueries({ queryKey: ["library"] });
+      const previousLibrary = queryClient.getQueryData(["library"]);
+
+      queryClient.setQueryData(["library"], (oldData) => {
+        if (!oldData) return [];
+        return oldData.filter((item) => Number(item.bookId) !== Number(deletedBookId));
       });
+
+      return { previousLibrary };
+    },
+    onError: (error, deletedBookId, context) => {
+      queryClient.setQueryData(["library"], context.previousLibrary);
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["library"] });
     },
   });
@@ -38,8 +48,6 @@ export const useAddToLibrary = () => {
       queryClient.invalidateQueries({ queryKey: ["library"] });
     },
     onError: (error) => {
-      const backendError = error.response?.data?.message || "Failed to add book";
-      console.log("Backend says:", backendError);
     }
   });
 };

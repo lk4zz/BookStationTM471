@@ -4,7 +4,7 @@ import { SparklesIcon } from "../../components/UI/IconLibrary";
 import { login } from "../../api/auth";
 import { useAuthForm } from "../../hooks/useAuthForm";
 import { InputField } from "../../components/UI/InputField";
-//use navigate  here instead  oflink also
+
 function LoginPage() {
   const { formData, error, isLoading, handleChange, handleSubmit } =
     useAuthForm(login, { email: "", password: "" }, "/explore");

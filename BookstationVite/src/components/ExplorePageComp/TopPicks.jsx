@@ -2,14 +2,15 @@ import React from "react";
 import styles from "./TopPicks.module.css";
 import { StarIcon, EyeIcon } from "../UI/IconLibrary";
 import { formatBookData } from "../../utils/bookUtils";
-const BASE_URL = import.meta.env.VITE_API_URL || "";
+import { useViews } from "../../hooks/useViews";
+import AddToLibraryBtn from "../UI/AddToLibraryBtn";
 
 function TopPicks({ book }) {
-  const formattedBook  = formatBookData(book);
+  const formattedBook = formatBookData(book);
   if (!formattedBook) return null;
 
-  const { name, coverUrl, ratingAverage, authorName } = formattedBook;
-
+  const { name, bookId, coverUrl, description, ratingAverage, authorName } = formattedBook;
+  const { totalViews } = useViews(bookId)
   const bgStyle = {
     backgroundImage: `url(${coverUrl})`,
   };
@@ -37,13 +38,13 @@ function TopPicks({ book }) {
             <p>by {authorName}</p>
 
             <div className={styles.statItem}>
-              <StarIcon className={styles.iconStar}/>
+              <StarIcon className={styles.iconStar} />
               {ratingAverage.toFixed(1)}
             </div>
 
             <div className={styles.statItem}>
               <EyeIcon className={styles.iconEye} />
-              {views}
+              {totalViews}
             </div>
           </div>
 
@@ -51,7 +52,7 @@ function TopPicks({ book }) {
 
           <div className={styles.buttons}>
             <button className={styles.primaryBtn}>Continue Reading</button>
-            <button className={styles.secondaryBtn}>Add to Library</button>
+            <AddToLibraryBtn bookId={bookId} className={styles.secondaryBtn}/>
           </div>
         </div>
       </div>
