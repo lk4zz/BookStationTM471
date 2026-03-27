@@ -5,7 +5,7 @@ import { SparklesIcon, CoinsIcon, BookOpenIcon } from "../../components/UI/IconL
 import styles from "./LandingPage.module.css";
 import FeaturesCard from "../../components/LandingPageComp/FeaturesCard";
 import { useAllBooks } from "../../hooks/useBooks";
-import GenreBox from "../../components/ExplorePageComp/GenreBox";
+import GenreBox from "../../components/LandingPageComp/GenreBox";
 import { useAllGenres } from "../../hooks/useGenres";
 
 function LandingPage() {

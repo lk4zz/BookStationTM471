@@ -1,0 +1,28 @@
+.chapterCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 17px;
+  border-radius: 8px;
+  background-color: #27272a;
+  color: #d4d4d8;
+  transition: background-color 0.2s;
+  cursor: pointer;
+
+}
+
+.chapterCard:hover {
+  background-color: #3f3f46;
+}
+
+.chapterTitle {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.icon {
+  width: 18px;
+  height: 30px;
+  color: #a1a1aa;
+}

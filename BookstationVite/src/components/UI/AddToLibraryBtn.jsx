@@ -1,11 +1,7 @@
 import { useAddToLibrary, useRemoveFromLibrary } from "../../hooks/useLibrary";
-import { useLibraryBooks } from "../../hooks/useLibrary";
 import styles from "./AddToLibraryBtn.module.css"
 
-function AddToLibraryBtn({bookId}) {
-    const { data: libraryBooks } = useLibraryBooks();
-
-    const isBookInLibrary = libraryBooks?.some((book) => book.bookId === bookId);
+function AddToLibraryBtn({bookId, isBookInLibrary}) {
 
     const addToLibraryMutation = useAddToLibrary();
     const removeFromLibraryMutation = useRemoveFromLibrary();

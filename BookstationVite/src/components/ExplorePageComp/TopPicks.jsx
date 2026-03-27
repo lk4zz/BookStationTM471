@@ -4,13 +4,15 @@ import { StarIcon, EyeIcon } from "../UI/IconLibrary";
 import { formatBookData } from "../../utils/bookUtils";
 import { useViews } from "../../hooks/useViews";
 import AddToLibraryBtn from "../UI/AddToLibraryBtn";
+import { useLibraryBooks } from "../../hooks/useLibrary";
 
 function TopPicks({ book }) {
   const formattedBook = formatBookData(book);
   if (!formattedBook) return null;
-
   const { name, bookId, coverUrl, description, ratingAverage, authorName } = formattedBook;
-  const { totalViews } = useViews(bookId)
+  const { data: libraryBooks } = useLibraryBooks();
+  const isBookInLibrary = libraryBooks?.some((book) => book.bookId === bookId);
+  const { totalViews } = useViews(bookId);
   const bgStyle = {
     backgroundImage: `url(${coverUrl})`,
   };
@@ -19,7 +21,6 @@ function TopPicks({ book }) {
     <section className={styles.container}>
       <div className={styles.bgImage} style={bgStyle} />
       <div className={styles.overlay} />
-
       <div className={styles.contentWrapper}>
         <div className={styles.bookcover}>
           <img
@@ -52,7 +53,7 @@ function TopPicks({ book }) {
 
           <div className={styles.buttons}>
             <button className={styles.primaryBtn}>Continue Reading</button>
-            <AddToLibraryBtn bookId={bookId} className={styles.secondaryBtn}/>
+            <AddToLibraryBtn bookId={bookId} isBookInLibrary={isBookInLibrary} className={styles.secondaryBtn} />
           </div>
         </div>
       </div>
