@@ -2,7 +2,7 @@ const bookGenreService = require('../services/bookGenreServices');
 const catchAsync = require('../middlewares/catchAsync');
 
 const tagBook = catchAsync(async (req, res) => {
-    try {
+
         const { bookId } = req.params;
         const currentUserId = req.user.userId; 
         
@@ -17,16 +17,6 @@ const tagBook = catchAsync(async (req, res) => {
 
         res.status(200).json({ message: "Book successfully tagged with genres!" });
 
-    } catch (error) {
-        console.error(error);
-        if (error.message === "Book not found") {
-            return res.status(404).json({ error: error.message });
-        }
-        if (error.message.includes("Forbidden")) {
-            return res.status(403).json({ error: error.message });
-        }
-        res.status(500).json({ error: "Something went wrong while tagging the book." });
-    }
 });
 
 module.exports = {

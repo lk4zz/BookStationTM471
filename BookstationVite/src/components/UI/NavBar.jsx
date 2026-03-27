@@ -1,7 +1,7 @@
 import Styles from "./NavBar.module.css";
 import React, { useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom"; // i am using react-router-dom (do research)
-import { BookLogo, NotifButton, SearchButton } from "./UI/IconLibrary";
+import { BookLogo, NotifButton, SearchButton } from "./IconLibrary";
 
 function NavBar() {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ function NavBar() {
         <h1>Bookstation</h1>
       </div>
 
-      {/* navigation Links */}
+      {/* navigation Links this is the techinque use instead of link in bookcards */}
       <div className={Styles.navLinks}>
         <button
           onClick={() => {

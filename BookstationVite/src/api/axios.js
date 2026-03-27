@@ -16,5 +16,23 @@ privateApi.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error),
+  (error) => Promise.reject(error)
+);
+
+privateApi.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    const backendData = error.response?.data;
+    
+    if (backendData) {
+      const errorMessage = backendData.message || backendData.error || backendData.details;
+      if (errorMessage) {
+        return Promise.reject(new Error(errorMessage));
+      }
+    }
+    
+    return Promise.reject(new Error(error.message || "An unexpected network error occurred."));
+  }
 );

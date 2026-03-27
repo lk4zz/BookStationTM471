@@ -15,4 +15,10 @@ export const getBookById = async (id) => {
     return  res.data;
 }
 
-export default { getAllBooks, getBookById };
+export const getBooksByGenre = async(genreId) => {
+    console.log(`fetching books with genre ${genreId}`)
+    const res = await publicApi.get(`/books/genres/${genreId}`)
+    return res.data;
+}
+
+export default { getAllBooks, getBookById, getBooksByGenre };

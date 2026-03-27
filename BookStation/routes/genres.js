@@ -6,7 +6,7 @@ const { verifyToken }  = require('../middlewares/verifyToken');
 // Public route
 router.get('/', genreController.getAllGenres);
 
-// Protected route: 
+// Protected route: for admins
 router.post('/', verifyToken, genreController.createGenre);
 
 module.exports = router;

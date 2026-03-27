@@ -8,6 +8,13 @@
   color: var(--color-text-primary);
 }
 
+.genreBoxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    height: 80px;
+}
+
 .navbar {
   display: flex;
   justify-content: space-between;

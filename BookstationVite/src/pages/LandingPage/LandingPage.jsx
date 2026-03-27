@@ -5,21 +5,26 @@ import { SparklesIcon, CoinsIcon, BookOpenIcon } from "../../components/UI/IconL
 import styles from "./LandingPage.module.css";
 import FeaturesCard from "../../components/LandingPageComp/FeaturesCard";
 import { useAllBooks } from "../../hooks/useBooks";
+import GenreBox from "../../components/ExplorePageComp/GenreBox";
+import { useAllGenres } from "../../hooks/useGenres";
 
 function LandingPage() {
 
   const navigate = useNavigate();
   const { books, isBooksLoading, booksError } = useAllBooks()
+  const { genres, isGenresLoading, genresError } = useAllGenres();
   if (isBooksLoading) return <p className="loading"> Loading...</p>;
   if (booksError) return <p className="loading"> {booksError.message}</p>;
-
+  if (isGenresLoading) return <p>loading..</p>
+  if (genresError) return <p>{genresError.message}</p>
 
   //  this only shows a sample edit later to be all books and genres so guest can explore
   const showcaseBooks = books?.slice(0, 6) || [];
 
   return (
     <div className={styles.pageWrapper}>
-      {/* navigation Header */}
+      {/* could be a component */}
+      {/* navigation Header makecomponent later */}
       <nav className={styles.navbar}>
         <div className={styles.logo}>
           Bookstation <SparklesIcon className={styles.logoIcon} />
@@ -39,8 +44,8 @@ function LandingPage() {
           </button>
         </div>
       </nav>
-
-      {/* hero Section */}
+      {/* could be a component */}
+      {/* hero Section make component later */}
       <header className={styles.hero}>
         <h1 className={styles.heroTitle}>
           Because Everyone Deserves To Tell Their Own <span>Story</span>
@@ -66,7 +71,7 @@ function LandingPage() {
           text="Create an ongoing book and publish chapters in real-time. Build an active audience while your story unfolds." />
       </section>
 
-      {/* dynamic Book Showcase Section fix this later to allow all exploration*/}
+      {/* guest should not access explore section*/}
       <section className={styles.showcase}>
         <div className={styles.showcaseHeader}>
           <h2>Trending on Bookstation</h2>
@@ -87,7 +92,16 @@ function LandingPage() {
           </div>
         )}
       </section>
-
+      <section className={styles.showcase}>
+        <div className={styles.showcaseHeader}></div>
+      <h1>Pick your favourite genre</h1>
+      <div className={styles.genreBoxes}>
+        {genres.map((genre) => (
+          <GenreBox key={genre.id} genre={genre} />
+        ))}
+      </div>
+      </section>
+      {/* could be a component */}
       {/* footer */}
       <footer className={styles.footer}>
         <p>© {new Date().getFullYear()} Bookstation. All rights reserved.</p>

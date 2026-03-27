@@ -17,8 +17,8 @@ export const useCommentsByBook = (numericId) => {
     const comments = commentsData?.data ?? commentsData ?? [];
 
     return { comments, isCommentsLoading }
-
 }
+
 export const useAddComment = (numericId) => {
 const queryClient = useQueryClient()
 return useMutation({

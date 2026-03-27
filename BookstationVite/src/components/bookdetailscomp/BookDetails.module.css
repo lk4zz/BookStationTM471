@@ -72,9 +72,10 @@
 }
 
 .iconEye {
-  width: 18px;
-  height: 18px;
-  color: white;
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
 }
 
 .buttons {
@@ -96,13 +97,6 @@
   color: white;
 }
 .primaryBtn:hover { background: #2563eb; }
-
-.secondaryBtn {
-  background: transparent;
-  border: 1px solid #3f3f46 !important;
-  color: white;
-}
-.secondaryBtn:hover { background: rgba(255,255,255,0.1); }
 
 .coverWrapper {
   width: 260px;
