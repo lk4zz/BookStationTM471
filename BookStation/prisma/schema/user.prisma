@@ -19,5 +19,5 @@ model User {
     transactions   TransactionLedger[]
     following Followers[] @relation("FollowerRelation")
     followers Followers[] @relation("FollowingRelation")
-    
+    readingProgress ReadingProgress[]
 }

@@ -112,6 +112,7 @@
     background-color: transparent;
     border-radius: 20px;
     padding: 6px 12px;
+    height: 20px;
     transition: all var(--transition-speed) ease;
 }
 

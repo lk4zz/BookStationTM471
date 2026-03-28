@@ -14,5 +14,5 @@ model Chapters {
     @@unique([bookId, chapterNum])
     pages Pages[]
     chapterUnlocks ChapterUnlocks[]
-
+    readingProgress ReadingProgress[]
 }

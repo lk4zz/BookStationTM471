@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import ChaptersPanel from "../../components/ReadingPageComp/ChaptersPanel";
 import ReadingCanvas from "../../components/ReadingPageComp/ReadingCanvas";
 import AiPanel from "../../components/ReadingPageComp/AiPanel";
@@ -12,10 +13,18 @@ function ReadingPage() {
   const { chapterId } = useParams();
   const numericBookId = Number(bookId);
   const numericChapterId = Number(chapterId);
+  
 
   const { chapters, isChaptersLoading } = useChaptersByBook(numericBookId);
   const { chapterData, isChapterLoading } = useChapterById(numericChapterId)
   const { pagesData, isPagesLoading, pagesError } = usePagesByChatper(numericChapterId);
+
+  // const { saveProgress } = useUpdateProgress();
+  // useEffect(() => {
+  //   if (numericBookId && numericChapterId) {
+  //     saveProgress({ bookId: numericBookId, chapterId: numericChapterId });
+  //   }
+  // }, [numericBookId, numericChapterId, saveProgress]);
 
   if (isPagesLoading) return <p>BRUH</p>
   if(isChaptersLoading) return <p className="loading">Loading..</p>

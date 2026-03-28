@@ -2,13 +2,17 @@ import Styles from "./NavBar.module.css";
 import React, { useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom"; // i am using react-router-dom (do research)
 import { BookLogo, NotifButton, SearchButton } from "./IconLibrary";
+import { useGetWallet } from "../../hooks/useWallet";
+import Wallet from "./wallet/Wallet";
 
 function NavBar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const {balance, isWalletLoading, walletError} = useGetWallet();
 
   const [isSearchActive, setIsSearchActive] = useState(false);
   const searchInputRef = useRef(null);
+  if (isWalletLoading) return <p className="loading"> wallet loading..</p>
 
   const handleSearchClick = () => {
     setIsSearchActive(true);
@@ -23,6 +27,7 @@ function NavBar() {
       <div className={Styles.logoContainer}>
         <BookLogo className={Styles.logo} />
         <h1>Bookstation</h1>
+        
       </div>
 
       {/* navigation Links this is the techinque use instead of link in bookcards */}
@@ -76,7 +81,7 @@ function NavBar() {
             }}
           />
         </div>
-
+            <Wallet balance={balance}/>
         <button className={Styles.iconButton} aria-label="Notifications">
           <NotifButton />
         </button>

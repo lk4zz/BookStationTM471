@@ -9,6 +9,7 @@ import SingupPage from "./pages/authPages/SingupPage";
 import LibraryPage from "./pages/LibraryPage/LibraryPage";
 import GenresPage from "./pages/GenresPage/GenresPage";
 import ReadingPage from "./pages/ReadingPage/ReadingPage";
+import WalletPage from "./pages/WalletPage/WalletPage";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path="/library" element={<LibraryPage />} />
         <Route path="/book/:id" element={<BookDetailsPage />} />
         <Route path="/book/reading/:bookId/:chapterId" element={<ReadingPage />} />
+        <Route path="/wallet/buy" element={<WalletPage />} />
       </Routes>
     </BrowserRouter>
   );

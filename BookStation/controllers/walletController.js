@@ -23,7 +23,7 @@ const buyCoins = catchAsync(async (req, res) => {
 
 const getCoinBalance = catchAsync(async (req, res) => {
     const currentUserId = req.user? req.user.userId : null;
-    const walletBalance = walletServices.getCoinBalance(currentUserId);
+    const walletBalance = await walletServices.getCoinBalance(currentUserId);
     res.status(200).json({
         success: true,
         data: walletBalance
