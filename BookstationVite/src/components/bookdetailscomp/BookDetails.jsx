@@ -4,8 +4,9 @@ import { Rating } from "react-simple-star-rating";
 import { formatBookData } from "../../utils/bookUtils";
 import AddToLibraryBtn from "../UI/AddToLibraryBtn";
 import { useLibraryBooks } from "../../hooks/useLibrary";
+import OnBackButton from "../UI/OnBackButton";
 
-function BookDetails({ book, onBack, views }) {
+function BookDetails({ book, views }) {
   const formattedBook = formatBookData(book);
   if (!formattedBook) return null;
   const { name, bookId, coverUrl, ratingAverage, ratingCount, authorName } =
@@ -24,9 +25,8 @@ function BookDetails({ book, onBack, views }) {
 
       <div className={styles.contentWrapper}>
         <div className={styles.bookInfo}>
-          <button className={styles.goBackBtn} onClick={onBack}>
-            &larr; Go Back
-          </button>
+
+          <OnBackButton />
 
           <h2 className={styles.bookTitle}>{name}</h2>
           <p className={styles.authorText}>by {authorName}</p>

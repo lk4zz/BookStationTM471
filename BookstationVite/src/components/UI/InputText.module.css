@@ -1,0 +1,80 @@
+/* The wrapper that holds everything together */
+.inputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.inputField {
+    flex: 1;
+    background-color: transparent;
+    border: 1px solid #3f3f46;
+    border-radius: 20px;
+    
+    /* 45px padding on the right creates a safe zone for the absolute button */
+    padding: 10px 45px 10px 16px; 
+    
+    color: white;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.inputField:focus {
+    border-color: #3b82f6;
+    /* Adds a soft glowing aura when focused */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); 
+}
+
+/* Base button styles */
+.submitBtn {
+    position: absolute;
+    right: 6px; /* Pins it 6px away from the right edge of the input */
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0;
+}
+
+/* State: When input is empty */
+.disabledBtn {
+    background-color: #3f3f46;
+    color: #71717a;
+    cursor: not-allowed;
+    transform: scale(0.90); /* Looks slightly deflated */
+}
+
+/* State: When input has text */
+.activeBtn {
+    background-color: #3b82f6;
+    color: white;
+    cursor: pointer;
+    transform: scale(1); /* Pops to full size */
+}
+
+.activeBtn:hover {
+    background-color: #2563eb;
+    transform: scale(1.05); /* Expands slightly on hover */
+}
+
+.activeBtn:active {
+    transform: scale(0.95); /* Squishes down when clicked */
+}
+
+/* The Arrow Icon */
+.arrowIcon {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.2s ease;
+}
+
+/* Nudges the arrow up when hovering the active button */
+.activeBtn:hover .arrowIcon {
+    transform: translateY(-2px); 
+}

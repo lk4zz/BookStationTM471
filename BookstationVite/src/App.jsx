@@ -22,7 +22,7 @@ function App() {
         <Route path="/books/:type" element={<GenresPage />} />
         <Route path="/library" element={<LibraryPage />} />
         <Route path="/book/:id" element={<BookDetailsPage />} />
-        <Route path="/book/reading/:id" element={<ReadingPage />} />
+        <Route path="/book/reading/:bookId/:chapterId" element={<ReadingPage />} />
       </Routes>
     </BrowserRouter>
   );

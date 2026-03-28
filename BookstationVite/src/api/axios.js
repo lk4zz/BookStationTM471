@@ -36,3 +36,21 @@ privateApi.interceptors.response.use(
     return Promise.reject(new Error(error.message || "An unexpected network error occurred."));
   }
 );
+
+publicApi.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    const backendData = error.response?.data;
+    
+    if (backendData) {
+      const errorMessage = backendData.message || backendData.error || backendData.details;
+      if (errorMessage) {
+        return Promise.reject(new Error(errorMessage));
+      }
+    }
+    
+    return Promise.reject(new Error(error.message || "An unexpected network error occurred."));
+  }
+);

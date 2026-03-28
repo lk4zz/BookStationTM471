@@ -10,6 +10,8 @@ import { useBookById } from "../../hooks/useBooks";
 import { useChaptersByBook } from "../../hooks/useChapters";
 import { useCommentsByBook } from "../../hooks/useComments";
 import { useAddComment } from "../../hooks/useComments";
+import InputText from "../../components/UI/InputText";
+
 //might need toclean could useless jsx and  they could be added to components
 function BookDetailsPage() {
   const { id } = useParams();
@@ -41,7 +43,6 @@ function BookDetailsPage() {
         <BookDetails
           book={book}
           views={totalViews}
-          onBack={() => navigate(-1)}
         />
       </div>
 
@@ -64,21 +65,14 @@ function BookDetailsPage() {
           </div>
           <div className={styles.commentInputWrapper}>
             <div className={styles.avatarPlaceholder} />
-            <input
-              type="text"
+            <InputText
               value={commentInput}
-              onKeyDown={(e) => e.key === "Enter" && handleAddComment()}
-              onChange={(e) => setCommentInput(e.target.value)}
+              onChange={setCommentInput}
+              onSubmit={handleAddComment}
               placeholder="Add a Comment"
-              className={styles.commentInput}
+              disabled={submitCommentMutation.isPending}
             />
-            <button
-              className={styles.commentSubmitButton}
-              onClick={handleAddComment}
-              disabled={!commentInput.trim()}
-            >
-              Submit
-            </button>
+
           </div>
         </div>
         <div className={styles.chaptercolumn}>
