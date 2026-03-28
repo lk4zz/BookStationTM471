@@ -2,14 +2,14 @@ const prisma = require("../db");
 const NotFoundError = require("../errors/NotFoundError");
 const unauthroizedError = require("../errors/unauthorizedError");
 const accessDetector = require("../utils/accessDetector");
-const { BookOwnership } = require("../utils/BookOwnership");
+const { getOwnedBook } = require("../utils/BookOwnership");
 
 const createPage = async (chapterId, text, currentUserId) => {
   const chapter = await prisma.chapters.findUnique({
     where: { id: parseInt(chapterId) },
     include: { book: true },
   });
-  BookOwnership(chapter.book.id, currentUserId);
+  await getOwnedBook(chapter.book.id, currentUserId);
   if (!chapter) {
     throw new NotFoundError("CHAPTER NOT FOUND");
   }
@@ -37,7 +37,7 @@ const updatePage = async (text, currentUserId, pageId) => {
     where: { id: parseInt(pageId) },
     include: { chapter: { include: { book: true } } },
   });
-  BookOwnership(page.chapter.book.id, currentUserId);
+  await getOwnedBook(page.chapter.book.id, currentUserId);
   if (!page.chapter) {
     throw new NotFoundError("CHAPTER NOT FOUND");
   }
@@ -104,7 +104,7 @@ const deletePage = async (pageId, currentUserId) => {
   if (!page) {
     throw new NotFoundError("PAGE NOT FOUND");
   }
-  BookOwnership(page.chapter.book.id, currentUserId);
+  await getOwnedBook(page.chapter.book.id, currentUserId);
 
   await prisma.pages.delete({
     where: { id: parseInt(pageId) },

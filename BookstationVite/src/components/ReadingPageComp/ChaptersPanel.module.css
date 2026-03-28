@@ -1,28 +1,56 @@
-.chapterCard {
+.upperPanel{
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 10px 17px;
-  border-radius: 8px;
-  background-color: #27272a;
-  color: #d4d4d8;
-  transition: background-color 0.2s;
-  cursor: pointer;
-
+  gap: 10px;
+  color: white;
 }
 
-.chapterCard:hover {
-  background-color: #3f3f46;
+
+/* check these later might have to remove and make global css */
+.chapterList{
+  margin: 20% 0 0 0;
+  width: 100%;
+}
+.chaptercolumn {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 300px;
+  width: 100%;
 }
 
-.chapterTitle {
-  font-family: var(--font-heading);
-  font-size: 0.9rem;
-  font-weight: 500;
+.sectionTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+  color: #ffffff;
 }
 
-.icon {
-  width: 18px;
-  height: 30px;
-  color: #a1a1aa;
+.scrollList {
+  padding-right: 0%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  flex: 1;
 }
+
+/* custom Scrollbar */
+.scrollList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollList::-webkit-scrollbar-track {
+  background: #1e1e1e;
+  border-radius: 10px;
+}
+
+.scrollList::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 10px;
+}
+
+.scrollList::-webkit-scrollbar-thumb:hover {
+  background: #52525b;
+}
+

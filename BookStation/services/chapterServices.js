@@ -43,12 +43,8 @@ const getChaptersByBook = async (bookId, currentUserId) => {
   const chapters = await prisma.chapters.findMany({
     where: {
       bookId: parseInt(bookId, 10),
-      isPublished: true,
     },
     orderBy: { chapterNum: "asc" },
-    include: {
-      book: true,
-    },
   });
 
   if (chapters.length === 0)
@@ -163,14 +159,14 @@ const publishChapter = async (chapterId, currentUserId, requestedPrice) => {
   // fetch chapter, book, and pages
   const chapter = await prisma.chapters.findUnique({
     where: { id: parseInt(chapterId, 10) },
-    include: { book: true, pages: true },
+    include: { pages: true },
   });
 
   if (!chapter) throw new NotFoundError("Chapter not found");
   if (chapter.isPublished)
     throw new BadRequestError("Chapter is already published");
 
-  await getOwnedBook(chapter.book.id, currentUserId);
+  await getOwnedBook(chapter.bookId, currentUserId);
 
   // if no price is requested, fall back to drafted price
   const priceToValidate = requestedPrice ?? chapter.price;

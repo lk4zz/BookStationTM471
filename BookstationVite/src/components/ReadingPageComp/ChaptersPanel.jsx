@@ -1,12 +1,20 @@
 import BookChapters from "../bookdetailscomp/BookChapters";
-import styles from "../../pages/bookdetails/BookDetailsPage.module.css";
+import styles from "./ChaptersPanel.module.css";
+import OnBackButton from "../UI/OnBackButton";
 
 
-function ChaptersPanel({chapters, isChapterLoading}) {
+function ChaptersPanel({ chapter, chapters, isChapterLoading }) {
   return (
-    <div>
-      <h3>Chapters Panel</h3>
-            <div className={styles.chaptercolumn}>
+    <div className={styles.leftPanel}>
+
+      <section className={styles.upperPanel}>
+        <OnBackButton/>
+        <h3>{chapter.book.name}</h3>
+      </section>
+
+      {/* might need to combine all of this to a full ready component */}
+      <section className={styles.chapterList}>
+        <div className={styles.chaptercolumn}>
           <h3 className={styles.sectionTitle}>Chapters</h3>
           <div className={styles.scrollList}>
             {isChapterLoading ? (
@@ -20,6 +28,8 @@ function ChaptersPanel({chapters, isChapterLoading}) {
             )}
           </div>
         </div>
+      </section>
+
     </div>
   );
 }
