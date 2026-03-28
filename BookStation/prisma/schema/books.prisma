@@ -17,6 +17,6 @@ model Books {
     comments Comments[]
     bookGenres BookGenre[]
     libraryBooks LibraryBook[]
-    
+    readingProgress ReadingProgress[]
 
 }

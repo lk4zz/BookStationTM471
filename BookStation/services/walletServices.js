@@ -34,7 +34,8 @@ const getCoinBalance = async (currentUserId) => {
         where: { id: currentUserId },
         select: { coinBalance: true }
     })
-    return user.coinBalance;
+    const balance = user.coinBalance? user.coinBalance : 0;
+    return balance;
 
 }
 
@@ -44,7 +45,8 @@ const getCoinBalanceByUser = async (userId) => {
         select: { coinBalance: true }
     })
     if (!user) throw new NotFoundError(message = "USER NOT FOUND");
-    return user.coinBalance
+    const balance = user.coinBalance? user.coinBalance : 0;
+    return balance;
 }
 
 module.exports = {

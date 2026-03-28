@@ -3,19 +3,14 @@ import { LockedIcon, UnlockedIcon } from "../UI/IconLibrary";
 import { useNavigate } from "react-router-dom";
 import { use } from "react";
 
-function BookChapters({ chapter }) {
+function BookChapters({ chapter, className, onClick }) {
   //fix icons add them to icon library
-   const navigate =  useNavigate()
-   const handleOnClick = () => {
-    if(chapter.hasAccess) {
-      navigate(`/book/reading/${chapter.bookId}/${chapter.id}`); }
-    else {alert("nigga you dont have access")}
-   }
+
   console.log(chapter)
   return (
     <div 
-     onClick={handleOnClick}
-     className={styles.chapterCard}>
+     onClick={onClick}
+     className={`${styles.chapterCard} ${className} ` }>
       <span className={styles.chapterTitle}>
         {chapter.chapterNum}. {chapter.title}
       </span>

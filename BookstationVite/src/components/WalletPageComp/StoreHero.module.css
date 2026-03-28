@@ -1,0 +1,27 @@
+.hero {
+  text-align: center;
+  padding: var(--space-4) 0;
+  max-width: 600px;
+}
+
+.heroIcon {
+  width: 40px;
+  height: 40px;
+  color: var(--color-accent);
+  margin-bottom: var(--space-3);
+}
+
+.heroTitle {
+  font-family: var(--font-heading);
+  font-size: 2.25rem;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-3) 0;
+}
+
+.heroSubtitle {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  margin: 0 auto;
+}

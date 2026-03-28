@@ -1,0 +1,15 @@
+model ReadingProgress {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  bookId        Int
+  lastChapterId Int
+  updatedAt     DateTime @updatedAt @default(now())
+
+  // Relations
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  book          Books    @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  chapter       Chapters @relation(fields: [lastChapterId], references: [id], onDelete: Cascade)
+
+  // A user can only have ONE progress record per book
+  @@unique([userId, bookId]) 
+}
