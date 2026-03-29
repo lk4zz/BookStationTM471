@@ -14,7 +14,7 @@ function BookDetails({ book, views }) {
 
   const formattedBook = formatBookData(book);
   if (!formattedBook) return null;
-  const { name, bookId, coverUrl, ratingAverage, ratingCount, authorName } =
+  const { name, bookId, coverUrl, ratingAverage, ratingCount, authorName, userId } =
     formattedBook;
   const { data: libraryBooks } = useLibraryBooks();
   const isBookInLibrary = libraryBooks?.some((book) => book.bookId === bookId);
@@ -47,7 +47,7 @@ function BookDetails({ book, views }) {
           <OnBackButton />
 
           <h2 className={styles.bookTitle}>{name}</h2>
-          <p className={styles.authorText}>by {authorName}</p>
+          <p onClick={() => navigate(`/author/${userId}`)} className={styles.authorText}>by {authorName}</p>
 
           <div className={styles.statsRow}>
             <div className={styles.statItem}>

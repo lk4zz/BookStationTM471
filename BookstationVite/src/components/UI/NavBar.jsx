@@ -6,15 +6,18 @@ import { useGetWallet } from "../../hooks/useWallet";
 import { checkIfGuest } from "../../utils/checkIfGuest";
 import Wallet from "./wallet/Wallet";
 import UserAvatar from "./UserAvatar/UserAvatar";
+import { useCurrentUserId } from "../../hooks/useUser";
+
 
 function NavBar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const {balance, isWalletLoading, walletError} = useGetWallet();
+  const { balance, isWalletLoading, walletError } = useGetWallet();
+  const { currentUserId } = useCurrentUserId();
 
   const [isSearchActive, setIsSearchActive] = useState(false);
   const searchInputRef = useRef(null);
-  
+
   if (isWalletLoading && !checkIfGuest) return <p className="loading"> wallet loading..</p>
 
   const handleSearchClick = () => {
@@ -30,7 +33,7 @@ function NavBar() {
       <div className={Styles.logoContainer}>
         <BookLogo className={Styles.logo} />
         <h1>Bookstation</h1>
-        
+
       </div>
 
       {/* navigation Links this is the techinque use instead of link in bookcards */}
@@ -84,14 +87,22 @@ function NavBar() {
             }}
           />
         </div>
-         <Wallet balance={balance}/>
-            
+        <Wallet balance={balance} />
+
         <button className={Styles.iconButton} aria-label="Notifications">
           <NotifButton />
         </button>
 
         {/* profile Avatar  */}
-       <UserAvatar />
+        <UserAvatar
+          onClick={() => {
+            if (currentUserId) {
+              navigate(`/author/${currentUserId}`);
+            } else {
+              console.warn("No User ID found! Cannot navigate.");
+            }
+          }}
+        />
       </div>
     </nav>
   );

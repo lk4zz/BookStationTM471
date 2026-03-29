@@ -4,7 +4,7 @@ model Books {
     author User @relation(fields: [userId], references: [id], onDelete: Cascade)
     name String 
     description String
-    coverImage    String?
+    coverImage  String?
     status String  @default("DRAFT") // 'DRAFT', 'ONGOING', 'COMPLETED'
     ratingAverage Float @default(0)
     ratingCount Int @default(0)

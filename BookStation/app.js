@@ -60,6 +60,7 @@ app.use('/following', followingRouter);
 app.use('/wallet', walletRouter);
 app.use('/views', viewsRouter);
 app.use('/progress', progressRouter);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Catch 404 for any unhandled routes and forward to error handler
 app.all('*', (req, res, next) => {
