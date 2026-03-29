@@ -22,6 +22,6 @@ export const getBooksByGenre = async(genreId) => {
 }
 
 export const getBooksByAuthor = async(userId) => {
-    const res = await privateApi.get(`/books/genre/${userId}`)
+    const res = await privateApi.get(`/books/author/${userId}`)
     return res.data;
 }

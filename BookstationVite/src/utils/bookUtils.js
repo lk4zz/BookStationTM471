@@ -11,6 +11,7 @@ export const formatBookData = (book) => {
     ratingCount = 0,
     author,
     id,
+    userId,
   } = book;
 
   return {
@@ -21,6 +22,7 @@ export const formatBookData = (book) => {
     ratingCount,
     authorName: author?.name || "Unknown",
     bookId : id,
+    userId,
   };
 
 };

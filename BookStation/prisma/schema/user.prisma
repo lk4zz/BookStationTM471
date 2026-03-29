@@ -4,6 +4,8 @@ model User {
     email String @unique
     password String
     coinBalance Int @default(0)
+    bio String?
+    profileImage String?
     
     roleId Int 
     role UserRole @relation(fields: [roleId], references: [id])

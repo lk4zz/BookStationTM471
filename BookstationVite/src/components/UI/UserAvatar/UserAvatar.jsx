@@ -1,13 +1,10 @@
 import Styles from './UserAvatar.module.css'
-import { useNavigate } from 'react-router-dom';
 
-function UserAvatar() {
-    const navigate = useNavigate()
+function UserAvatar({ onClick }) {
+
     return (
         <div
-            onClick={() => {
-                navigate("/profile");
-            }}
+            onClick={onClick}
             className={Styles.avatarContainer}>
             <div className={Styles.avatarRing}>
                 <img
@@ -19,6 +16,6 @@ function UserAvatar() {
             <span className={Styles.statusDot}></span>
         </div>
     )
-}   
+}
 
 export default UserAvatar;
