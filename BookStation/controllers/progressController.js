@@ -3,7 +3,7 @@ const catchAsync = require('../middlewares/catchAsync');
 
 const updateProgress = catchAsync(async (req, res) => {
   const currentUserId = req.user.userId;
-  const { bookId, chapterId } = req.body;
+  const { bookId, chapterId } = req.params;
 
   const progress = await progressServices.upsertProgress(currentUserId, bookId, chapterId);
 

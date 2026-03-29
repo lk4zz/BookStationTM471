@@ -21,6 +21,7 @@ const pagesRouter = require('./routes/pages');
 const chaptersRouter = require('./routes/chapters');
 const walletRouter = require('./routes/wallet');
 const viewsRouter = require('./routes/views');
+const progressRouter = require('./routes/progress')
 
 // Custom Error Handling imports
 const errorHandler = require('./middlewares/errorHandler');
@@ -58,6 +59,7 @@ app.use('/comments', commentsRouter);
 app.use('/following', followingRouter);
 app.use('/wallet', walletRouter);
 app.use('/views', viewsRouter);
+app.use('/progress', progressRouter);
 
 // Catch 404 for any unhandled routes and forward to error handler
 app.all('*', (req, res, next) => {

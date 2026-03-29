@@ -5,14 +5,32 @@ import { formatBookData } from "../../utils/bookUtils";
 import AddToLibraryBtn from "../UI/AddToLibraryBtn";
 import { useLibraryBooks } from "../../hooks/useLibrary";
 import OnBackButton from "../UI/OnBackButton";
+import { useNavigate } from "react-router-dom";
+import { useGetProgress } from "../../hooks/useProgress";
+import { useChaptersByBook } from "../../hooks/useChapters";
 
 function BookDetails({ book, views }) {
+  const navigate = useNavigate()
+
   const formattedBook = formatBookData(book);
   if (!formattedBook) return null;
   const { name, bookId, coverUrl, ratingAverage, ratingCount, authorName } =
     formattedBook;
   const { data: libraryBooks } = useLibraryBooks();
   const isBookInLibrary = libraryBooks?.some((book) => book.bookId === bookId);
+
+  const { progress, isProgressLoading } = useGetProgress(bookId);
+  const { chapters, isChaptersLoading } = useChaptersByBook(bookId);
+
+  const handleReadClick = () => {
+    if (progress?.lastChapterId) {
+
+      navigate(`/book/reading/${bookId}/${progress.lastChapterId}`);
+    } else if (chapters && chapters.length > 0) {
+      navigate(`/book/reading/${bookId}/${chapters[0].id}`);
+    }
+  };
+  const isDataLoading = isProgressLoading || isChaptersLoading;
   console.log(bookId);
 
   return (
@@ -50,8 +68,13 @@ function BookDetails({ book, views }) {
           </div>
 
           <div className={styles.buttons}>
-            <button className={styles.primaryBtn}>
-              Continue Reading (68%)
+            <button
+              className={styles.primaryBtn}
+              onClick={handleReadClick}
+              disabled={isDataLoading }
+            >
+              {isDataLoading ? "Loading..." :
+                progress ? "Continue Reading" : "Read First Chapter"}
             </button>
             <AddToLibraryBtn bookId={bookId} isBookInLibrary={isBookInLibrary} />
           </div>

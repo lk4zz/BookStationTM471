@@ -27,6 +27,7 @@ export const useUpdateProgress = () => {
     onSuccess: (data, variables) => {
       // Instantly invalidate the GET query so the book page "Continue" button is fresh
       queryClient.invalidateQueries(["progress", variables.bookId]);
+      console.log("stored progress")
     }
   });
 

@@ -15,4 +15,8 @@ export const getChaptersById = async (chapterId) => {
     return res.data;
 }
 
-export default { getChaptersFromBook };
+export const unlockChapter = async (chapterId) => {
+    console.log(`nigga nigga ${chapterId}`)
+    const res = await privateApi.post(`/chapters/${chapterId}/unlock`)
+    return res.data;
+}

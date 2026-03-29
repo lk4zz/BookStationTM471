@@ -6,6 +6,7 @@ import { useChapterById, useChaptersByBook } from "../../hooks/useChapters";
 import { usePagesByChatper } from "../../hooks/usePages";
 import { useParams } from "react-router-dom";
 import styles from './ReadingPage.module.css'
+import { useUpdateProgress } from "../../hooks/useProgress";
 
 
 function ReadingPage() {
@@ -13,21 +14,21 @@ function ReadingPage() {
   const { chapterId } = useParams();
   const numericBookId = Number(bookId);
   const numericChapterId = Number(chapterId);
-  
+
 
   const { chapters, isChaptersLoading } = useChaptersByBook(numericBookId);
   const { chapterData, isChapterLoading } = useChapterById(numericChapterId)
   const { pagesData, isPagesLoading, pagesError } = usePagesByChatper(numericChapterId);
 
-  // const { saveProgress } = useUpdateProgress();
-  // useEffect(() => {
-  //   if (numericBookId && numericChapterId) {
-  //     saveProgress({ bookId: numericBookId, chapterId: numericChapterId });
-  //   }
-  // }, [numericBookId, numericChapterId, saveProgress]);
+  const { saveProgress } = useUpdateProgress();
+  useEffect(() => {
+    if (numericBookId && numericChapterId) {
+      saveProgress({ bookId: numericBookId, chapterId: numericChapterId });
+    }
+  }, [numericBookId, numericChapterId, saveProgress]);
 
   if (isPagesLoading) return <p>BRUH</p>
-  if(isChaptersLoading) return <p className="loading">Loading..</p>
+  if (isChaptersLoading) return <p className="loading">Loading..</p>
   if (isChapterLoading) return <p className="loading">Loading..</p>
 
   const { chapter, hasAccess } = chapterData

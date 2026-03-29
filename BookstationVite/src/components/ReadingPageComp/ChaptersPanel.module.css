@@ -10,13 +10,16 @@
 .chapterList{
   margin: 20% 0 0 0;
   width: 100%;
+  
 }
 .chaptercolumn {
   display: flex;
   flex-direction: column;
   flex: 1;
   min-height: 300px;
+  max-height: 450px;
   width: 100%;
+  
 }
 
 .sectionTitle {
