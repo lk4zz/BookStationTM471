@@ -3,7 +3,9 @@ import React, { useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom"; // i am using react-router-dom (do research)
 import { BookLogo, NotifButton, SearchButton } from "./IconLibrary";
 import { useGetWallet } from "../../hooks/useWallet";
+import { checkIfGuest } from "../../utils/checkIfGuest";
 import Wallet from "./wallet/Wallet";
+import UserAvatar from "./UserAvatar/UserAvatar";
 
 function NavBar() {
   const navigate = useNavigate();
@@ -12,7 +14,8 @@ function NavBar() {
 
   const [isSearchActive, setIsSearchActive] = useState(false);
   const searchInputRef = useRef(null);
-  if (isWalletLoading) return <p className="loading"> wallet loading..</p>
+  
+  if (isWalletLoading && !checkIfGuest) return <p className="loading"> wallet loading..</p>
 
   const handleSearchClick = () => {
     setIsSearchActive(true);
@@ -81,22 +84,14 @@ function NavBar() {
             }}
           />
         </div>
-            <Wallet balance={balance}/>
+         <Wallet balance={balance}/>
+            
         <button className={Styles.iconButton} aria-label="Notifications">
           <NotifButton />
         </button>
 
         {/* profile Avatar  */}
-        <div className={Styles.avatarContainer}>
-          <div className={Styles.avatarRing}>
-            <img
-              src="/your-default-image.jpg"
-              alt="User Profile"
-              className={Styles.avatarImage}
-            />
-          </div>
-          <span className={Styles.statusDot}></span>
-        </div>
+       <UserAvatar />
       </div>
     </nav>
   );

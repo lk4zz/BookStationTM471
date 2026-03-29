@@ -1,7 +1,7 @@
 import styles from "./BookCard.module.css";
 import { Link } from "react-router-dom";
 const BASE_URL = import.meta.env.VITE_API_URL || "";
-import { StarIcon } from "../UI/IconLibrary";
+import { EyeIcon, StarIcon } from "../UI/IconLibrary";
 import { addView } from "../../api/views";
 
 function BookCard({ book }) {
@@ -23,8 +23,9 @@ function BookCard({ book }) {
         </div>
 
         <div className={styles.footer}>
-          <div className={styles.progressTrack}>
-            <div className={styles.progressFill} style={{ width: "60%" }}></div>
+          <div className={styles.views}>
+           <EyeIcon className={styles.eye}/> 
+            <p>1233</p>
           </div>
 
           <div className={styles.rating}>

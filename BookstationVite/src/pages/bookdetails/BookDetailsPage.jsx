@@ -12,6 +12,7 @@ import { useCommentsByBook } from "../../hooks/useComments";
 import { useAddComment } from "../../hooks/useComments";
 import InputText from "../../components/UI/InputText";
 
+
 //might need toclean could useless jsx and  they could be added to components
 function BookDetailsPage() {
   const { id } = useParams();

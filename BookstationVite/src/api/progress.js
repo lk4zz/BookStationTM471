@@ -1,7 +1,8 @@
 import { privateApi } from "./axios";
 
 export const updateReadingProgress = async ({ bookId, chapterId }) => {
-  const res = await privateApi.post(`/progress`, { bookId, chapterId });
+    console.log(`/progress/${bookId}/${chapterId}`)
+  const res = await privateApi.post(`/progress/${bookId}/${chapterId}`);
   return res.data;
 };
 

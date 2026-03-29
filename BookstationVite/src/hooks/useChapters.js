@@ -1,5 +1,7 @@
+
 import { getChaptersFromBook, getChaptersById } from "../api/chapters";
-import { useQuery } from "@tanstack/react-query";
+import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { unlockChapter } from "../api/chapters";
 
 export const useChaptersByBook = (numericId) => {
 
@@ -15,20 +17,30 @@ export const useChaptersByBook = (numericId) => {
 
   const chapters = chaptersData?.data ?? chaptersData;
 
-  return {chapters, isChapterLoading, chapterError}
+  return { chapters, isChapterLoading, chapterError }
 
-  }
+}
 
-  export const useChapterById = (chapterId) => {
-    const {
-      data: chapterDataOjects,
-      isLoading: isChapterLoading,
-      error: chapterError
-    } = useQuery({
-      queryKey: ["chapter", chapterId],
-      queryFn: () => getChaptersById(chapterId),
-      enabled: Number.isFinite(chapterId)
-    });
-    const chapterData = chapterDataOjects?.data ?? chapterDataOjects;
-    return {chapterData, isChapterLoading, chapterError}
-  }
+export const useChapterById = (chapterId) => {
+  const {
+    data: chapterDataOjects,
+    isLoading: isChapterLoading,
+    error: chapterError
+  } = useQuery({
+    queryKey: ["chapter", chapterId],
+    queryFn: () => getChaptersById(chapterId),
+    enabled: Number.isFinite(chapterId)
+  });
+  const chapterData = chapterDataOjects?.data ?? chapterDataOjects;
+  return { chapterData, isChapterLoading, chapterError }
+}
+
+export const useUnlockChapter = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (chapterId) => unlockChapter(chapterId),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["chapters"])
+    },
+  })
+}

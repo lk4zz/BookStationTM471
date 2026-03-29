@@ -1,4 +1,4 @@
-import { getBookById, getAllBooks, getBooksByGenre } from "../api/books";
+import { getBookById, getAllBooks, getBooksByGenre, getBooksByAuthor } from "../api/books";
 import { useQuery } from "@tanstack/react-query";
 
 export const useBookById = (numericId) => {
@@ -26,7 +26,7 @@ export const useAllBooks = () => {
         error: booksError
     } = useQuery({
         queryKey: ["books"],
-        queryFn:getAllBooks,
+        queryFn: getAllBooks,
     });
 
     const books = booksData?.data ?? booksData ?? [];
@@ -45,4 +45,18 @@ export const useBooksByGenre = (genreId) => {
     });
     const books = booksData?.data ?? [];
     return { books, isBooksLoading, booksError };
+}
+
+export const useBooksByAuthor = (userId) => {
+    const {
+        data: booksByAuthorData,
+        isLoading: isBooksByAuthorLoading,
+        error: booksByAuthorError,
+    } = useQuery({
+        queryKey: ["books", "author", userId],
+        queryFn: () => getBooksByAuthor(userId),
+        enabled: !!userId
+    })
+    const booksByAuthor = booksByAuthorData?.data ?? booksByAuthorData;
+    return { booksByAuthor, isBooksByAuthorLoading, booksByAuthorError};
 }
