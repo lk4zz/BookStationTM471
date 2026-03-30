@@ -3,7 +3,7 @@ import NavBar from "../../components/UI/NavBar/NavBar";
 import LibraryGrid from "../../components/LibraryComp/LibraryGrid/LibraryGrid";
 import { useLibraryBooks } from "../../hooks/useLibrary";
 import styles from "./LibraryPage.module.css";
-import IsGuestLibrary from "../../components/LibraryComp/IsGuestLibrary/IsGuestLibrary";
+import EmptyLibrary from "../../components/LibraryComp/EmptyLibrary/EmptyLibrary";
 
 function LibraryPage() {
 
@@ -15,7 +15,7 @@ function LibraryPage() {
     return (
       <div className={styles.pageWrapper}>
         <NavBar />
-        <IsGuestLibrary title={"Log in to view your Library"}
+        <EmptyLibrary title={"Log in to view your Library"}
           body={"Log in to view your Library"}
           suggestion={"Login"}
           path={"/login"} />
@@ -35,11 +35,11 @@ function LibraryPage() {
     );
   }
 
-  if (isError && error.response?.status === 404) {
+  if (isError && error?.status === 404) {
     return (
       <div className={styles.pageWrapper}>
         <NavBar />
-        <IsGuestLibrary title={"Your Library is Empty"}
+        <EmptyLibrary title={"Your Library is Empty"}
           body={"You haven't added any books to your library yet."}
           suggestion={"Explore Books"}
           path={"/explore"} />
@@ -52,7 +52,7 @@ function LibraryPage() {
       <div className={styles.pageWrapper}>
         <NavBar />
         <main className={styles.centeredContent}>
-          <div className="error">Oops! Something went wrong loading your library.</div>
+          <div className="error">{error?.message || "Oops! Something went wrong loading your library."}</div>
         </main>
       </div>
     );

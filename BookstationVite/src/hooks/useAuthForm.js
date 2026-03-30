@@ -25,7 +25,7 @@ export const useAuthForm = (apiFunction, initialData, redirectRoute) => {
       }
     } catch (err) {
       setError(
-        err.response?.data?.message ||
+        err?.message ||
           "Authentication failed. Please try again.",
       );
     } finally {

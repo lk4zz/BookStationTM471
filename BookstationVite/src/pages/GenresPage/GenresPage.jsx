@@ -11,7 +11,7 @@ function GenresPage() {
 
     const { genres, isGenresLoading, genresError } = useAllGenres()
     if (isGenresLoading) return <p className="loading">loading...</p>
-    if (genresError) return <p className="loading">No books with this genre</p>
+    if (genresError) return <p className="loading">{genresError.message || "No books with this genre"}</p>
     const genreType = genres?.find(
         g => g.type.toLowerCase() === currentGenreType.toLowerCase()
     );

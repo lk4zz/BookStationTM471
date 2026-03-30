@@ -76,7 +76,7 @@ export const useEditProfile = (user, onSuccess) => {
         imageFile,
         imagePreview,
         isLoading: mutation.isPending,
-        error: mutation.error?.message ?? null,
+        error: mutation.error ?? null,
         handleChange,
         handleImageChange,
         handleSubmit,

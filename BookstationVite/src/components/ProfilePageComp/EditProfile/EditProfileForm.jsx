@@ -29,7 +29,9 @@ function EditProfileForm({ formData, isLoading, error, handleChange, handleSubmi
                 />
             </div>
 
-            {error && <p className={styles.errorMessage}>{error}</p>}
+            {error && (
+                <p className={styles.errorMessage}>{error.message ?? String(error)}</p>
+            )}
 
             <div className={styles.actionButtons}>
                 <button
