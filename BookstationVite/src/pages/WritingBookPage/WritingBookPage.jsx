@@ -5,12 +5,7 @@ import WritingCanvas from "../../components/WritingBook/WritingCanvas/WritingCan
 import WritingChaptersPanel from "../../components/WritingBook/WritingChaptersPanel/WritingChaptersPanel";
 import WritingAiPanel from "../../components/WritingBook/WritingAiPanel/WritingAiPanel";
 import { useBookForWriting, useUpdateBookStatus } from "../../hooks/useBooks";
-import {
-  useChaptersForAuthor,
-  useCreateChapter,
-  useUpdateChapter,
-  useDeleteChapter,
-  usePublishChapter,
+import { useChaptersForAuthor, useCreateChapter, useUpdateChapter, useDeleteChapter, usePublishChapter,
 } from "../../hooks/useChapters";
 import { useAuthorPages } from "../../hooks/useWritingPages";
 import { checkIfGuest } from "../../utils/checkIfGuest";

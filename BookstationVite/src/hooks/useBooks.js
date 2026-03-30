@@ -48,7 +48,7 @@ export const useBooksByGenre = (genreId) => {
     return { books, isBooksLoading, booksError };
 }
 
-export const useBooksByAuthor = (userId) => {
+export const useBooksByAuthor = (userId) => { //all books made by author
     const {
         data: booksByAuthorData,
         isLoading: isBooksByAuthorLoading,
@@ -75,7 +75,7 @@ export const useDraftedBooks = () => {
     return { draftBooks, isDraftsloading, draftsError };
 };
 
-export const useBookForWriting = (bookId) => {  //this fetches any book by author incase u wanna edit
+export const useBookForWriting = (bookId) => {  //one specifi book by author incase u wanna edit
     const {
         data,
         isLoading,
