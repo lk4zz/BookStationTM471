@@ -20,20 +20,40 @@ const createPage = catchAsync(async (req, res) => {
 
 
 const updatePage = catchAsync(async (req, res) => {
-    
-
         const currentUserId = req.user.userId;
-        const {chapterId} = req.params;
         const { text } = req.body;
         const pageId = req.params.id;
 
-        const updatePage = await pageServices.updatePage(chapterId, text, currentUserId, pageId);
+        const updated = await pageServices.updatePage(text, currentUserId, pageId);
         res.status(200).json({
             message: "Page updated successfully!",
-            page: updatePage
+            page: updated
         });
 
 
+});
+
+const getPagesForAuthor = catchAsync(async (req, res) => {
+    const chapterId = req.params.chapterId;
+    const currentUserId = req.user.userId;
+    const data = await pageServices.getPagesForAuthor(chapterId, currentUserId);
+    res.status(200).json({
+        success: true,
+        count: data.pages.length,
+        data,
+    });
+});
+
+const upsertPrimaryPage = catchAsync(async (req, res) => {
+    const chapterId = req.params.chapterId;
+    const currentUserId = req.user.userId;
+    const { text } = req.body;
+    const page = await pageServices.upsertPrimaryPage(chapterId, text, currentUserId);
+    res.status(200).json({
+        success: true,
+        message: "Chapter content saved.",
+        page,
+    });
 });
 
 const getPagesByChapter = catchAsync(async (req, res) => {
@@ -66,6 +86,8 @@ module.exports = {
     createPage,
     updatePage,
     getPagesByChapter,
+    getPagesForAuthor,
+    upsertPrimaryPage,
     deletePage
 
 }

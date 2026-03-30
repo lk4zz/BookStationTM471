@@ -1,8 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
-import BookDetails from "../../components/bookdetailscomp/BookDetails";
-import BookDescription from "../../components/bookdetailscomp/BookDescription";
-import BookChapters from "../../components/bookdetailscomp/BookChapters";
-import Comments from "../../components/bookdetailscomp/Comments";
+import BookDetails from "../../components/bookdetailscomp/BookDetails/BookDetails";
+import BookDescription from "../../components/bookdetailscomp/BookDescription/BookDescription";
+import BookChapters from "../../components/bookdetailscomp/BookChapter/BookChapters";
+import Comments from "../../components/bookdetailscomp/Comments/Comments";
 import styles from "./BookDetailsPage.module.css";
 import { useViews } from "../../hooks/useViews";
 import { useState } from "react";
@@ -10,7 +10,7 @@ import { useBookById } from "../../hooks/useBooks";
 import { useChaptersByBook } from "../../hooks/useChapters";
 import { useCommentsByBook } from "../../hooks/useComments";
 import { useAddComment } from "../../hooks/useComments";
-import InputText from "../../components/UI/InputText";
+import InputText from "../../components/UI/InputFields/InputText";
 
 
 //might need toclean could useless jsx and  they could be added to components

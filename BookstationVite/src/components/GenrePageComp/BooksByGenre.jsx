@@ -1,4 +1,4 @@
-import BookCard from "../ExplorePageComp/BookCard"
+import BookCard from "../UI/BookCard/BookCard"
 import { useBooksByGenre } from "../../hooks/useBooks"
 
 

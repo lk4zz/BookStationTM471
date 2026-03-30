@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import ChaptersPanel from "../../components/ReadingPageComp/ChaptersPanel";
-import ReadingCanvas from "../../components/ReadingPageComp/ReadingCanvas";
-import AiPanel from "../../components/ReadingPageComp/AiPanel";
+import ChaptersPanel from "../../components/ReadingPageComp/ChaptersPanel/ChaptersPanel";
+import ReadingCanvas from "../../components/ReadingPageComp/ReadingCanvas/ReadingCanvas";
+import AiPanel from "../../components/ReadingPageComp/AiPanel/AiPanel";
 import { useChapterById, useChaptersByBook } from "../../hooks/useChapters";
 import { usePagesByChatper } from "../../hooks/usePages";
 import { useParams } from "react-router-dom";

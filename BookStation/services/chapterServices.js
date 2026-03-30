@@ -70,6 +70,20 @@ const getChaptersByBook = async (bookId, currentUserId) => {
   return decoratedChapters;
 };
 
+const getChaptersByBookForAuthor = async (bookId, currentUserId) => {
+  await getOwnedBook(bookId, currentUserId);
+
+  const chapters = await prisma.chapters.findMany({
+    where: { bookId: parseInt(bookId, 10) },
+    orderBy: { chapterNum: "asc" },
+  });
+
+  return chapters.map((chapter) => ({
+    ...chapter,
+    hasAccess: true,
+  }));
+};
+
 const getChapterById = async (chapterId, userId) => {
   // fetch the chapter through access function
   const accessData = await accessDetector.checkAccess(
@@ -279,6 +293,7 @@ const deleteChapter = async (chapterId, currentUserId) => {
 module.exports = {
   createChapter,
   getChaptersByBook,
+  getChaptersByBookForAuthor,
   getChapterById,
   updateChapter,
   publishChapter,

@@ -1,5 +1,5 @@
 import Styles from "./App.module.css";
-import './components/UI/rootvariables.css'
+import "./components/UI/GlobalCss/rootvariables.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Explore from "./pages/Explore/Explore";
 import BookDetailsPage from "./pages/bookdetails/BookDetailsPage"; 
@@ -11,6 +11,8 @@ import GenresPage from "./pages/GenresPage/GenresPage";
 import ReadingPage from "./pages/ReadingPage/ReadingPage";
 import WalletPage from "./pages/WalletPage/WalletPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import WritingDashboardPage from "./pages/WritingDashboardPage/WritingDashboardPage";
+import WritingBookPage from "./pages/WritingBookPage/WritingBookPage";
 
 
 function App() {
@@ -27,6 +29,8 @@ function App() {
         <Route path="/book/reading/:bookId/:chapterId" element={<ReadingPage />} />
         <Route path="/wallet/buy" element={<WalletPage />} />
         <Route path="/author/:authorId" element={<ProfilePage />} />
+        <Route path="/writing" element={<WritingDashboardPage />} />
+        <Route path="/writing/:bookId" element={<WritingBookPage />} />
       </Routes>
     </BrowserRouter>
   );

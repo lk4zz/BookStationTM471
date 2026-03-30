@@ -1,11 +1,11 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import BookCard from "../../components/ExplorePageComp/BookCard";
-import { SparklesIcon, CoinsIcon, BookOpenIcon } from "../../components/UI/IconLibrary";
+import BookCard from "../../components/UI/BookCard/BookCard";
+import { SparklesIcon, CoinsIcon, BookOpenIcon } from "../../components/UI/Icons/IconLibrary";
 import styles from "./LandingPage.module.css";
-import FeaturesCard from "../../components/LandingPageComp/FeaturesCard";
+import FeaturesCard from "../../components/LandingPageComp/FeaturesCard/FeaturesCard";
 import { useAllBooks } from "../../hooks/useBooks";
-import GenreBox from "../../components/LandingPageComp/GenreBox";
+import GenreBox from "../../components/LandingPageComp/GenreBox/GenreBox";
 import { useAllGenres } from "../../hooks/useGenres";
 
 function LandingPage() {

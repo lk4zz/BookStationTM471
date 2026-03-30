@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import styles from "./Auth.module.css";
-import { SparklesIcon } from "../../components/UI/IconLibrary";
+import { SparklesIcon } from "../../components/UI/Icons/IconLibrary";
 import { login } from "../../api/auth";
 import { useAuthForm } from "../../hooks/useAuthForm";
-import { InputField } from "../../components/UI/InputField";
+import { InputField } from "../../components/UI/InputFields/InputField";
 
 function LoginPage() {
   const { formData, error, isLoading, handleChange, handleSubmit } =

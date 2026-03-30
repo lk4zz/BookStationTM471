@@ -1,10 +1,10 @@
 import React from "react";
 import styles from "./WalletPage.module.css";
 import { useGetWallet } from "../../hooks/useWallet";
-import WalletHeader from "../../components/WalletPageComp/WalletHeader";
-import CoinBundleList from "../../components/WalletPageComp/CoinBundleList";
-import StoreHero from "../../components/WalletPageComp/StoreHero";
-import FeaturesBreakdown from "../../components/WalletPageComp/FeaturesBreakdown";
+import WalletHeader from "../../components/WalletPageComp/WalletHeader/WalletHeader";
+import CoinBundleList from "../../components/WalletPageComp/CoinBundleList/CoinBundleList";
+import StoreHero from "../../components/WalletPageComp/StoreHero/StoreHero";
+import FeaturesBreakdown from "../../components/WalletPageComp/FeaturesBreakdown/FeaturesBreakdown";
 
 const VALID_COIN_BUNDLES = [100, 500, 1200, 2500, 5000];
 const STANDARD_BUNDLES = VALID_COIN_BUNDLES.slice(0, 3);

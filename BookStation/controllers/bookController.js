@@ -43,6 +43,16 @@ const getDraftedPrivateBooks = catchAsync(async (req, res) => {
   });
 });
 
+const getBookByIdForAuthor = catchAsync(async (req, res) => {
+  const { bookId } = req.params;
+  const currentUserId = req.user.userId;
+  const book = await bookService.getBookByIdForAuthor(bookId, currentUserId);
+  res.status(200).json({
+    success: true,
+    data: book,
+  });
+});
+
 const getBookById = catchAsync(async (req, res) => {
   const book = await bookService.getBookById(req.params.bookId);
 
@@ -127,6 +137,7 @@ const updateBookCover = catchAsync(async (req, res) => {
 module.exports = {
   createBook,
   getDraftedPrivateBooks,
+  getBookByIdForAuthor,
   getAllPublicBooks,
   getBookById,
   getBooksByAuthor,

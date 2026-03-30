@@ -1,0 +1,96 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.sheet {
+  flex: 1;
+  min-height: 320px;
+  overflow: auto;
+  padding: var(--space-6);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.editorRoot {
+  min-height: 280px;
+}
+
+.editorRoot :global(.tiptap) {
+  min-height: 240px;
+  outline: none;
+}
+
+.editorRoot :global(.ProseMirror) {
+  min-height: 240px;
+  outline: none;
+}
+
+.tiptapInner {
+  outline: none;
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--color-text-primary);
+}
+
+.tiptapInner p {
+  margin: 0 0 0.75em;
+}
+
+.tiptapInner h1,
+.tiptapInner h2,
+.tiptapInner h3 {
+  font-family: var(--font-heading);
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+.tiptapInner ul,
+.tiptapInner ol {
+  padding-left: 1.25em;
+  margin: 0 0 0.75em;
+}
+
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
+  padding: var(--space-6);
+  color: var(--color-text-muted);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+}
+
+.placeholder p {
+  margin: 0;
+  text-align: center;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-color);
+  font-size: 0.8125rem;
+  color: var(--color-text-dim);
+}
+
+.hint {
+  flex: 1;
+  min-width: 0;
+}
+
+.saveState {
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}

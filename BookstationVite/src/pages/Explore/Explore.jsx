@@ -1,7 +1,7 @@
 import Styles from "./explore.module.css";
-import BookCard from "../../components/ExplorePageComp/BookCard";
-import NavBar from "../../components/UI/NavBar";
-import TopPicks from "../../components/ExplorePageComp/TopPicks";
+import BookCard from "../../components/UI/BookCard/BookCard";
+import NavBar from "../../components/UI/NavBar/NavBar";
+import TopPicks from "../../components/ExplorePageComp/TopPicks/TopPicks";
 import { useAllBooks } from "../../hooks/useBooks";
 
 

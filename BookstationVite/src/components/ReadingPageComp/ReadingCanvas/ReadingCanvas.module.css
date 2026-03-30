@@ -1,0 +1,50 @@
+/* The dark background that handles natural vertical scrolling */
+.paperWrapper {
+    background-color: #070707;
+    display: flex;
+    justify-content: center;
+    padding: 1.5rem 1rem; /* Space at the top/bottom, and prevents touching sides on mobile */
+    box-sizing: border-box;
+    background-color: rgb(150, 150, 150);    
+}
+
+/* The actual document */
+.paperContainer {
+    
+    background-color: #E8DCB8;
+    width: 95%;
+    height: 920px;
+    max-width: 750px; /* The industry standard constraint for reading */
+    padding: 5% 8%; /* Large physical margins like a real book/doc */
+    border-radius: 10px; /* Very subtle rounding */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Lifts the paper off the dark desk */
+    box-sizing: border-box;
+    
+    /* Professional Typography */
+    font-family: 'Georgia', serif;
+    font-size: 1rem;
+    line-height: 1.5; 
+    color: #2c2921;   
+}
+
+.htmlBody {
+    margin: 0;
+}
+
+.htmlBody p {
+    margin: 0 0 1em;
+}
+
+.htmlBody ul,
+.htmlBody ol {
+    margin: 0 0 1em;
+    padding-left: 1.25em;
+}
+
+
+/* Make it responsive for mobile devices */
+@media (max-width: 600px) {
+    .paperContainer {
+        padding: 2rem 1.5rem; /* Shrink margins so text still fits on phones */
+    }
+}

@@ -25,3 +25,28 @@ export const getBooksByAuthor = async(userId) => {
     const res = await privateApi.get(`/books/author/${userId}`)
     return res.data;
 }
+
+export const getDraftedBooks = async () => {
+    const res = await privateApi.get("/books/drafted");
+    return res.data;
+};
+
+export const createBook = async ({ title, description = "" }) => {
+    const res = await privateApi.post("/books", { title, description });
+    return res.data;
+};
+
+export const deleteBook = async (bookId) => {
+    const res = await privateApi.delete(`/books/${bookId}`);
+    return res.data;
+};
+
+export const getBookForWriting = async (bookId) => {   
+    const res = await privateApi.get(`/books/writing/${bookId}`);
+    return res.data;
+};
+
+export const updateBookStatus = async (bookId, requestedStatus) => {
+    const res = await privateApi.put(`/books/${bookId}/status`, { requestedStatus });
+    return res.data;
+};

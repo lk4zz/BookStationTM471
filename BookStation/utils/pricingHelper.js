@@ -1,9 +1,16 @@
 const BadRequestError = require('../errors/BadRequestError');
 
+/** Strip HTML tags for word-count (pages may store Tiptap HTML). */
+const stripHtml = (html) =>
+  String(html)
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
 const validateChapterPricing = (pages, requestedPrice, chapterNum) => {
     // calculate the word count from the pages array
-    const fullText = pages.map(page => page.text).join(" ");
-    const wordCount = fullText.split(/\s+/).filter(word => word.length > 0).length;
+    const fullText = pages.map((page) => stripHtml(page.text)).join(" ");
+    const wordCount = fullText.split(/\s+/).filter((word) => word.length > 0).length;
 
     // clean the price input
     let finalPrice = parseInt(requestedPrice, 10);
