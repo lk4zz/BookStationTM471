@@ -6,10 +6,10 @@ export const useLibraryBooks = () => {
     queryKey: ["library"],
     queryFn: fetchLibraryBooks,
     retry: (failureCount, error) => {
-      if (error.message.includes("401") || error.message.includes("403")) {
+      if (error?.status === 401 || error?.status === 403) {
         return false; 
       }
-      return failureCount < 2;
+      return failureCount < 1;
     },
   });
 };

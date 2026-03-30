@@ -5,7 +5,10 @@ function DashboardBooksSection({ draftBooks, isLoading, error, onDelete,
     booksByAuthor, isBooksByAuthorLoading, booksByAuthorError, activeTab }) {
 
     if (isBooksByAuthorLoading || isLoading) return <p className={styles.loading}>Loading your books…</p>
-    if (error || booksByAuthorError) return <p className={styles.error}>{error.message}</p>;
+    if (error || booksByAuthorError) {
+      const displayError = error || booksByAuthorError;
+      return <p className={styles.error}>{displayError?.message || "Failed to load books."}</p>;
+    }
 
     const onGoingBooks = booksByAuthor.filter((book) => book.status === "ONGOING");
     const completedBooks = booksByAuthor.filter((book) => book.status === "COMPLETED");

@@ -1,12 +1,12 @@
 import {
-    getChaptersFromBook,
-    getChaptersById,
-    getChaptersForAuthor,
-    createChapter,
-    updateChapter,
-    deleteChapter,
-    publishChapter,
-    unlockChapter,
+  getChaptersFromBook,
+  getChaptersById,
+  getChaptersForAuthor,
+  createChapter,
+  updateChapter,
+  deleteChapter,
+  publishChapter,
+  unlockChapter,
 } from "../api/chapters";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 

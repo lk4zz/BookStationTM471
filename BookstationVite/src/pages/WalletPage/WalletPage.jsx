@@ -14,7 +14,7 @@ function WalletPage() {
   const { balance, isWalletLoading, walletError } = useGetWallet();
 
   if (isWalletLoading) return <div className="loading">Loading...</div>;
-  if (walletError) return <div className={styles.error}>Failed to load wallet.</div>;
+  if (walletError) return <div className={styles.error}>{walletError.message || "Failed to load wallet."}</div>;
 
   return (
     <div className={styles.pageContainer}>

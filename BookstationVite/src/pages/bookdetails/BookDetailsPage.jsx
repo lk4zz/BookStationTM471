@@ -36,7 +36,7 @@ function BookDetailsPage() {
   const { totalViews } = useViews(numericId);
 
   if (isBookLoading) return <p className={styles.loading}>Loading...</p>;
-  if (bookError) return <p className={styles.error}>Error loading data.</p>;
+  if (bookError) return <p className={styles.error}>{bookError.message || "Error loading data."}</p>;
 
   return (
     <div className={styles.page}>

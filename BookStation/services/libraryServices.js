@@ -63,7 +63,7 @@ const getLibraryBooks = async (currentUserId) => {
   });
 
   if (!libraryBooks || libraryBooks.length === 0) {
-    return [];
+    throw new NotFoundError("YOU DONT HAVE ANY BOOKS IN YOUR LIBRARY.");
   }
   return libraryBooks;
 };

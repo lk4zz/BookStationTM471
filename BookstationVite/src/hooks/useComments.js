@@ -8,6 +8,7 @@ export const useCommentsByBook = (numericId) => {
     const {
         data: commentsData,
         isLoading: isCommentsLoading,
+        error: commentsError,
     } = useQuery({
         queryKey: ["comments", numericId],
         queryFn: () => getCommentsByBook(numericId),
@@ -16,7 +17,7 @@ export const useCommentsByBook = (numericId) => {
 
     const comments = commentsData?.data ?? commentsData ?? [];
 
-    return { comments, isCommentsLoading }
+    return { comments, isCommentsLoading, commentsError }
 }
 
 export const useAddComment = (numericId) => {

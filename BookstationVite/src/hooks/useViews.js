@@ -3,7 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 
 export const useViews = (numericId) => {
 
-    const { data: viewsData } = useQuery({
+    const {
+        data: viewsData,
+        isLoading: isViewsLoading,
+        error: viewsError,
+    } = useQuery({
         queryKey: ["views", numericId],
         queryFn: () => getViews(numericId),
         enabled: Number.isFinite(numericId),
@@ -11,6 +15,6 @@ export const useViews = (numericId) => {
 
     const totalViews = viewsData?.data || 0;
 
-    return { totalViews }
+    return { totalViews, isViewsLoading, viewsError }
 
 }

@@ -1,7 +1,7 @@
-import styles from './IsGuestLibrary.module.css'
+import styles from './EmptyLibrary.module.css'
 import { useNavigate } from "react-router-dom";
 
-function IsGuestLibrary({ suggestion, title, body, path }) {
+function EmptyLibrary({ suggestion, title, body, path }) {
     const navigate = useNavigate();
     return (
         <main className={styles.centeredContent}>
@@ -14,4 +14,4 @@ function IsGuestLibrary({ suggestion, title, body, path }) {
     )
 }
 
-export default IsGuestLibrary;
+export default EmptyLibrary;

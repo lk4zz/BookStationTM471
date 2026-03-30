@@ -1,5 +1,21 @@
 import axios from "axios";
 
+const buildApiError = (error) => {
+  const backendData = error.response?.data;
+  const message =
+    backendData?.message ||
+    backendData?.error ||
+    backendData?.details ||
+    error.message ||
+    "An unexpected network error occurred.";
+
+  const apiError = new Error(message);
+  apiError.status = error.response?.status ?? null;
+  apiError.data = backendData ?? null;
+
+  return apiError;
+};
+
 export const publicApi = axios.create({
   baseURL: "http://localhost:3000",
 });
@@ -24,16 +40,7 @@ privateApi.interceptors.response.use(
     return response;
   },
   (error) => {
-    const backendData = error.response?.data;
-    
-    if (backendData) {
-      const errorMessage = backendData.message || backendData.error || backendData.details;
-      if (errorMessage) {
-        return Promise.reject(new Error(errorMessage));
-      }
-    }
-    
-    return Promise.reject(new Error(error.message || "An unexpected network error occurred."));
+    return Promise.reject(buildApiError(error));
   }
 );
 
@@ -42,15 +49,6 @@ publicApi.interceptors.response.use(
     return response;
   },
   (error) => {
-    const backendData = error.response?.data;
-    
-    if (backendData) {
-      const errorMessage = backendData.message || backendData.error || backendData.details;
-      if (errorMessage) {
-        return Promise.reject(new Error(errorMessage));
-      }
-    }
-    
-    return Promise.reject(new Error(error.message || "An unexpected network error occurred."));
+    return Promise.reject(buildApiError(error));
   }
 );
