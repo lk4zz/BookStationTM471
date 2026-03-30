@@ -6,11 +6,11 @@ import { useUser, useCurrentUserId, useEditProfile } from "../../hooks/UseUser";
 import { useBooksByAuthor } from "../../hooks/useBooks";
 import { resolveImageUrl } from "../../utils/ImageUrl";
 
-import ProfileBanner from "../../components/ProfilePageComp/ProfileBanner";
-import ProfileAvatar from "../../components/ProfilePageComp/ProfileAvatar";
-import ProfileInfo from "../../components/ProfilePageComp/ProfileInfo";
-import EditProfileForm from "../../components/ProfilePageComp/EditProfileForm";
-import UserBooksList from "../../components/ProfilePageComp/UserBooksList";
+import ProfileBanner from "../../components/ProfilePageComp/ProfileBanner/ProfileBanner";
+import ProfileAvatar from "../../components/ProfilePageComp/ProfileAvatar/ProfileAvatar";
+import ProfileInfo from "../../components/ProfilePageComp/ProfileInfo/ProfileInfo";
+import EditProfileForm from "../../components/ProfilePageComp/EditProfile/EditProfileForm";
+import UserBooksList from "../../components/ProfilePageComp/UserBooksList/UserBooksList";
 
 function ProfilePage() {
     const { authorId } = useParams();

@@ -65,10 +65,24 @@ const getDraftedPrivateBooks = async (currentUserId) => {
         select: { chapters: true },
       },
     },
+    orderBy: { updatedAt: "desc" },
   });
 
-  if (books.length === 0) throw new NotFoundError("NO DRAFT BOOKS FOUND");
   return books;
+};
+
+const getBookByIdForAuthor = async (bookId, currentUserId) => {
+  await getOwnedBook(bookId, currentUserId);
+  const book = await prisma.books.findUnique({
+    where: { id: parseInt(bookId, 10) },
+    include: {
+      author: { select: { name: true } },
+      bookGenres: { include: { bookGenre: true } },
+      _count: { select: { chapters: true } },
+    },
+  });
+  if (!book) throw new NotFoundError("BOOK NOT FOUND");
+  return book;
 };
 
 const getBookByGenre = async (genreId) => {
@@ -192,8 +206,23 @@ const updateBookStatus = async (bookId, currentUserId, requestedStatus) => {
   if (requestedStatus === "DRAFT") {
     await checkChapterRreceipt(bookId);
   }
+
+  if (
+    book.status === "DRAFT" &&
+    (requestedStatus === "ONGOING" || requestedStatus === "COMPLETED")
+  ) {
+    const chapterCount = await prisma.chapters.count({
+      where: { bookId: parseInt(bookId, 10) },
+    });
+    if (chapterCount < 3) {
+      throw new BadRequestError(
+        "A book must have at least 3 chapters before leaving DRAFT status.",
+      );
+    }
+  }
+
   const updatedStatus = await prisma.books.update({
-    where: { id: bookId },
+    where: { id: parseInt(bookId, 10) },
     data: { status: requestedStatus },
   });
   return updatedStatus;
@@ -216,6 +245,7 @@ module.exports = {
   createBook,
   getAllPublicBooks,
   getBookById,
+  getBookByIdForAuthor,
   getBooksByAuthor,
   updateBook,
   deleteBook,

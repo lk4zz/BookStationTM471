@@ -15,6 +15,7 @@ router.get('/drafted', verifyToken, bookController.getDraftedPrivateBooks);
 // DYNAMIC GET ROUTES (More specific to least specific)
 router.get('/genres/:genreId', verifyTokenOptional, bookController.getAllBooksByGenre);
 router.get('/author/:authorId', verifyTokenOptional, bookController.getBooksByAuthor);
+router.get('/writing/:bookId', verifyToken, bookController.getBookByIdForAuthor);
 
 // The catch-all GET route for a single book MUST be the very last GET route
 router.get('/:bookId', verifyTokenOptional, bookController.getBookById);

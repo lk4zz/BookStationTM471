@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import styles from "./Auth.module.css";
-import { SparklesIcon } from "../../components/UI/IconLibrary";
+import { SparklesIcon } from "../../components/UI/Icons/IconLibrary";
 import { signup } from "../../api/auth";
 import { useAuthForm } from "../../hooks/useAuthForm";
-import { InputField } from "../../components/UI/InputField";
+import { InputField } from "../../components/UI/InputFields/InputField";
 
 function SignupPage() {
   // from the custom hook (I pass signup(apifunction) and initialdata(input) and the route after signup)

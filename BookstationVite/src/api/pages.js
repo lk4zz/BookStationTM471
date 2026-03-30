@@ -1,11 +1,18 @@
-import { publicApi, privateApi } from "./axios";
+import { privateApi } from "./axios";
 
 export const getPagesByChapter = async (chapterId) => {
-    console.log(`fetching pages from chapterId`, chapterId)
-    const res = await privateApi.get(`/pages/${chapterId}`)
+    const res = await privateApi.get(`/pages/${chapterId}`);
     return res.data;
-}
+};
+
+export const getPagesForAuthor = async (chapterId) => {
+    const res = await privateApi.get(`/pages/author/${chapterId}`);
+    return res.data;
+};
+
+export const upsertPrimaryPage = async (chapterId, text) => {
+    const res = await privateApi.put(`/pages/primary/${chapterId}`, { text });
+    return res.data;
+};
 
 export default getPagesByChapter;
-
-

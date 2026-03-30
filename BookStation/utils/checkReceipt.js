@@ -1,3 +1,4 @@
+const prisma = require("../db");
 const ForbiddenError = require("../errors/ForbiddenError");
 
 const checkBookReceipts = async (bookId) => {
@@ -13,7 +14,7 @@ const checkBookReceipts = async (bookId) => {
     },
   });
   if (receipt) {
-    return next(new ForbiddenError("THIS BOOK HAS BOUGHT CHAPTERS ALREADY CANNOT DRAFT NOR DELETE"));
+  throw new ForbiddenError("THIS BOOK HAS BOUGHT CHAPTERS ALREADY CANNOT DRAFT NOR DELETE");
   }
 };
 

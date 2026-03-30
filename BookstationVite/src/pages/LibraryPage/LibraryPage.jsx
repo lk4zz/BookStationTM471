@@ -1,9 +1,9 @@
 import React from "react";
-import NavBar from "../../components/UI/NavBar";
-import LibraryGrid from "../../components/Library/LibraryGrid";
+import NavBar from "../../components/UI/NavBar/NavBar";
+import LibraryGrid from "../../components/LibraryComp/LibraryGrid/LibraryGrid";
 import { useLibraryBooks } from "../../hooks/useLibrary";
 import styles from "./LibraryPage.module.css";
-import IsGuestLibrary from "../../components/Library/IsGuestLibrary";
+import IsGuestLibrary from "../../components/LibraryComp/IsGuestLibrary/IsGuestLibrary";
 
 function LibraryPage() {
 

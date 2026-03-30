@@ -1,5 +1,5 @@
 import styles from './Wallet.module.css'
-import { WalletIcon } from '../IconLibrary';
+import { WalletIcon } from '../Icons/IconLibrary';
 import { useNavigate } from 'react-router-dom';
 
 
