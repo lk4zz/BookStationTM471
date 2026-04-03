@@ -1,0 +1,21 @@
+model PageChunk {
+  id          String   @id @default(uuid())
+  content     String   @db.Text
+  embedding   Json     
+  pageNumber  Int      
+  
+  pageId      Int
+  page        Pages    @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  chapterId   Int
+  chapter     Chapters @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  bookId      Int
+  book        Books    @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([chapterId]) 
+  @@index([userId])
+}

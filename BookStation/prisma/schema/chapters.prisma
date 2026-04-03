@@ -15,4 +15,5 @@ model Chapters {
     pages Pages[]
     chapterUnlocks ChapterUnlocks[]
     readingProgress ReadingProgress[]
+    pageChunks  PageChunk[]
 }

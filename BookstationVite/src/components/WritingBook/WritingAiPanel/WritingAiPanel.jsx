@@ -3,13 +3,13 @@ import InputText from "../../UI/InputFields/InputText";
 import { useAIPrompting } from "../../../hooks/features/useAIPrompting";
 import AIChat from "./AIChat";
 
-function WritingAiPanel() {
+function WritingAiPanel({ chapterId }) {
   const {
     promptInput,
     handlePromptInput,
     handleSendPrompt,
     messages,
-  } = useAIPrompting();
+  } = useAIPrompting(chapterId);
 
   return (
     <aside className={styles.panel}>

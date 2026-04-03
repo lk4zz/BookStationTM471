@@ -1,7 +1,7 @@
 import { useAIPrompt } from "../useAI";
 import { useState } from "react"
 
-export function useAIPrompting() {
+export function useAIPrompting(chapterId = null) {
 
     const [promptInput, setPromptInput] = useState("")
     const [AIResponse, setAIResponse] = useState("")
@@ -31,11 +31,12 @@ export function useAIPrompting() {
         setPromptInput("")
         setMessages(messages => [...messages, userMessage, pendingAIResponse]);
 
-        sendPrompt({ messages: chatContext }, {
+        sendPrompt({ messages: chatContext, chapterId }, {
             onSuccess: (response) => {
+                const assistantText = response?.response ?? response?.text ?? "No response from AI.";
                 setMessages(prevMsgs =>
                     prevMsgs.map(msg => msg.id === pendingId ?
-                        { ...msg, content: response.text, status: "done" } : msg)
+                        { ...msg, content: assistantText, status: "done" } : msg)
                 )
             },
             onError: (err) => {
