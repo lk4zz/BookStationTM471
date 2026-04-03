@@ -1,14 +1,7 @@
 import { EditorContent } from "@tiptap/react";
-import { useWritingCanvas } from "../../../hooks/features/useWritingCanvas";
 import styles from "./WritingCanvas.module.css";
 
-function WritingCanvas({ chapterId, bookId, initialHtml, isLoading }) {
-  const { editor, words, approxPages, saveStatus } = useWritingCanvas({
-    chapterId,
-    bookId,
-    initialHtml,
-    isLoading,
-  });
+function WritingCanvas({ editor, words, approxPages, saveStatus, chapterId}) {
 
   if (!chapterId) {
     return (
@@ -24,13 +17,13 @@ function WritingCanvas({ chapterId, bookId, initialHtml, isLoading }) {
         {editor && <EditorContent editor={editor} className={styles.editorRoot} />}
       </div>
 
-      <footer className={styles.footer}>
+      {/* <footer className={styles.footer}>
         <span className={styles.hint}>
           ~{words} words · approx. {approxPages} page{approxPages !== 1 ? "s" : ""}{" "}
           (display only)
         </span>
         <span className={styles.saveState}>{saveStatus}</span>
-      </footer>
+      </footer> */}
     </div>
   );
 }

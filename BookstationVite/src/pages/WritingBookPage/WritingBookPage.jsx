@@ -1,43 +1,32 @@
 import { useWritingBookPageData } from "../../hooks/features/useWritingBook";
 import { useParams } from "react-router-dom";
 import { checkIfGuest } from "../../utils/checkIfGuest";
+import { Link } from "react-router-dom";
 import styles from "./WritingBookPage.module.css";
-import Toolbar from "../../components/WritingBook/WritingToolBar/ToolBar";
-import WritingChaptersPanel from "../../components/WritingBook/WritingChaptersPanel/WritingChaptersPanel";
 import WritingCanvas from "../../components/WritingBook/WritingCanvas/WritingCanvas";
 import WritingAiPanel from "../../components/WritingBook/WritingAiPanel/WritingAiPanel";
-import { Link } from "react-router-dom";
-
+import WritingToolbar from "../../components/WritingBook/WritingToolBar/WritingToolbar";
+import WritingPageSidePanel from "../../components/WritingBook/WritingPageSidePanel/WritingPageSidePanel";
+import { useWritingCanvas } from "../../hooks/features/useWritingCanvas";
 
 function WritingBookPage() {
   const { bookId } = useParams();
   const numericBookId = Number(bookId);
-
   if (checkIfGuest()) return null;
-
-  const {
-    book, bookLoading, bookError,
-    chapters, chaptersLoading, pagesLoading,
-    selectedChapterId, selectChapter,
+  const { book, bookLoading, bookError, chapters, chaptersLoading, pagesLoading, selectedChapterId,
+    selectChapter, initialHtml, isBusy, handleStatusChange, handleDeleteChapter,
+    onCreateChapter, onUpdateChapter, onPublishChapter, isStatusPending, error } = useWritingBookPageData(numericBookId);
+  const isLoading = chaptersLoading || pagesLoading;
+  const { editor, words, approxPages, saveStatus } = useWritingCanvas({
+    chapterId: selectedChapterId,
+    bookId: numericBookId,
     initialHtml,
-    statusError,
-    isBusy,
-    handleStatusChange,
-    handleDeleteChapter,
-    onCreateChapter,
-    onUpdateChapter,
-    onPublishChapter,
-    isStatusPending,
-  } = useWritingBookPageData(numericBookId);
-
+    isLoading,
+  });
+  
   if (bookLoading) {
-    return (
-      <div className={styles.page}>
-        <p className={styles.centerMsg}>Loading book…</p>
-      </div>
-    );
+    return <div className={styles.page}><p className={styles.centerMsg}>Loading book...</p></div>;
   }
-
   if (bookError || !book) {
     return (
       <div className={styles.page}>
@@ -48,44 +37,42 @@ function WritingBookPage() {
       </div>
     );
   }
-
   return (
-    <div className={styles.page}>
-      <Toolbar
+    <div className={styles.writingPage}>
+      <section className={styles.chaptersPanelContainer}>
+        <WritingPageSidePanel
         book={book}
-        statusError={statusError}
         onStatusChange={handleStatusChange}
         isStatusPending={isStatusPending}
-      />
-
-      <div className={styles.layout}>
-        <section className={styles.side}>
-          <WritingChaptersPanel
-            bookId={numericBookId}
-            chapters={chapters}
-            selectedChapterId={selectedChapterId}
-            onSelectChapter={selectChapter}
-            onCreateChapter={onCreateChapter}
-            onUpdateChapter={onUpdateChapter}
-            onDeleteChapter={handleDeleteChapter}
-            onPublishChapter={onPublishChapter}
-            isBusy={isBusy}
-          />
-        </section>
-
-        <section className={styles.main}>
+        numericBookId={numericBookId}
+        chapters={chapters}
+        selectedChapterId={selectedChapterId}
+        selectChapter={selectChapter}
+        onCreateChapter={onCreateChapter}
+        onUpdateChapter={onUpdateChapter}
+        handleDeleteChapter={handleDeleteChapter}
+        onPublishChapter={onPublishChapter}
+        isBusy={isBusy}
+        error={error}
+        />
+      </section>
+      <section className={styles.middleSection}>
+        <div className={styles.aboveCanvas}>
+          <WritingToolbar editor={editor} />
+        </div>
+        <div className={styles.canvasContainer}>
           <WritingCanvas
+            editor={editor}
+            words={words}
+            approxPages={approxPages}
+            saveStatus={saveStatus}
             chapterId={selectedChapterId}
-            bookId={numericBookId}
-            initialHtml={initialHtml}
-            isLoading={chaptersLoading || pagesLoading}
           />
-        </section>
-
-        <section className={styles.ai}>
-          <WritingAiPanel />
-        </section>
-      </div>
+        </div>
+      </section>
+      <section className={styles.AiPanelContainer}>
+        <WritingAiPanel editor={editor} />
+      </section>
     </div>
   );
 }
