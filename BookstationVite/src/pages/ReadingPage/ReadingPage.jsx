@@ -59,7 +59,7 @@ function ReadingPage() {
       </section>
 
       <section className={styles.AiPanelContainer}>
-        <WritingAiPanel />
+        <WritingAiPanel chapterId={numericChapterId} />
       </section>
 
     </div>

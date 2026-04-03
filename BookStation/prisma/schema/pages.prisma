@@ -7,5 +7,5 @@ model Pages {
     
     @@unique([chapterId, pageNum])
 
-
+    pageChunks  PageChunk[]
 }

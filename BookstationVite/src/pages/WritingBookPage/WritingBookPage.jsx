@@ -71,7 +71,7 @@ function WritingBookPage() {
         </div>
       </section>
       <section className={styles.AiPanelContainer}>
-        <WritingAiPanel editor={editor} />
+        <WritingAiPanel chapterId={selectedChapterId} />
       </section>
     </div>
   );
