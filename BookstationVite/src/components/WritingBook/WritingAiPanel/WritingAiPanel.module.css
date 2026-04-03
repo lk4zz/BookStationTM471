@@ -1,9 +1,14 @@
 .panel {
+  height: 95%;
   padding: var(--space-4);
   background: var(--color-bg-panel);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  min-height: 200px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .title {
@@ -19,3 +24,4 @@
   line-height: 1.5;
   color: var(--color-text-dim);
 }
+

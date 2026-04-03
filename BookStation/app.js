@@ -22,6 +22,8 @@ const chaptersRouter = require('./routes/chapters');
 const walletRouter = require('./routes/wallet');
 const viewsRouter = require('./routes/views');
 const progressRouter = require('./routes/progress')
+const AIRouter = require('./routes/AI')
+
 
 // Custom Error Handling imports
 const errorHandler = require('./middlewares/errorHandler');
@@ -60,6 +62,7 @@ app.use('/following', followingRouter);
 app.use('/wallet', walletRouter);
 app.use('/views', viewsRouter);
 app.use('/progress', progressRouter);
+app.use('/AI', AIRouter);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Catch 404 for any unhandled routes and forward to error handler

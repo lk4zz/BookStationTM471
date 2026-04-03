@@ -89,6 +89,9 @@ export const useUpdateChapter = () => {
       }
       queryClient.invalidateQueries({ queryKey: ["chapters"] });
     },
+    onError: (error) => {
+      console.error(error?.message ?? "Failed to update chapter.");
+    },
   });
 };
 
@@ -102,6 +105,9 @@ export const useDeleteChapter = () => {
         queryClient.invalidateQueries({ queryKey: ["chapters", bookId] });
       }
     },
+    onError: (error) => {
+      console.error(error?.message ?? "Failed to delete chapter.");
+    },
   });
 };
 
@@ -114,6 +120,9 @@ export const usePublishChapter = () => {
         queryClient.invalidateQueries({ queryKey: ["chapters", "author", bookId] });
         queryClient.invalidateQueries({ queryKey: ["chapters", bookId] });
       }
+    },
+    onError: (error) => {
+      console.error(error?.message ?? "Failed to publish chapter.");
     },
   });
 };

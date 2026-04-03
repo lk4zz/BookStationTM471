@@ -1,50 +1,64 @@
-/* The dark background that handles natural vertical scrolling */
+/* Scroll area: stacks simulated pages (padding matches readingCanvas.dimensions.js) */
 .paperWrapper {
-    background-color: #070707;
-    display: flex;
-    justify-content: center;
-    padding: 1.5rem 1rem; /* Space at the top/bottom, and prevents touching sides on mobile */
-    box-sizing: border-box;
-    background-color: rgb(150, 150, 150);    
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5, 1.25rem);
+  padding: var(--space-4, 1rem) var(--space-2, 0.5rem);
+  background: rgb(90, 90, 90);
 }
 
-/* The actual document */
-.paperContainer {
-    
-    background-color: #E8DCB8;
-    width: 95%;
-    height: 920px;
-    max-width: 750px; /* The industry standard constraint for reading */
-    padding: 5% 8%; /* Large physical margins like a real book/doc */
-    border-radius: 10px; /* Very subtle rounding */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Lifts the paper off the dark desk */
-    box-sizing: border-box;
-    
-    /* Professional Typography */
-    font-family: 'Georgia', serif;
-    font-size: 1rem;
-    line-height: 1.5; 
-    color: #2c2921;   
+/* One sheet — dimensions pair with readingCanvas.dimensions.js */
+.pageSheet {
+  box-sizing: border-box;
+  width: min(100%, 750px);
+  aspect-ratio: 210 / 297;
+  max-width: 100%;
+  padding: 48px 56px;
+  background: #e8dcb8;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  font-family: Georgia, serif;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: #2c2921;
+}
+
+.pageContent {
+  width: 100%;
+  min-height: 0;
+}
+
+.chapterTitle {
+  margin: 0 0 0.75em;
+  font-size: clamp(1.25rem, 2.5vw, 1.6rem);
+  font-weight: 600;
+  line-height: 1.25;
 }
 
 .htmlBody {
-    margin: 0;
+  margin: 0;
 }
 
-.htmlBody p {
-    margin: 0 0 1em;
+.htmlBody :global(p) {
+  margin: 0 0 1em;
 }
 
-.htmlBody ul,
-.htmlBody ol {
-    margin: 0 0 1em;
-    padding-left: 1.25em;
+.htmlBody :global(ul),
+.htmlBody :global(ol) {
+  margin: 0 0 1em;
+  padding-left: 1.25em;
 }
 
-
-/* Make it responsive for mobile devices */
-@media (max-width: 600px) {
-    .paperContainer {
-        padding: 2rem 1.5rem; /* Shrink margins so text still fits on phones */
-    }
+.htmlBody :global(h1),
+.htmlBody :global(h2),
+.htmlBody :global(h3) {
+  margin: 1em 0 0.5em;
+  font-weight: 600;
 }
+

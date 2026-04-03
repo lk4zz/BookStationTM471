@@ -1,30 +1,30 @@
 import { useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 import { useCallback, useEffect, useRef } from "react";
 import { useUpsertPrimaryPage } from "../useWritingPages";
+import {extensions} from "../../utils/tiptapExtensions";
 import styles from "../../components/writingBook/WritingCanvas/WritingCanvas.module.css";
 
-// how long to wait after the user stops typing before hitting the database
+// save delay time
 const MILLISECONDS_TO_WAIT = 2000;
 
-export function calculateWordCount(rawHtmlString) {
-    if (typeof document === "undefined") return 0;
+// export function calculateWordCount(rawHtmlString) {
+//     if (typeof document === "undefined") return 0;
 
-    // create an fake container <div> element
-    const temporaryContainer = document.createElement("div");
-    temporaryContainer.innerHTML = rawHtmlString; //html with tags and text content
+//     // create an fake container <div> element
+//     const temporaryContainer = document.createElement("div");
+//     temporaryContainer.innerHTML = rawHtmlString; //html with tags and text content
 
-    // extract the plain text adnd ignore  the formatting tags
-    const plainTextOnly = temporaryContainer.textContent || "";
+//     // extract the plain text adnd ignore  the formatting tags
+//     const plainTextOnly = temporaryContainer.textContent || "";
 
-    const wordsArray = plainTextOnly.trim().split(/\s+/).filter(Boolean);
-    return wordsArray.length;  // split by spaces and count the resulting words
-}
+//     const wordsArray = plainTextOnly.trim().split(/\s+/).filter(Boolean);
+//     return wordsArray.length;  // split by spaces and count the resulting words
+// }
 
-export function estimatePageCount(totalWords) {
-    return Math.max(1, Math.ceil(totalWords / 250)); // book page size (250 words per page)
+// export function estimatePageCount(totalWords) {
+//     return Math.max(1, Math.ceil(totalWords / 250)); // book page size (250 words per page)
 
-}
+// }
 
 // Hook
 export function useWritingCanvas({ chapterId, bookId, initialHtml, isLoading }) {
@@ -66,19 +66,21 @@ export function useWritingCanvas({ chapterId, bookId, initialHtml, isLoading }) 
 
     const textEditorInstance = useEditor(
         {
-            extensions: [StarterKit],
-            content: "<p></p>",
-            editorProps: { attributes: { class: styles.tiptapInner } },
+            extensions: extensions,
 
-            // EVERY time a key is pressed, pass the current text to the timer
+            content: "<p></p>",
+
+            editorProps: {
+                attributes: { class: styles.tiptapInner },
+            },
+
             onUpdate: (props) => {
                 const currentHtml = props.editor.getHTML();
                 restartAutosaveTimer(currentHtml);
-            }
+            },
         },
-        [chapterId],
+        [chapterId]
     );
-
     // sync content when the page first loads
     useEffect(() => {
         if (!textEditorInstance || isLoading) return;
@@ -90,7 +92,7 @@ export function useWritingCanvas({ chapterId, bookId, initialHtml, isLoading }) 
         textEditorInstance.commands.setContent(startingText, { emitUpdate: false });
     }, [chapterId, textEditorInstance, isLoading, initialHtml]);
 
-    // If the user leaves the page, kill the timer so it doesn't cause errors
+    // incase the user leaves the page, kill the timer so it doesn't cause errors
     useEffect(() => {
         return () => {
             if (typingTimer.current) {
@@ -101,24 +103,24 @@ export function useWritingCanvas({ chapterId, bookId, initialHtml, isLoading }) 
 
     // Display Values 
     const activeHtmlString = textEditorInstance?.getHTML() ?? "";
-    const calculatedWordCount = calculateWordCount(activeHtmlString);
-    const estimatedPages = estimatePageCount(calculatedWordCount);
+    // const calculatedWordCount = calculateWordCount(activeHtmlString);
+    // const estimatedPages = estimatePageCount(calculatedWordCount);
 
     // Status Label 
-    let currentSaveStateLabel = "Autosave on pause";
+    // let currentSaveStateLabel = "Autosave on pause";
 
-    if (databaseSaveAction.isPending) {
-        currentSaveStateLabel = "Saving…";
-    } else if (databaseSaveAction.isError) {
-        currentSaveStateLabel = databaseSaveAction.error?.message || "Save failed — retry by editing";
-    } else if (databaseSaveAction.isSuccess) {
-        currentSaveStateLabel = "Synced";
-    }
+    // if (databaseSaveAction.isPending) {
+    //     currentSaveStateLabel = "Saving…";
+    // } else if (databaseSaveAction.isError) {
+    //     currentSaveStateLabel = databaseSaveAction.error?.message || "Save failed — retry by editing";
+    // } else if (databaseSaveAction.isSuccess) {
+    //     currentSaveStateLabel = "Synced";
+    // }
 
     return {
         editor: textEditorInstance,
-        words: calculatedWordCount,
-        approxPages: estimatedPages,
-        saveStatus: currentSaveStateLabel
+        // words: calculatedWordCount,
+        // approxPages: estimatedPages,
+        // saveStatus: currentSaveStateLabel
     };
 }

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import ChaptersPanel from "../../components/ReadingPageComp/ChaptersPanel/ChaptersPanel";
 import ReadingCanvas from "../../components/ReadingPageComp/ReadingCanvas/ReadingCanvas";
-import AiPanel from "../../components/ReadingPageComp/AiPanel/AiPanel";
+import WritingAiPanel from "../../components/WritingBook/WritingAiPanel/WritingAiPanel";
 import { useChapterById, useChaptersByBook } from "../../hooks/useChapters";
 import { usePagesByChatper } from "../../hooks/usePages";
 import { useParams } from "react-router-dom";
@@ -31,9 +31,11 @@ function ReadingPage() {
   if (isChaptersLoading) return <p className="loading">Loading..</p>
   if (isChapterLoading) return <p className="loading">Loading..</p>
 
-  const { chapter, hasAccess } = chapterData
-  const { pages, hasAccessPages } = pagesData
-
+  const { chapter, hasAccess } = chapterData ?? {};
+  const pages = Array.isArray(pagesData)
+    ? pagesData
+    : pagesData?.pages ?? [];
+  const firstPage = pages[0] ?? { id: 0, text: "" };
 
   return (
     <div className={styles.readingPage}>
@@ -47,14 +49,17 @@ function ReadingPage() {
           <h1>{chapter.book.name}</h1>
         </div>
         <div className={styles.canvasContainer}>
-          {pages?.map((page) => (
-            <ReadingCanvas key={page.id} page={page} chapter={chapter} />
-          ))}
+          <ReadingCanvas
+            key={firstPage.id}
+            page={firstPage}
+            chapter={chapter}
+            isPagesLoading={isPagesLoading}
+          />
         </div>
       </section>
 
       <section className={styles.AiPanelContainer}>
-        <AiPanel />
+        <WritingAiPanel />
       </section>
 
     </div>

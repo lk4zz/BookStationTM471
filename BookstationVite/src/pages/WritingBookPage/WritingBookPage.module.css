@@ -1,7 +1,6 @@
 .page {
   min-height: 100vh;
   background: var(--color-bg-app);
-  padding-bottom: var(--space-10);
 }
 
 .centerMsg {
@@ -14,117 +13,42 @@
   color: var(--color-accent);
 }
 
-.toolbar {
+.writingPage {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  height: 99.7vh;
+}
+
+.chaptersPanelContainer {
+  width: 23vw;
+  height: 95%;
+  border-radius: 10px;
+}
+
+.middleSection {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: var(--space-4) var(--space-4) var(--space-2);
+  width: 60vw;
 }
 
-@media (min-width: 768px) {
-  .toolbar {
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: space-between;
-  }
-}
-
-.toolbarLeft {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  min-width: 0;
-}
-
-.back {
-  font-size: 0.875rem;
-  color: var(--color-accent);
-  text-decoration: none;
-  width: fit-content;
-}
-
-.back:hover {
-  text-decoration: underline;
-}
-
-.bookTitle {
-  margin: 0;
-  font-size: clamp(1.25rem, 3vw, 1.5rem);
-  font-family: var(--font-heading);
-  color: var(--color-text-primary);
-  line-height: 1.25;
-}
-
-.toolbarRight {
+.aboveCanvas {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  justify-content: center;
+  min-height: 68px;
+  padding: 10px;
 }
 
-.statusLabel {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  font-size: 0.75rem;
-  color: var(--color-text-muted);
+.canvasContainer {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
 }
 
-.statusSelect {
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-color);
-  background: var(--color-bg-card);
-  color: var(--color-text-primary);
-  min-width: 160px;
-}
+.AiPanelContainer {
+  width: 28vw;
+  height: 100%;
+  border-radius: 10px;
 
-.statusErr {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 var(--space-4) var(--space-2);
-  font-size: 0.875rem;
-  color: #f87171;
-}
-
-.layout {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-4);
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: var(--space-2) var(--space-4) 0;
-  align-items: start;
-}
-
-@media (min-width: 960px) {
-  .layout {
-    grid-template-columns: minmax(220px, 280px) minmax(0, 1fr) minmax(180px, 220px);
-  }
-}
-
-.side {
-  order: 1;
-}
-
-.main {
-  order: 0;
-  min-width: 0;
-}
-
-@media (min-width: 960px) {
-  .side {
-    order: 0;
-  }
-
-  .main {
-    order: 1;
-  }
-}
-
-.ai {
-  order: 2;
 }

@@ -1,6 +1,7 @@
 import { getPagesByChapter } from "../api/pages";
 import { useQuery } from "@tanstack/react-query";
 
+// this hook is for reading page fetching
 export const usePagesByChatper =  (numericChapterId) => {
     const {
         data: pagesDataObjects,
