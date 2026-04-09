@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.80.0",
     "@google/generative-ai": "^0.24.1",
     "@tiptap/extension-character-count": "^3.22.0",
     "@tiptap/extension-highlight": "^3.22.0",

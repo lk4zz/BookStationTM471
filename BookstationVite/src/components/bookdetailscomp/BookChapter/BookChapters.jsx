@@ -4,9 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { use } from "react";
 
 function BookChapters({ chapter, className, onClick }) {
-  //fix icons add them to icon library
 
-  console.log(chapter)
   return (
     <div 
      onClick={onClick}

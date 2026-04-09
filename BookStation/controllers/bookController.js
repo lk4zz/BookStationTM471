@@ -33,28 +33,9 @@ const getAllPublicBooks = catchAsync(async (req, res) => {
   });
 });
 
-const getDraftedPrivateBooks = catchAsync(async (req, res) => {
-  const currentUserId = req.user.userId;
-  const books = await bookService.getDraftedPrivateBooks(currentUserId);
-  res.status(200).json({
-    success: true,
-    count: books.length,
-    data: books,
-  });
-});
-
-const getBookByIdForAuthor = catchAsync(async (req, res) => {
-  const { bookId } = req.params;
-  const currentUserId = req.user.userId;
-  const book = await bookService.getBookByIdForAuthor(bookId, currentUserId);
-  res.status(200).json({
-    success: true,
-    data: book,
-  });
-});
-
 const getBookById = catchAsync(async (req, res) => {
-  const book = await bookService.getBookById(req.params.bookId);
+  const currentUserId = req.user?.userId;
+  const book = await bookService.getBookById(req.params.bookId, currentUserId);
 
   res.status(200).json({
     success: true,
@@ -63,7 +44,8 @@ const getBookById = catchAsync(async (req, res) => {
 });
 
 const getBooksByAuthor = catchAsync(async (req, res) => {
-  const books = await bookService.getBooksByAuthor(req.params.authorId);
+  const currentUserId = req.user?.userId;
+  const books = await bookService.getBooksByAuthor(req.params.authorId, currentUserId);
 
   res.status(200).json({
     success: true,
@@ -136,8 +118,6 @@ const updateBookCover = catchAsync(async (req, res) => {
 
 module.exports = {
   createBook,
-  getDraftedPrivateBooks,
-  getBookByIdForAuthor,
   getAllPublicBooks,
   getBookById,
   getBooksByAuthor,

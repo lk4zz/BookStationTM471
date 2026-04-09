@@ -22,12 +22,22 @@ const views = await viewsServices.getViews(bookId, currentUserId);
 
 res.status(200).json({
     success: true,
-    count: views.length,
-    data: views});
+    data: views
+});
 
 });
 
+const getMostViewedBook = catchAsync(async (req, res) => {
+    const bookId = await viewsServices.getMostViewedBook();
+    res.status(200).json({
+        success: true,
+        data: bookId
+    });
+}); 
+
 module.exports = {
     addView,
-    getViews
+    getViews,
+    getMostViewedBook
+
 };

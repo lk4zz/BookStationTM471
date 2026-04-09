@@ -5,7 +5,6 @@ const chapterController = require('../controllers/chapterController');
 const validateChapter = require('../middlewares/validateChapter.js');
 
 // Public Routes (No jwt required)
-router.get('/book/:bookId/author', verifyToken, chapterController.getChaptersByBookForAuthor);
 router.get('/book/:bookId', verifyTokenOptional, chapterController.getChaptersByBook);
 router.get('/:chapterId', verifyTokenOptional, chapterController.getChapterById); 
 

@@ -3,7 +3,7 @@ const BadRequestError = require("../errors/BadRequestError");
 const NotFoundError = require("../errors/NotFoundError");
 const { getOwnedBook } = require("../utils/BookOwnership");
 const { checkBookReceipts, checkChapterRreceipt } = require("../utils/checkReceipt");
-
+const {checkEditAccess} = require("../utils/checkEditAccess");
 
 const createBook = async (title, description, authorId) => {
   normalizedTitle = title.trim().toLowerCase().replace(/\s+/g, '');
@@ -51,40 +51,6 @@ const getAllPublicBooks = async () => {
   return books;
 };
 
-const getDraftedPrivateBooks = async (currentUserId) => {
-  const books = await prisma.books.findMany({
-    where: {
-      userId: currentUserId,
-      status: "DRAFT",
-    },
-    include: {
-      bookGenres: {
-        include: { bookGenre: true },
-      },
-      _count: {
-        select: { chapters: true },
-      },
-    },
-    orderBy: { updatedAt: "desc" },
-  });
-
-  return books;
-};
-
-const getBookByIdForAuthor = async (bookId, currentUserId) => {
-  await getOwnedBook(bookId, currentUserId);
-  const book = await prisma.books.findUnique({
-    where: { id: parseInt(bookId, 10) },
-    include: {
-      author: { select: { name: true } },
-      bookGenres: { include: { bookGenre: true } },
-      _count: { select: { chapters: true } },
-    },
-  });
-  if (!book) throw new NotFoundError("BOOK NOT FOUND");
-  return book;
-};
-
 const getBookByGenre = async (genreId) => {
   const books = await prisma.books.findMany({
     where: {
@@ -108,11 +74,11 @@ const getBookByGenre = async (genreId) => {
   return books;
 };
 
-const getBookById = async (id) => {
-  const book = await prisma.books.findFirst({
+const getBookById = async (id, currentUserId) => {
+  const parsedBookId = parseInt(id, 10);
+  const book = await prisma.books.findUnique({
     where: {
-      id: parseInt(id, 10),
-      NOT: { status: "DRAFT" },
+      id: parsedBookId,
     },
     include: {
       author: { select: { name: true } },
@@ -126,11 +92,21 @@ const getBookById = async (id) => {
   });
 
   if (!book) throw new NotFoundError("BOOK NOT FOUND");
+  if (book.status !== "DRAFT") return book;
+
+  if (!currentUserId) throw new NotFoundError("BOOK NOT FOUND");
+  try {
+    await getOwnedBook(parsedBookId, currentUserId);
+  } catch {
+    throw new NotFoundError("BOOK NOT FOUND");
+  }
   return book;
 };
 
-const getBooksByAuthor = async (authorId) => {
+const getBooksByAuthor = async (authorId, currentUserId) => {
   const parsedAuthorId = parseInt(authorId, 10);
+  const parsedCurrentUserId = parseInt(currentUserId, 10);
+  const isOwner = Number.isFinite(parsedCurrentUserId) && parsedCurrentUserId === parsedAuthorId;
 
   const user = await prisma.user.findUnique({
     where: { id: parsedAuthorId },
@@ -141,7 +117,7 @@ const getBooksByAuthor = async (authorId) => {
   const books = await prisma.books.findMany({
     where: {
       userId: parsedAuthorId,
-      NOT: { status: "DRAFT" },
+      ...(isOwner ? {} : { NOT: { status: "DRAFT" } }),
     },
     include: {
       bookGenres: {
@@ -161,6 +137,8 @@ const getBooksByAuthor = async (authorId) => {
 const updateBook = async (bookId, currentUserId, title, description) => {
   // Extract the book object directly from the functions return value
   const { book } = await getOwnedBook(bookId, currentUserId);
+
+  await checkEditAccess(book);
 
   // Check if another book with the same userId and name already exists
   if (title !== book.name) {
@@ -245,12 +223,10 @@ module.exports = {
   createBook,
   getAllPublicBooks,
   getBookById,
-  getBookByIdForAuthor,
   getBooksByAuthor,
   updateBook,
   deleteBook,
   getBookByGenre,
-  getDraftedPrivateBooks,
   updateBookStatus,
   updateBookCover,
 };

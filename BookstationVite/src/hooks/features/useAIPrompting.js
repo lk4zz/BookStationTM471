@@ -4,7 +4,6 @@ import { useState } from "react"
 export function useAIPrompting(chapterId = null) {
 
     const [promptInput, setPromptInput] = useState("")
-    const [AIResponse, setAIResponse] = useState("")
     const [messages, setMessages] = useState([])
     const uid = () => crypto.randomUUID();
 
@@ -27,7 +26,6 @@ export function useAIPrompting(chapterId = null) {
             )
             .map(msg => ({ role: msg.role, content: msg.content }))
 
-        setAIResponse("")
         setPromptInput("")
         setMessages(messages => [...messages, userMessage, pendingAIResponse]);
 
@@ -51,7 +49,6 @@ export function useAIPrompting(chapterId = null) {
 
     return {
         promptInput,
-        AIResponse,
         messages,
         handlePromptInput,
         handleSendPrompt
