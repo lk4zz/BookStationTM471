@@ -1,4 +1,4 @@
-import { getMostViewedBook } from "../api/views";
+import { getMostViewedBook, getTopBooks } from "../api/views";
 import { getViews } from "../api/views";
 import { useQuery } from "@tanstack/react-query";
 
@@ -34,5 +34,22 @@ export const useMostViewedBook = () => {
     const mostViewedBook = mostViewedBookId?.data || null;
 
     return { mostViewedBook, isMostViewedBookLoading, mostViewedBookError }
+
+}
+
+export const useTopBooks = () => {
+    const {
+        data: topBooksData,
+        isLoading: isTopBooksLoading,
+        error: topBooksError,
+    } = useQuery({
+        queryKey: ["topBooks"],
+        queryFn: () => getTopBooks(),
+        enabled: true,
+    });
+
+    const topBooks = topBooksData?.data || null;
+
+    return { topBooks, isTopBooksLoading, topBooksError }
 
 }

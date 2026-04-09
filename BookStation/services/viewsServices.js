@@ -70,8 +70,21 @@ const getMostViewedBook = async () => {
 }
 
 
+const getTopBooks = async () => {
+  const books = await prisma.books.findMany({
+    orderBy:{
+      views:{
+        _count: "desc",
+      },
+    },
+    take: 10,
+  })
+  return books? books : null;
+}
+
 module.exports = {
   addView,
   getViews,
-  getMostViewedBook
+  getMostViewedBook,
+  getTopBooks,
 };
