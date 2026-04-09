@@ -11,4 +11,8 @@ export const addView = async (id) => {
   console.log(res.data)
 };
 
-export default { getViews, addView };
+export const getMostViewedBook = async () => {
+  const res = await publicApi.get(`/views/books/mostviewed`);
+  return res.data;
+};
+

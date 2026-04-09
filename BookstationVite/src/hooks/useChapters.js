@@ -1,7 +1,6 @@
 import {
   getChaptersFromBook,
   getChaptersById,
-  getChaptersForAuthor,
   createChapter,
   updateChapter,
   deleteChapter,
@@ -52,26 +51,11 @@ export const useUnlockChapter = () => {
   })
 }
 
-export const useChaptersForAuthor = (bookId) => {
-  const {
-    data: chaptersData,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["chapters", "author", bookId],
-    queryFn: () => getChaptersForAuthor(bookId),
-    enabled: Number.isFinite(bookId),
-  });
-  const chapters = chaptersData?.data ?? chaptersData ?? [];
-  return { chapters, isLoading, error };
-};
-
 export const useCreateChapter = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ bookId, title }) => createChapter(bookId, title),
     onSuccess: (_, { bookId }) => {
-      queryClient.invalidateQueries({ queryKey: ["chapters", "author", bookId] });
       queryClient.invalidateQueries({ queryKey: ["chapters", bookId] });
     },
   });
@@ -84,7 +68,6 @@ export const useUpdateChapter = () => {
       updateChapter(chapterId, { title, price }),
     onSuccess: (_, { bookId }) => {
       if (bookId != null) {
-        queryClient.invalidateQueries({ queryKey: ["chapters", "author", bookId] });
         queryClient.invalidateQueries({ queryKey: ["chapters", bookId] });
       }
       queryClient.invalidateQueries({ queryKey: ["chapters"] });
@@ -101,7 +84,6 @@ export const useDeleteChapter = () => {
     mutationFn: ({ chapterId }) => deleteChapter(chapterId),
     onSuccess: (_, { bookId }) => {
       if (bookId != null) {
-        queryClient.invalidateQueries({ queryKey: ["chapters", "author", bookId] });
         queryClient.invalidateQueries({ queryKey: ["chapters", bookId] });
       }
     },
@@ -117,7 +99,6 @@ export const usePublishChapter = () => {
     mutationFn: ({ chapterId, price }) => publishChapter(chapterId, price),
     onSuccess: (_, { bookId }) => {
       if (bookId != null) {
-        queryClient.invalidateQueries({ queryKey: ["chapters", "author", bookId] });
         queryClient.invalidateQueries({ queryKey: ["chapters", bookId] });
       }
     },

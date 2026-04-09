@@ -7,10 +7,10 @@ export const getAllBooks = async () => {
     return res.data;
 }
 
-export const getBookById = async (id) => {
-
+export const getBookById = async (id, includeAuth = false) => {
     console.log("Fetching book with id:", id);
-    const res = await publicApi.get(`/books/${id}`);
+    const apiClient = includeAuth ? privateApi : publicApi;
+    const res = await apiClient.get(`/books/${id}`);
 
     return  res.data;
 }
@@ -22,14 +22,9 @@ export const getBooksByGenre = async(genreId) => {
 }
 
 export const getBooksByAuthor = async(userId) => {
-    const res = await privateApi.get(`/books/author/${userId}`)
+   const res = await privateApi.get(`/books/author/${userId}`)
     return res.data;
 }
-
-export const getDraftedBooks = async () => {
-    const res = await privateApi.get("/books/drafted");
-    return res.data;
-};
 
 export const createBook = async ({ title, description = "" }) => {
     const res = await privateApi.post("/books", { title, description });
@@ -38,11 +33,6 @@ export const createBook = async ({ title, description = "" }) => {
 
 export const deleteBook = async (bookId) => {
     const res = await privateApi.delete(`/books/${bookId}`);
-    return res.data;
-};
-
-export const getBookForWriting = async (bookId) => {   
-    const res = await privateApi.get(`/books/writing/${bookId}`);
     return res.data;
 };
 

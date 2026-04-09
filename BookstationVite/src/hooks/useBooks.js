@@ -1,16 +1,16 @@
-import { getBookById, getAllBooks, getBooksByGenre, getBooksByAuthor, getDraftedBooks,
-    createBook, deleteBook, getBookForWriting, updateBookStatus, } from "../api/books";
+import { getBookById, getAllBooks, getBooksByGenre, getBooksByAuthor,
+    createBook, deleteBook, updateBookStatus, } from "../api/books";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-export const useBookById = (numericId) => {
+export const useBookById = (numericId, includeAuth = false) => {
 
     const {
         data: bookData,
         isLoading: isBookLoading,
         error: bookError,
     } = useQuery({
-        queryKey: ["book", numericId],
-        queryFn: () => getBookById(numericId),
+        queryKey: ["book", numericId, includeAuth],
+        queryFn: () => getBookById(numericId, includeAuth),
         enabled: Number.isFinite(numericId),
     });
 
@@ -59,42 +59,16 @@ export const useBooksByAuthor = (userId) => { //all books made by author
         enabled: !!userId
     })
     const booksByAuthor = booksByAuthorData?.data ?? booksByAuthorData;
+
     return { booksByAuthor, isBooksByAuthorLoading, booksByAuthorError};
 }
-
-export const useDraftedBooks = () => {
-    const {
-        data,
-        isLoading : isDraftsloading,
-        error : draftsError,
-    } = useQuery({
-        queryKey: ["books", "drafts"],
-        queryFn: getDraftedBooks,
-    });
-    const draftBooks = data?.data ?? [];
-    return { draftBooks, isDraftsloading, draftsError };
-};
-
-export const useBookForWriting = (bookId) => {  //one specifi book by author incase u wanna edit
-    const {
-        data,
-        isLoading,
-        error,
-    } = useQuery({
-        queryKey: ["books", "writing", bookId],
-        queryFn: () => getBookForWriting(bookId),
-        enabled: Number.isFinite(bookId),
-    });
-    const book = data?.data ?? data;
-    return { book, isLoading, error };
-};
 
 export const useCreateBook = () => {  //this creates book
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: createBook,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["books", "drafts"] });
+            queryClient.invalidateQueries({ queryKey: ["books", "author"] });
         },
     });
 };
@@ -104,7 +78,7 @@ export const useDeleteBook = () => {
     return useMutation({
         mutationFn: deleteBook,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["books", "drafts"] });
+            queryClient.invalidateQueries({ queryKey: ["books", "author"] });
         },
     });
 };
@@ -115,8 +89,8 @@ export const useUpdateBookStatus = () => {
         mutationFn: ({ bookId, requestedStatus }) =>
             updateBookStatus(bookId, requestedStatus),
         onSuccess: (_, { bookId }) => {
-            queryClient.invalidateQueries({ queryKey: ["books", "drafts"] });
-            queryClient.invalidateQueries({ queryKey: ["books", "writing", bookId] });
+            queryClient.invalidateQueries({ queryKey: ["books", "author"] });
+            queryClient.invalidateQueries({ queryKey: ["book", bookId] });
         },
     });
 };

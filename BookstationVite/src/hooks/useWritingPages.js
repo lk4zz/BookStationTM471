@@ -26,7 +26,7 @@ export const useUpsertPrimaryPage = () => {
     mutationFn: ({ chapterId, text }) => upsertPrimaryPage(chapterId, text),
     onSuccess: (_, { chapterId, bookId }) => {
       if (bookId != null) {
-        queryClient.invalidateQueries({ queryKey: ["chapters", "author", bookId] });
+        queryClient.invalidateQueries({ queryKey: ["chapters", bookId] });
       }
       queryClient.invalidateQueries({ queryKey: ["pages", chapterId] });
     },

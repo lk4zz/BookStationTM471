@@ -1,37 +1,5 @@
-const { get } = require('http');
 const pageServices = require('../services/pageServices');
 const catchAsync = require('../middlewares/catchAsync');
-
-const createPage = catchAsync(async (req, res) => {
-
-        const currentUserId = req.user.userId;
-        const {chapterId} = req.params;
-        const { text } = req.body;
-
-        const newPage = await pageServices.createPage(chapterId, text, currentUserId);
-
-        res.status(201).json({
-            message: "Page created successfully!",
-            page: newPage
-        });
-
-
-});
-
-
-const updatePage = catchAsync(async (req, res) => {
-        const currentUserId = req.user.userId;
-        const { text } = req.body;
-        const pageId = req.params.id;
-
-        const updated = await pageServices.updatePage(text, currentUserId, pageId);
-        res.status(200).json({
-            message: "Page updated successfully!",
-            page: updated
-        });
-
-
-});
 
 const getPagesForAuthor = catchAsync(async (req, res) => {
     const chapterId = req.params.chapterId;
@@ -83,8 +51,6 @@ const deletePage = catchAsync(async (req, res) => {
 
 
 module.exports = {
-    createPage,
-    updatePage,
     getPagesByChapter,
     getPagesForAuthor,
     upsertPrimaryPage,

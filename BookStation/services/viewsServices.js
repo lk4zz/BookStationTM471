@@ -37,7 +37,7 @@ const addView = async (bookId, currentUserId) => {
 };
 
 
-const getViews = async (bookId) => {
+const getViews = async (bookId) => { //this is for one book
   try {
     const viewCount = await prisma.bookViews.count({
       where: {
@@ -52,7 +52,26 @@ const getViews = async (bookId) => {
   }
 };
 
+const getMostViewedBook = async () => {
+  try {
+    const book = await prisma.books.findFirst({
+      orderBy: {
+        views: {
+          _count: "desc",
+        },
+      },
+      select: { id: true },
+    });
+    return book ? book.id : null;
+  } catch (err) {
+    console.error("Error fetching most viewed book:", err);
+  }
+
+}
+
+
 module.exports = {
   addView,
   getViews,
+  getMostViewedBook
 };

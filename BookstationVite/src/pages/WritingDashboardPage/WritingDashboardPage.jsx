@@ -7,7 +7,7 @@ import DashboardBooksSection from "../../components/WritingDashboard/DraftBooksS
 import PageHeader from "../../components/WritingDashboard/PageHeader/PageHeader";
 import BookTabs from "../../components/WritingDashboard/BookTabPanel/BookTabs";
 
-import { useDraftedBooks, useCreateBook, useDeleteBook, useBooksByAuthor } from "../../hooks/useBooks";
+import { useCreateBook, useDeleteBook, useBooksByAuthor } from "../../hooks/useBooks";
 import { checkIfGuest } from "../../utils/checkIfGuest";
 import { useCurrentUserId } from "../../hooks/useUser";
 import styles from "./WritingDashboardPage.module.css";
@@ -18,12 +18,10 @@ function WritingDashboardPage() {
   const { currentUserId } = useCurrentUserId();
   const [activeTab, setActiveTab] = useState("DRAFTS");
   const [isNewBookModalOpen, setNewBookModalOpen] = useState(false);
-  const { draftBooks, isDraftsloading, draftsError } = useDraftedBooks(); //fetch drafts
   const { booksByAuthor, isBooksByAuthorLoading, booksByAuthorError
   } = useBooksByAuthor(currentUserId);
 
-
-
+  
   const createBook = useCreateBook(); //create new draft
   const deleteBook = useDeleteBook(); //delete draft
 
@@ -66,12 +64,11 @@ function WritingDashboardPage() {
         
         {/* draftbooks list */}
         <DashboardBooksSection
-          draftBooks={draftBooks}
           booksByAuthor={booksByAuthor}
           isBooksByAuthorLoading={isBooksByAuthorLoading}
           booksByAuthorError={booksByAuthorError}
-          isLoading={isDraftsloading}
-          error={draftsError}
+          isLoading={isBooksByAuthorLoading}
+          error={booksByAuthorError}
           onDelete={handleDelete}
           activeTab={activeTab}
         />
@@ -87,6 +84,8 @@ function WritingDashboardPage() {
       />
     </div>
   );
+
 }
+
 
 export default WritingDashboardPage;

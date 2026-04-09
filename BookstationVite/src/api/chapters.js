@@ -5,11 +5,6 @@ export const getChaptersFromBook = async (id) => {
     return res.data;
 };
 
-export const getChaptersForAuthor = async (bookId) => {
-    const res = await privateApi.get(`/chapters/book/${bookId}/author`);
-    return res.data;
-};
-
 export const getChaptersById = async (chapterId) => {
     const res = await privateApi.get(`/chapters/${chapterId}`);
     return res.data;

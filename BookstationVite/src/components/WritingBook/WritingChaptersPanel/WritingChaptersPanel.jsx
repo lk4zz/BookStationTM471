@@ -32,10 +32,10 @@ function WritingChaptersPanel({
         </button>
       </div>
       <ul className={styles.list}>
-        {chapters.length === 0 && (
+        {chapters?.length === 0 && (
           <li className={styles.empty}>No chapters yet. Create one to write.</li>
         )}
-        {chapters.map((ch) => (
+        {chapters?.map((ch) => (
           <WritingChapterItem
             key={ch.id}
             ch={ch}

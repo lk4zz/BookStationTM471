@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useMemo } from "react";
-import { useBookForWriting, useUpdateBookStatus } from "../useBooks";
-import { useChaptersForAuthor } from "../useChapters";
+import { useBookById, useUpdateBookStatus } from "../useBooks";
+import { useChaptersByBook } from "../useChapters";
 import { useAuthorPages } from "../useWritingPages";
 import { useCreateChapter, useUpdateChapter, useDeleteChapter, usePublishChapter } from "../useChapters";
 import { checkIfGuest } from "../../utils/checkIfGuest";
@@ -17,8 +17,8 @@ export function useWritingBookPageData(numericBookId) { //takes ID
   const [error, setError] = useState(null);
 
   // data and loadings and errors
-  const { book, isLoading: bookLoading, error: bookError } = useBookForWriting(numericBookId);
-  const { chapters, isLoading: chaptersLoading } = useChaptersForAuthor(numericBookId);
+  const { book, isBookLoading: bookLoading, bookError } = useBookById(numericBookId, true);
+  const { chapters, isChapterLoading: chaptersLoading } = useChaptersByBook(numericBookId);
   const { pages, isLoading: pagesLoading } = useAuthorPages(selectedChapterId);
 
   // mutations

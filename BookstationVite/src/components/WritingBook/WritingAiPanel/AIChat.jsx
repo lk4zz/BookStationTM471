@@ -6,9 +6,9 @@ function AIChat({ messages }) {
     return (
         <div className={styles.chatWindow} >
             <div className={styles.chatBubbleContainer}>
-            {messages?.map((message, index) => (
+            {messages?.map((message) => (
                 <div className={message.role === "user" ? `${styles.chatBubbleUser}` : `${styles.chatBubbleAI}` }
-                key={index} message={message.text}
+                key={message.id ?? `${message.role}-${message.content}`}
                 >{message.content}</div>
             ))}
                

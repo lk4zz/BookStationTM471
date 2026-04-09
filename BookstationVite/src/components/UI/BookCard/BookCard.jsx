@@ -3,9 +3,12 @@ import { Link } from "react-router-dom";
 const BASE_URL = import.meta.env.VITE_API_URL || "";
 import { EyeIcon, StarIcon } from "../Icons/IconLibrary";
 import { addView } from "../../../api/views";
+import { useViews } from "../../../hooks/useViews";
 
 function BookCard({ book }) {
   //link works but might as well change it to navigate later since i am already using it in other files
+  const {totalViews, isViewsLoading, viewsError} = useViews(book.id)
+  console.log(totalViews)
   return (
     <Link onClick= { () => addView(book.id)} className={styles.link} to={`/book/${book.id}`}>
       <div className={styles.card}>
@@ -25,7 +28,9 @@ function BookCard({ book }) {
         <div className={styles.footer}>
           <div className={styles.views}>
            <EyeIcon className={styles.eye}/> 
-            <p>1233</p>
+           {totalViews? (<p>{totalViews}</p>) :
+           (<p>Loading Views</p>)}
+            
           </div>
 
           <div className={styles.rating}>

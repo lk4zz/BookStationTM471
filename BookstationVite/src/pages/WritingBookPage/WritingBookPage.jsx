@@ -38,41 +38,43 @@ function WritingBookPage() {
     );
   }
   return (
-    <div className={styles.writingPage}>
-      <section className={styles.chaptersPanelContainer}>
-        <WritingPageSidePanel
-        book={book}
-        onStatusChange={handleStatusChange}
-        isStatusPending={isStatusPending}
-        numericBookId={numericBookId}
-        chapters={chapters}
-        selectedChapterId={selectedChapterId}
-        selectChapter={selectChapter}
-        onCreateChapter={onCreateChapter}
-        onUpdateChapter={onUpdateChapter}
-        handleDeleteChapter={handleDeleteChapter}
-        onPublishChapter={onPublishChapter}
-        isBusy={isBusy}
-        error={error}
-        />
-      </section>
-      <section className={styles.middleSection}>
-        <div className={styles.aboveCanvas}>
-          <WritingToolbar editor={editor} />
-        </div>
-        <div className={styles.canvasContainer}>
-          <WritingCanvas
-            editor={editor}
-            words={words}
-            approxPages={approxPages}
-            saveStatus={saveStatus}
-            chapterId={selectedChapterId}
+    <div className={styles.writingPageViewport}>
+      <div className={styles.writingPage}>
+        <section className={styles.chaptersPanelContainer}>
+          <WritingPageSidePanel
+          book={book}
+          onStatusChange={handleStatusChange}
+          isStatusPending={isStatusPending}
+          numericBookId={numericBookId}
+          chapters={chapters}
+          selectedChapterId={selectedChapterId}
+          selectChapter={selectChapter}
+          onCreateChapter={onCreateChapter}
+          onUpdateChapter={onUpdateChapter}
+          handleDeleteChapter={handleDeleteChapter}
+          onPublishChapter={onPublishChapter}
+          isBusy={isBusy}
+          error={error}
           />
-        </div>
-      </section>
-      <section className={styles.AiPanelContainer}>
-        <WritingAiPanel chapterId={selectedChapterId} />
-      </section>
+        </section>
+        <section className={styles.middleSection}>
+          <div className={styles.aboveCanvas}>
+            <WritingToolbar editor={editor} />
+          </div>
+          <div className={styles.canvasContainer}>
+            <WritingCanvas
+              editor={editor}
+              words={words}
+              approxPages={approxPages}
+              saveStatus={saveStatus}
+              chapterId={selectedChapterId}
+            />
+          </div>
+        </section>
+        <section className={styles.AiPanelContainer}>
+          <WritingAiPanel chapterId={selectedChapterId} />
+        </section>
+      </div>
     </div>
   );
 }

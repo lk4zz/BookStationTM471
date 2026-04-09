@@ -7,9 +7,12 @@ const BadRequestError = require("../errors/BadRequestError");
 const ForbiddenError = require("../errors/ForbiddenError");
 const PaymentRequiredError = require("../errors/PaymentRequiredError");
 const { checkChapterRreceipt } = require("../utils/checkReceipt");
+const {checkEditAccess} = require("../utils/checkEditAccess");
+
 
 const createChapter = async (bookId, title, currentUserId) => {
-  await getOwnedBook(bookId, currentUserId);
+  const { book } = await getOwnedBook(bookId, currentUserId);
+  await checkEditAccess(book);
 
   const lastChapter = await prisma.chapters.findFirst({
     where: { bookId: parseInt(bookId, 10) },
@@ -36,8 +39,14 @@ const getChaptersByBook = async (bookId, currentUserId) => {
   });
 
   if (!book) throw new NotFoundError("Book not found");
-  if (book.status === "DRAFT")
-    throw new NotFoundError("This book is not public.");
+  if (book.status === "DRAFT") {
+    if (!currentUserId) throw new NotFoundError("This book is not public.");
+    try {
+      await getOwnedBook(bookId, currentUserId);
+    } catch {
+      throw new NotFoundError("This book is not public.");
+    }
+  }
 
   // fetch all published chapters for this book
   const chapters = await prisma.chapters.findMany({
@@ -49,6 +58,13 @@ const getChaptersByBook = async (bookId, currentUserId) => {
 
   if (chapters.length === 0)
     throw new NotFoundError("No published chapters found for this book.");
+
+  if (book.status === "DRAFT") {
+    return chapters.map((chapter) => ({
+      ...chapter,
+      hasAccess: true,
+    }));
+  }
 
   // promise.all allows javaScript to send all the queries at the same time to the DB this way you save a lot of time instead of waiting for each check sequentially
   const decoratedChapters = await Promise.all(
@@ -69,21 +85,6 @@ const getChaptersByBook = async (bookId, currentUserId) => {
 
   return decoratedChapters;
 };
-
-const getChaptersByBookForAuthor = async (bookId, currentUserId) => {
-  await getOwnedBook(bookId, currentUserId);
-
-  const chapters = await prisma.chapters.findMany({
-    where: { bookId: parseInt(bookId, 10) },
-    orderBy: { chapterNum: "asc" },
-  });
-
-  return chapters.map((chapter) => ({
-    ...chapter,
-    hasAccess: true,
-  }));
-};
-
 const getChapterById = async (chapterId, userId) => {
   // fetch the chapter through access function
   const accessData = await accessDetector.checkAccess(
@@ -109,14 +110,24 @@ const updateChapter = async (
   currentUserId,
   requestedPrice,
 ) => {
+
   // fetch the chapter include book (for ownership), include pages (for the function to calculate)
   const chapter = await prisma.chapters.findUnique({
     where: { id: parseInt(chapterId, 10) },
-    include: { book: true, pages: true },
+    select: { bookId: true,
+      title: true,
+      pages: true,
+      price: true,
+      isLocked: true,
+      isPublished: true,
+      wordCount: true,
+      chapterNum: true,
+    },
   });
 
   if (!chapter) throw new NotFoundError("CHAPTER NOT FOUND");
-  await getOwnedBook(chapter.book.id, currentUserId);
+  const { book } = await getOwnedBook(chapter.bookId, currentUserId);
+  await checkEditAccess(book);
 
   // default values in case they only want to update the title
   let finalIsLocked = chapter.isLocked;
@@ -263,10 +274,10 @@ const unlockChapter = async (userId, chapterId) => {
 const deleteChapter = async (chapterId, currentUserId) => {
   const chapter = await prisma.chapters.findUnique({
     where: { id: parseInt(chapterId, 10) },
-    include: { book: true },
   });
   if (!chapter) throw new NotFoundError("CHAPTER NOT FOUND");
-  await getOwnedBook(chapter.book.id, currentUserId);
+  const {book} = await getOwnedBook(chapter.bookId, currentUserId);
+  await checkEditAccess(book);
   checkChapterRreceipt(chapterId);
 
   await prisma.chapters.delete({
@@ -293,7 +304,6 @@ const deleteChapter = async (chapterId, currentUserId) => {
 module.exports = {
   createChapter,
   getChaptersByBook,
-  getChaptersByBookForAuthor,
   getChapterById,
   updateChapter,
   publishChapter,

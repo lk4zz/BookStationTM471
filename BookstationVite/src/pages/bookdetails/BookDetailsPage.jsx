@@ -37,6 +37,7 @@ function BookDetailsPage() {
 
   if (isBookLoading) return <p className={styles.loading}>Loading...</p>;
   if (bookError) return <p className={styles.error}>{bookError.message || "Error loading data."}</p>;
+  const publishedChapters = chapters?.filter((chapter) => chapter.isPublished);
 
   return (
     <div className={styles.page}>
@@ -57,11 +58,11 @@ function BookDetailsPage() {
           <h3 className={styles.sectionTitle}>User Comments</h3>
           <div className={styles.scrollList}>
             {comments?.length > 0 ? (
-              comments.map((comment) => (
+              comments?.map((comment) => (
                 <Comments key={comment.id} comment={comment} />
               ))
             ) : (
-              <p className="loading">No comments yet.</p>
+              <p>No comments yet.</p>
             )}
           </div>
           <div className={styles.commentInputWrapper}>
@@ -81,8 +82,9 @@ function BookDetailsPage() {
           <div className={styles.scrollList}>
             {isChapterLoading ? (
               <p className="loading">Loading...</p>
-            ) : chapters?.length > 0 ? (
-              chapters.map((chapter) => (
+            ) : chapters?.length > 0 && publishedChapters?.length > 0? (
+              chapters
+              .map((chapter) => (
                 <BookChapters key={chapter.id} chapter={chapter} />
               ))
             ) : (

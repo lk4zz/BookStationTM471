@@ -28,22 +28,6 @@ const getChaptersByBook = catchAsync(async (req, res) => {
     });
 });
 
-const getChaptersByBookForAuthor = catchAsync(async (req, res) => {
-    const bookId = parseInt(req.params.bookId, 10);
-    const currentUserId = req.user.userId;
-
-    const chapters = await chapterServices.getChaptersByBookForAuthor(
-        bookId,
-        currentUserId,
-    );
-
-    res.status(200).json({
-        success: true,
-        count: chapters.length,
-        data: chapters,
-    });
-});
-
 const getChapterById = catchAsync(async (req, res) => {
     const { chapterId } = req.params;
     const userId = req.user ? req.user.userId : null; 
@@ -118,7 +102,6 @@ const deleteChapter = catchAsync(async (req, res) => {
 module.exports = {
     createChapter,
     getChaptersByBook,
-    getChaptersByBookForAuthor,
     getChapterById,
     updateChapter,
     deleteChapter,

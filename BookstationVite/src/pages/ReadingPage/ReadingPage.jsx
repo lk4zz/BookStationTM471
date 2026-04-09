@@ -27,7 +27,7 @@ function ReadingPage() {
     }
   }, [numericBookId, numericChapterId, saveProgress]);
 
-  if (isPagesLoading) return <p>BRUH</p>
+  if (isPagesLoading) return <p>Loading Pages</p>
   if (isChaptersLoading) return <p className="loading">Loading..</p>
   if (isChapterLoading) return <p className="loading">Loading..</p>
 
