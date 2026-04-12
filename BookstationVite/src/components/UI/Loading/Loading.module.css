@@ -1,0 +1,190 @@
+/* --- CONTAINER & THEME --- */
+.loaderContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: serif;
+
+}
+
+/* --- THE MAIN 3D CONTEXT --- */
+.logoPerspectiveWrapper {
+    position: relative;
+    width: 300px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    animation: mergeSpinSplit 2.5s infinite linear;
+}
+
+/* --- COMMON DOOR STYLES --- */
+.bDoor {
+    position: absolute;
+    width: 60px;
+    /* Size of one B */
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    /* Large and impactful */
+    font-weight: 400;
+    /* Extra bold */
+    color: white;
+    transform-style: preserve-3d;
+    /* Glowing edge for premium tech feel */
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* --- LEFT DOOR LOGIC (French door style) --- */
+.leftB {
+    right: 50%;
+    /* Anchor to the center spine */
+    transform-origin: right center;
+    animation: mergeLeft 2.5s infinite linear;
+}
+
+@keyframes mergeSpinSplit {
+
+    0%,
+    35% {
+        transform: rotate(0deg);
+        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    60% {
+        transform: rotate(-360deg);
+        animation-timing-function: ease-out;
+    }
+
+    89%,
+    100% {
+        transform: rotate(-360deg);
+    }
+}
+
+@keyframes mergeLeft {
+
+    0%,
+    10% {
+        transform: translateX(-45px);
+        animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+
+    25% {
+        transform: translateX(30px);
+        animation-timing-function: linear;
+    }
+
+    75% {
+        transform: translateX(30px);
+        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    100% {
+        transform: translateX(-45px);
+    }
+}
+
+/* --- RIGHT DOOR LOGIC (Reversed text) --- */
+.rightB {
+    left: 50%;
+    /* Anchor to the center spine */
+    transform-origin: left center;
+    animation: mergeRight 2.5s infinite linear;
+}
+
+.rightB span {
+    /* This reflects the *text character* itself, achieving backwards/inverted 'B' */
+    display: inline-block;
+}
+
+.leftB span {
+    transform: scaleX(-1);
+
+}
+
+@keyframes mergeRight {
+
+    0%,
+    10% {
+        transform: translateX(45px);
+        animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+
+    25% {
+        transform: translateX(-30px);
+        animation-timing-function: linear;
+    }
+
+    75% {
+        transform: translateX(-30px);
+        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    100% {
+        transform: translateX(45px);
+    }
+}
+
+/* --- BRANDING & STATUS TEXT --- */
+.brandWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    
+}
+
+.brandName {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: 300;
+    color: white;
+    letter-spacing: 0.15em;
+    animation: smashPhrase 2.5s infinite linear;
+    overflow: hidden;
+    transform-origin: center center;
+}
+
+
+@keyframes smashPhrase {
+
+    0%,
+    10% {
+        opacity: 1;
+        transform: scaleX(1) scaleY(1);
+        animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
+    }
+
+    16% {
+        opacity: 0.5;
+        transform: scaleX(0.3) scaleY(1);
+        animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
+    }
+
+    22% {
+        opacity: 0;
+        transform: scaleX(0) scaleY(1);
+    }
+
+    78% {
+        opacity: 0;
+        transform: scaleX(0) scaleY(1);
+        animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+
+    90% {
+        opacity: 0.8;
+        transform: scaleX(0.98) scaleY(1);
+        animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scaleX(1) scaleY(1);
+    }
+}

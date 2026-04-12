@@ -103,6 +103,20 @@ const updateBookStatus = catchAsync(async (req, res) => {
 });
 
 
+const launchBook = catchAsync(async (req, res) => {
+  const bookId = parseInt(req.params.bookId);
+  const currentUserId = req.user.userId;
+  const { chapterPrices } = req.body;
+
+  const launched = await bookService.launchBook(bookId, currentUserId, chapterPrices);
+
+  res.status(200).json({
+    success: true,
+    message: "Book launched successfully!",
+    data: launched,
+  });
+});
+
 const updateBookCover = catchAsync(async (req, res) => {
   const bookId = parseInt(req.params.bookId);
   const coverImage = req.file.path;
@@ -115,6 +129,15 @@ const updateBookCover = catchAsync(async (req, res) => {
   });
 });
 
+const getTrendingBooks = catchAsync(async (req, res) => {
+  const limit = req.query.limit ? parseInt(req.query.limit) : 10;
+  const books = await bookService.getTrendingBooks(limit);
+  res.status(200).json({
+    success: true,
+    count: books.length,
+    data: books,
+  });
+});
 
 module.exports = {
   createBook,
@@ -126,4 +149,6 @@ module.exports = {
   getAllBooksByGenre,
   updateBookStatus,
   updateBookCover,
+  getTrendingBooks,
+  launchBook,
 };

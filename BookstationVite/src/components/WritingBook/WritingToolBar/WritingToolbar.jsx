@@ -9,6 +9,7 @@ export default function WritingToolbar({ editor }) {
 
   return (
     <div className={styles.toolbar}>
+        
 
       {/* editor.chain().focus().toggleBold().run() is the Tiptap command to make text bold.
         editor.isActive("bold") checks if the cursor is currently on bold text so we can highlight the button.

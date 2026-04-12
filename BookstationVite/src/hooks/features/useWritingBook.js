@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useMemo } from "react";
-import { useBookById, useUpdateBookStatus } from "../useBooks";
+import { useBookById, useUpdateBookStatus, useLaunchBook } from "../useBooks";
 import { useChaptersByBook } from "../useChapters";
 import { useAuthorPages } from "../useWritingPages";
 import { useCreateChapter, useUpdateChapter, useDeleteChapter, usePublishChapter } from "../useChapters";
@@ -27,6 +27,7 @@ export function useWritingBookPageData(numericBookId) { //takes ID
   const deleteChapter = useDeleteChapter();
   const publishChapter = usePublishChapter();
   const updateBookStatus = useUpdateBookStatus();
+  const launchBookMutation = useLaunchBook();
 
   // Redirect guests
   useEffect(() => {
@@ -123,6 +124,18 @@ export function useWritingBookPageData(numericBookId) { //takes ID
     });
   };
 
+  const handleLaunchBook = (chapterPrices) => {
+    setError(null);
+    launchBookMutation.reset();
+    launchBookMutation.mutate(
+      { bookId: numericBookId, chapterPrices },
+      {
+        onError: (err) => setError(err?.message || "Could not launch book."),
+        onSuccess: () => setError(null),
+      }
+    );
+  };
+
   //clear timer for error messages
   useEffect(() => {
     if (!error) return;
@@ -134,7 +147,8 @@ export function useWritingBookPageData(numericBookId) { //takes ID
     createChapter.isPending ||
     updateChapter.isPending ||
     deleteChapter.isPending ||
-    publishChapter.isPending;
+    publishChapter.isPending ||
+    launchBookMutation.isPending;
 
   return {
     book, bookLoading, bookError,
@@ -148,7 +162,9 @@ export function useWritingBookPageData(numericBookId) { //takes ID
     onCreateChapter: handleCreateChapter,
     onUpdateChapter: handleUpdateChapter,
     onPublishChapter: handlePublishChapter,
+    handleLaunchBook,
     isStatusPending: updateBookStatus.isPending,
+    isLaunchPending: launchBookMutation.isPending,
     error,
   };
 }

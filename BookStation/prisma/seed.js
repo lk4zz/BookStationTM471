@@ -20,14 +20,8 @@ const userBlueprints = [
   { name: "Admin One", email: "admin@bookstation.dev", role: "ADMIN", coinBalance: 10000 },
 ];
 
-const coverPool = [
-  "seed-covers/cover-1.svg",
-  "seed-covers/cover-2.svg",
-  "seed-covers/cover-3.svg",
-  "seed-covers/cover-4.svg",
-  "seed-covers/cover-5.svg",
-  "seed-covers/cover-6.svg",
-];
+const getSeedCoverUrl = (index) =>
+  `https://picsum.photos/seed/bookstation-cover-${index + 1}/600/900`;
 
 const titleHeads = [
   "Moonfire",
@@ -93,7 +87,7 @@ for (let i = 0; i < 40; i += 1) {
     authorEmail,
     name: `${head} ${tail} ${i + 1}`,
     description: `Book ${i + 1}: A layered story with evolving conflicts, character growth, and long-form scenes suited for testing reading and writing flows.`,
-    coverImage: coverPool[i % coverPool.length],
+    coverImage: getSeedCoverUrl(i),
     status,
     views: status === "DRAFT" ? 0 : 30 + (i % 12) * 9,
     genres: [genreTypes[i % genreTypes.length], genreTypes[(i + 2) % genreTypes.length]],
@@ -134,6 +128,7 @@ async function resetData() {
   await prisma.pages.deleteMany();
   await prisma.chapters.deleteMany();
   await prisma.comments.deleteMany();
+  await prisma.rating.deleteMany();
   await prisma.bookViews.deleteMany();
   await prisma.bookGenre.deleteMany();
   await prisma.libraryBook.deleteMany();
@@ -208,8 +203,6 @@ async function seedBooksAndContent(usersByEmail, genresByType) {
 
   for (const blueprint of bookBlueprints) {
     const author = usersByEmail[blueprint.authorEmail];
-    const ratingCount = Math.max(0, Math.floor(blueprint.views / 7));
-
     const book = await prisma.books.create({
       data: {
         userId: author.id,
@@ -217,8 +210,6 @@ async function seedBooksAndContent(usersByEmail, genresByType) {
         description: blueprint.description,
         coverImage: blueprint.coverImage,
         status: blueprint.status,
-        ratingAverage: blueprint.status === "DRAFT" ? 0 : 4.3,
-        ratingCount,
       },
     });
 

@@ -3,14 +3,18 @@ const BadRequestError = require("../errors/BadRequestError");
 const NotFoundError = require("../errors/NotFoundError");
 const { getOwnedBook } = require("../utils/BookOwnership");
 const { checkBookReceipts, checkChapterRreceipt } = require("../utils/checkReceipt");
-const {checkEditAccess} = require("../utils/checkEditAccess");
+const { checkEditAccess } = require("../utils/checkEditAccess");
+const { updateBookMasterEmbedding } = require("../utils/BookDataEmbedder");
+const { validateChapterPricing } = require("../utils/pricingHelper");
+
 
 const createBook = async (title, description, authorId) => {
   normalizedTitle = title.trim().toLowerCase().replace(/\s+/g, '');
   const books = await prisma.books.findMany({
     where: {
-      userId: authorId },
-      select: { id: true , name: true},
+      userId: authorId
+    },
+    select: { id: true, name: true },
   });
 
   const existingBook = books.find(b => b.name.toLowerCase().replace(/\s+/g, '') === normalizedTitle);
@@ -24,10 +28,10 @@ const createBook = async (title, description, authorId) => {
       name: title,
       description: description || "",
       userId: authorId,
-      ratingAverage: 0,
-      ratingCount: 0,
     },
   });
+
+  updateBookMasterEmbedding(newBook.id).catch(console.error);
 
   return newBook;
 };
@@ -39,14 +43,15 @@ const getAllPublicBooks = async () => {
     },
     orderBy: { createdAt: "desc" },
     include: {
-      author: { select: { name: true}, },
+      author: { select: { name: true }, },
       bookGenres: { include: { bookGenre: true }, },
       _count: {
-        select: { chapters: true }, },
+        select: { chapters: true },
+      },
     },
   });
 
-  
+
   if (books.length === 0) throw new NotFoundError("NO PUBLIC BOOKS FOUND");
   return books;
 };
@@ -163,6 +168,10 @@ const updateBook = async (bookId, currentUserId, title, description) => {
     },
   });
 
+  if (title || description) {
+    updateBookMasterEmbedding(updatedBook.id).catch(console.error);
+  }
+
   return updatedBook;
 };
 
@@ -181,22 +190,20 @@ const updateBookStatus = async (bookId, currentUserId, requestedStatus) => {
 
   if (book.status === requestedStatus)
     throw new BadRequestError(`BOOK IS ALREADY ${requestedStatus}`);
+
+  if (book.status === "DRAFT")
+    throw new BadRequestError("Use Launch Book to publish your book for the first time.");
+
   if (requestedStatus === "DRAFT") {
     await checkChapterRreceipt(bookId);
   }
 
-  if (
-    book.status === "DRAFT" &&
-    (requestedStatus === "ONGOING" || requestedStatus === "COMPLETED")
-  ) {
-    const chapterCount = await prisma.chapters.count({
-      where: { bookId: parseInt(bookId, 10) },
+  if (requestedStatus === "COMPLETED") {
+    const draftChapterCount = await prisma.chapters.count({
+      where: { bookId: parseInt(bookId, 10), isPublished: false },
     });
-    if (chapterCount < 3) {
-      throw new BadRequestError(
-        "A book must have at least 3 chapters before leaving DRAFT status.",
-      );
-    }
+    if (draftChapterCount > 0)
+      throw new BadRequestError("All chapters must be published before marking the book as completed.");
   }
 
   const updatedStatus = await prisma.books.update({
@@ -210,7 +217,7 @@ const updateBookCover = async (bookId, coverImage, currentUserId) => {
   await getOwnedBook(bookId, currentUserId);
   const normalizedPath = coverImage.replace(/\\/g, '/');
   const updatedBook = await prisma.books.update({
-    where: { id: bookId},
+    where: { id: bookId },
     data: {
       coverImage: normalizedPath,
     }
@@ -218,6 +225,91 @@ const updateBookCover = async (bookId, coverImage, currentUserId) => {
   return updatedBook;
 }
 
+
+const launchBook = async (bookId, currentUserId, chapterPrices = []) => {
+  const parsedBookId = parseInt(bookId, 10);
+  const { book } = await getOwnedBook(parsedBookId, currentUserId);
+
+  if (book.status !== "DRAFT")
+    throw new BadRequestError("Only DRAFT books can be launched.");
+
+  const chapters = await prisma.chapters.findMany({
+    where: { bookId: parsedBookId },
+    orderBy: { chapterNum: "asc" },
+    include: { pages: true },
+  });
+
+  if (chapters.length < 3)
+    throw new BadRequestError("A book must have at least 3 chapters to launch.");
+
+  const first3 = chapters.slice(0, 3);
+
+  const updates = first3.map((ch) => {
+    const requestedPrice = ch.chapterNum === 1
+      ? 0
+      : chapterPrices.find((p) => p.chapterId === ch.id)?.price ?? ch.price;
+
+    const { finalPrice, isLocked, wordCount } = validateChapterPricing(
+      ch.pages,
+      requestedPrice,
+      ch.chapterNum,
+    );
+
+    return prisma.chapters.update({
+      where: { id: ch.id },
+      data: { isPublished: true, price: finalPrice, isLocked, wordCount },
+    });
+  });
+
+  const statusUpdate = prisma.books.update({
+    where: { id: parsedBookId },
+    data: { status: "ONGOING" },
+  });
+
+  const results = await prisma.$transaction([...updates, statusUpdate]);
+
+  updateBookMasterEmbedding(parsedBookId).catch(console.error);
+
+  return results[results.length - 1];
+};
+
+const getTrendingBooks = async (limit = 10) => {
+  const books = await prisma.books.findMany({
+    where: { NOT: { status: "DRAFT" } },
+    select: {
+      id: true,
+      name: true,
+      coverImage: true,
+      author: { select: { name: true } },
+      _count: {
+        select: {
+          views: true,
+          ratings: true,
+        },
+      },
+      ratings: {
+        select: { value: true },
+      },
+    },
+  });
+
+  const scored = books.map((book) => {
+    const views = book._count.views;
+    const ratingsCount = book._count.ratings;
+
+    const avg =
+      ratingsCount > 0
+        ? book.ratings.reduce((sum, r) => sum + r.value, 0) / ratingsCount
+        : 0;
+
+    const score = views * 0.6 + avg * ratingsCount * 0.4;
+
+    const { ratings, ...rest } = book;
+    return { ...rest, ratingAverage: avg, score };
+  });
+
+  return scored.sort((a, b) => b.score - a.score).slice(0, limit);
+}
 
 module.exports = {
   createBook,
@@ -229,4 +321,6 @@ module.exports = {
   getBookByGenre,
   updateBookStatus,
   updateBookCover,
+  getTrendingBooks,
+  launchBook,
 };

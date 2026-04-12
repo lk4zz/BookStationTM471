@@ -7,19 +7,35 @@ import FeaturesCard from "../../components/LandingPageComp/FeaturesCard/Features
 import { useAllBooks } from "../../hooks/useBooks";
 import GenreBox from "../../components/LandingPageComp/GenreBox/GenreBox";
 import { useAllGenres } from "../../hooks/useGenres";
+import GenreSection from "../../components/ExplorePageComp/GenreSection/GenreSection";
+import BookCoverCard from "../../components/UI/BookCoverCard/BookCoverCard";
+import { useTrendingBooks } from "../../hooks/useBooks";
+
+function CreateBookCard() {
+  const navigate = useNavigate();
+  return (
+    <div 
+    onClick={() => navigate('/signup')}
+    className={styles.createCard}>
+      <div className={styles.plus}>＋</div>
+      <h3>YOUR OWN STORY</h3>
+      <p>Tell the world your story.</p>
+    </div>
+  );
+}
 
 function LandingPage() {
 
   const navigate = useNavigate();
   const { books, isBooksLoading, booksError } = useAllBooks()
   const { genres, isGenresLoading, genresError } = useAllGenres();
-  if (isBooksLoading) return <p className="loading"> Loading...</p>;
-  if (booksError) return <p className="loading"> {booksError.message}</p>;
+  const { trendingBooks, isTrendingLoading, trendingError } = useTrendingBooks();
+  const randomGenre =
+    genres[Math.floor(Math.random() * genres.length)];
+  if (isTrendingLoading) return <p className="loading"> Loading...</p>;
+  if (trendingError) return <p className="loading"> {trendingError.message}</p>;
   if (isGenresLoading) return <p>loading..</p>
   if (genresError) return <p>{genresError.message}</p>
-
-  //  this only shows a sample edit later to be all books and genres so guest can explore
-  const showcaseBooks = books?.slice(0, 6) || [];
 
   return (
     <div className={styles.pageWrapper}>
@@ -75,31 +91,41 @@ function LandingPage() {
       <section className={styles.showcase}>
         <div className={styles.showcaseHeader}>
           <h2>Trending on Bookstation</h2>
-          <Link to="/explore" className={styles.exploreLink}>
-            Explore All →
-          </Link>
+
         </div>
 
-        {isBooksLoading ? (
+        {isTrendingLoading ? (
           <p className={styles.loadingState}>Loading amazing stories...</p>
-        ) : booksError ? (
+        ) : trendingError ? (
           <p className={styles.errorState}>Failed to load books. Please try again later.</p>
         ) : (
-          <div className={styles.bookGrid}>
-            {showcaseBooks?.map((book) => (
-              <BookCard key={book.id} book={book} />
+          <div className="gridContainer">
+            {trendingBooks?.map((book) => (
+              <BookCoverCard key={book.id} book={book} />
+              
             ))}
+
+            <CreateBookCard className={styles.createCardContainer} />
+            
           </div>
         )}
       </section>
+
+      <section className={styles.showcase}>
+
+        <GenreSection genre={randomGenre} />
+        
+
+      </section>
+
       <section className={styles.showcase}>
         <div className={styles.showcaseHeader}></div>
-      <h1>Pick your favourite genre</h1>
-      <div className={styles.genreBoxes}>
-        {genres.map((genre) => (
-          <GenreBox key={genre.id} genre={genre} />
-        ))}
-      </div>
+        <h1>Pick your favourite genre</h1>
+        <div className={styles.genreBoxes}>
+          {genres.map((genre) => (
+            <GenreBox key={genre.id} genre={genre} />
+          ))}
+        </div>
       </section>
       {/* could be a component */}
       {/* footer */}

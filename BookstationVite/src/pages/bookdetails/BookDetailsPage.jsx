@@ -11,6 +11,7 @@ import { useChaptersByBook } from "../../hooks/useChapters";
 import { useCommentsByBook } from "../../hooks/useComments";
 import { useAddComment } from "../../hooks/useComments";
 import InputText from "../../components/UI/InputFields/InputText";
+import Loading from "../../components/UI/Loading/Loading";
 
 
 //might need toclean could useless jsx and  they could be added to components
@@ -35,7 +36,7 @@ function BookDetailsPage() {
   const { comments, isCommentsLoading } = useCommentsByBook(numericId);
   const { totalViews } = useViews(numericId);
 
-  if (isBookLoading) return <p className={styles.loading}>Loading...</p>;
+  if (isBookLoading) return <Loading/>;
   if (bookError) return <p className={styles.error}>{bookError.message || "Error loading data."}</p>;
   const publishedChapters = chapters?.filter((chapter) => chapter.isPublished);
 
@@ -57,16 +58,20 @@ function BookDetailsPage() {
         <div className={styles.commetscolumn}>
           <h3 className={styles.sectionTitle}>User Comments</h3>
           <div className={styles.scrollList}>
-            {comments?.length > 0 ? (
+            {isCommentsLoading ? (
+              <Loading/>
+            ) : comments?.length > 0? (
               comments?.map((comment) => (
                 <Comments key={comment.id} comment={comment} />
               ))
             ) : (
               <p>No comments yet.</p>
             )}
+
+
           </div>
           <div className={styles.commentInputWrapper}>
-            <div className={styles.avatarPlaceholder} />
+            <div />
             <InputText
               value={commentInput}
               onChange={setCommentInput}
@@ -81,7 +86,7 @@ function BookDetailsPage() {
           <h3 className={styles.sectionTitle}>Chapters</h3>
           <div className={styles.scrollList}>
             {isChapterLoading ? (
-              <p className="loading">Loading...</p>
+              <Loading/>
             ) : chapters?.length > 0 && publishedChapters?.length > 0? (
               chapters
               .map((chapter) => (

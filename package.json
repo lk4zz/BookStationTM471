@@ -1,6 +1,8 @@
 {
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "@splidejs/react-splide": "^0.7.12",
+    "@splidejs/splide": "^4.1.4",
     "@tiptap/extension-character-count": "^3.22.0",
     "@tiptap/extension-highlight": "^3.22.0",
     "@tiptap/extension-image": "^3.22.0",

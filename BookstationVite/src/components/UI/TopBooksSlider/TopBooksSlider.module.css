@@ -1,0 +1,211 @@
+/* ==========================================================================
+   1. MAIN SLIDER CONTAINER & BACKGROUNDS
+   ========================================================================== */
+.container {
+  position: relative;
+  width: 100%;
+  min-height: 400px;
+  overflow: hidden;
+  font-family: var(--font-heading);
+  color: var(--color-text-primary);
+}
+
+.bgImage {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(6px);
+  transform: scale(1.1);
+  z-index: 0;
+  transition: background-image 0.4s ease;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.75) 50%,
+    rgba(0, 0, 0, 0.35) 100%
+  );
+  z-index: 1;
+}
+
+.slide {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+/* ==========================================================================
+   2. SLIDE CONTENT
+   ========================================================================== */
+.contentWrapper {
+  display: flex;
+  gap: 36px;
+  padding: 2% 2% 3% 7%;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.bookcover {
+  width: 190px;
+  aspect-ratio: 2 / 3;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-cover);
+}
+
+.cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.bookdetails {
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--color-text-muted);
+}
+
+.bookTitle {
+  font-size: 2.1rem;
+  font-weight: 700;
+  margin: 8px 0;
+  line-height: 1.15;
+}
+
+.bookinsights {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  margin-bottom: 14px;
+}
+
+.bookinsights p {
+  margin: 0;
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.iconStar,
+.iconEye {
+  width: 14px;
+  height: 14px;
+}
+
+.iconStar {
+  fill: var(--color-warning);
+}
+
+.iconEye {
+  stroke: currentColor;
+  fill: none;
+}
+
+.description {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #d4d4d8;
+  margin-bottom: 20px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.primaryBtn {
+  display: inline-block;
+  width: fit-content;
+  padding: 8px 18px;
+  border-radius: var(--radius-md);
+  background: var(--color-accent);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: background 0.2s ease;
+  cursor: pointer;
+}
+
+.contentWrapper:hover .primaryBtn {
+  background: var(--color-accent-hover);
+}
+
+/* ==========================================================================
+   3. SPLIDE OVERRIDES
+   ========================================================================== */
+.slide :global(.splide__arrow) {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  width: 36px;
+  height: 36px;
+  opacity: 1;
+}
+
+.slide :global(.splide__arrow:hover) {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.slide :global(.splide__arrow svg) {
+  width: 16px;
+  height: 16px;
+  fill: rgba(255, 255, 255, 0.55);
+}
+
+.slide :global(.splide__arrow:hover svg) {
+  fill: #fff;
+}
+
+.slide :global(.splide__pagination__page) {
+  background: rgba(255, 255, 255, 0.25);
+  width: 6px;
+  height: 6px;
+}
+
+.slide :global(.splide__pagination__page.is-active) {
+  background: #fff;
+  transform: scale(1.35);
+}
+
+/* ==========================================================================
+   4. RESPONSIVE
+   ========================================================================== */
+@media (max-width: 768px) {
+  .contentWrapper {
+    flex-direction: column;
+    padding: 5% 5% 8%;
+    text-align: center;
+  }
+
+  .bookinsights {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .primaryBtn {
+    align-self: center;
+  }
+
+  .bookcover {
+    width: 150px;
+  }
+}

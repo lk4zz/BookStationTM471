@@ -1,52 +1,49 @@
+import { useState } from "react";
 import Styles from "./explore.module.css";
-import BookCard from "../../components/UI/BookCard/BookCard";
 import NavBar from "../../components/UI/NavBar/NavBar";
-import TopPicks from "../../components/ExplorePageComp/TopPicks/TopPicks";
-import { useAllBooks, useBookById } from "../../hooks/useBooks";
-import { useMostViewedBook } from "../../hooks/useViews";
-import { useTopBooks } from "../../hooks/useViews";
-
+import TopBookSlider from "../../components/UI/TopBooksSlider/TopBooksSlider";
+import ExploreContent from "../../components/ExplorePageComp/ExploreContent/ExploreContent";
+import { useAllBooks } from "../../hooks/useBooks";
+import { useTrendingBooks, useForYouBooks } from "../../hooks/useBooks";
+import { useMostViewedBook, useViewsByBookIds } from "../../hooks/useViews";
+import { useBookById } from "../../hooks/useBooks";
+import Loading from "../../components/UI/Loading/Loading";
 
 function Explore() {
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const { books, isBooksLoading, booksError } = useAllBooks()
-  const { topBooks, isTopBooksLoading, topBooksError } = useTopBooks();
-  const { mostViewedBook } = useMostViewedBook()
-  const { book } = useBookById(mostViewedBook)
-  if (!book) return <p className={Styles.loading}> Loading...</p>;
-  if (!books) return <p className={Styles.loading}> Loading...</p>;
-  if (isBooksLoading) return <p className={Styles.loading}> Loading...</p>;
-  if (isTopBooksLoading) return <p className={Styles.loading}> Loading...</p>;
-  if (booksError) return <p className={Styles.error}> {booksError.message}</p>;
+  const { books, isBooksLoading, booksError } = useAllBooks();
+  const { trendingBooks, isTrendingLoading, trendingError } = useTrendingBooks();
+  const { forYouBooks, isForYouLoading, forYouError } = useForYouBooks();
+  const { mostViewedBook } = useMostViewedBook();
+  const { book } = useBookById(mostViewedBook);
+  const displayedBooks = books.slice(8, 21);
+  const { viewsByBookId } = useViewsByBookIds(displayedBooks.map((b) => b.id));
+
+  if (!book || !books || isBooksLoading || isTrendingLoading || isForYouLoading)
+    return <Loading className={Styles.loading} />;
+  if (booksError || trendingError || forYouError)
+    return <Loading className={Styles.loading} />;
+
+  const isSearching = searchQuery.trim().length > 0;
 
   return (
     <div>
-      <NavBar />
+      <NavBar onSearch={setSearchQuery} />
 
-      <div className={Styles.topPicks} >
-        <TopPicks book={book} />
-      </div>
+      {!isSearching && (
+        <div className={Styles.topPicks}>
+          <TopBookSlider books={trendingBooks} />
+        </div>
+      )}
 
-      <p className={Styles.headers}>Most Popular</p>
-      
-      <div className="gridContainer">
-        {topBooks.map((book) => (
-          <BookCard key={book.id} book={book} />
-        ))}
-      </div>
-
-      <p className={Styles.headers}>Popular Books</p>
-
-      <div className="gridContainer">
-        {books.map((book) => (
-          <BookCard key={book.id} book={book} />
-        ))}
-      </div>
-
-
-
+      <ExploreContent
+        searchQuery={searchQuery}
+        displayedBooks={displayedBooks}
+        viewsByBookId={viewsByBookId}
+        forYouBooks={forYouBooks}
+      />
     </div>
-
   );
 }
 

@@ -4,8 +4,7 @@ const ForbiddenError = require("../errors/ForbiddenError");
 const unauthroizedError = require("../errors/unauthorizedError");
 const accessDetector = require("../utils/accessDetector");
 const { getOwnedBook } = require("../utils/BookOwnership");
-const ChunkingService = require("./ChunkingService");
-const EmbeddingService = require("./EmbeddingService");
+const { pageChunking } = require("../utils/pageChunking");
 const { checkEditAccess } = require("../utils/checkEditAccess");
 
 const getPagesByChapter = async (chapterId, currentUserId) => {
@@ -104,7 +103,6 @@ const deletePage = async (pageId, currentUserId) => {
 };
 
 
-
 const upsertPrimaryPage = async (chapterId, text, currentUserId) => {
   const parsedChapterId = parseInt(chapterId, 10);
 
@@ -148,35 +146,7 @@ const upsertPrimaryPage = async (chapterId, text, currentUserId) => {
     targetPageId = updated.id;
   }
 
-
-  // RAG CHUNKING
-
-
-  await prisma.pageChunk.deleteMany({
-    where: { pageId: targetPageId }
-  });
-
-  const chunks = ChunkingService.chunkTipTapContent(text);
-
-  if (chunks.length > 0) {
-    const embeddings = await Promise.all(
-      chunks.map(chunk => EmbeddingService.generateEmbedding(chunk))
-    );
-
-    const chunkData = chunks.map((chunk, index) => ({
-      content: chunk,
-      embedding: embeddings[index],
-      pageNumber: 1,
-      pageId: targetPageId,
-      chapterId: parsedChapterId,
-      bookId: chapter.bookId,
-      userId: currentUserId
-    }));
-
-    await prisma.pageChunk.createMany({
-      data: chunkData
-    });
-  }
+  await pageChunking(chapterId, text, currentUserId, targetPageId, chapter);
 
   return prisma.pages.findUnique({ where: { id: targetPageId } });
 };

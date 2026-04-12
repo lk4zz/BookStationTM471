@@ -1,34 +1,13 @@
-.bookcards {
-    max-width: 90%;
-    margin: 3% 4%;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 10px;
+.explore p {
 
 }
 
-.topPicks {
-    height: 400px;
-    padding: 0;
+.GenreSection {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
     margin: 0;
-
+    gap: 40px;
 }
-
-.loading {
-    align-self: center;
-    font-size: 4rem;
-    color: white;
-}
-
-.error {
-    font-size: 4rem;
-    color: white;
-}
-
-.headers {
-    color: white;
-    font-size: 1.5rem;
-    margin-left: 4%;
-    font-family: var(--font-heading);
-}
-

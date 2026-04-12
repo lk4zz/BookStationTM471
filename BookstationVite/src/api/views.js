@@ -15,9 +15,3 @@ export const getMostViewedBook = async () => {
   const res = await publicApi.get(`/views/books/mostviewed`);
   return res.data;
 };
-
-export const getTopBooks = async () => {
-  const res = await publicApi.get(`/views/books/top`);
-  return res.data;
-
-}
