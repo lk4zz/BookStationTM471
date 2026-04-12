@@ -1,6 +1,6 @@
 import Styles from './UserAvatar.module.css'
 
-function UserAvatar({ onClick }) {
+function UserAvatar({ onClick, profileUrl}) {
 
     return (
         <div
@@ -8,12 +8,12 @@ function UserAvatar({ onClick }) {
             className={Styles.avatarContainer}>
             <div className={Styles.avatarRing}>
                 <img
-                    src="/your-default-image.jpg"
+                    src={profileUrl}
                     alt="User Profile"
                     className={Styles.avatarImage}
                 />
             </div>
-            <span className={Styles.statusDot}></span>
+            
         </div>
     )
 }

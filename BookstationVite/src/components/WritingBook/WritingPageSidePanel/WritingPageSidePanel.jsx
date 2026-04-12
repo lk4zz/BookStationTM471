@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import OnBackButton from "../../UI/Buttons/OnBackButtons";
 import WritingChaptersPanel from "../WritingChaptersPanel/WritingChaptersPanel";
+import LaunchModal from "../LaunchModal/LaunchModal";
 import styles from "./WritingPageSidePanel.module.css";
 
-const STATUS_OPTIONS = ["DRAFT", "ONGOING", "COMPLETED"];
+const POST_LAUNCH_OPTIONS = ["ONGOING", "COMPLETED"];
 
 function WritingPageSidePanel({
   book,
@@ -17,9 +19,14 @@ function WritingPageSidePanel({
   onUpdateChapter,
   handleDeleteChapter,
   onPublishChapter,
+  onLaunchBook,
+  isLaunchPending,
   isBusy,
   error,
 }) {
+  const [showLaunch, setShowLaunch] = useState(false);
+  const isDraft = book.status === "DRAFT";
+
   return (
     <aside className={styles.panel}>
       <div className={styles.metaCard}>
@@ -27,29 +34,39 @@ function WritingPageSidePanel({
           <OnBackButton />
         </Link>
         <h1 className={styles.bookTitle}>{book.name}</h1>
-        <label className={styles.statusLabel}>
-          Book status
-          <select
-            className={styles.statusSelect}
-            value={book.status}
-            onChange={onStatusChange}
-            disabled={isStatusPending}
-          > 
-          
-            {STATUS_OPTIONS.map((status) => (
-              <option key={status} value={status}
-              disabled={status === "DRAFT"}
-              >
-                {status.charAt(0) + status.slice(1).toLowerCase()}
-              </option>
-            ))}
-          </select>
-        </label>
+
+        {isDraft ? (
+          <>
+            <span className={styles.statusBadge}>Draft</span>
+            <button
+              type="button"
+              className={styles.launchBtn}
+              onClick={() => setShowLaunch(true)}
+              disabled={isBusy}
+            >
+              Launch Book
+            </button>
+          </>
+        ) : (
+          <label className={styles.statusLabel}>
+            Book status
+            <select
+              className={styles.statusSelect}
+              value={book.status}
+              onChange={onStatusChange}
+              disabled={isStatusPending}
+            >
+              {POST_LAUNCH_OPTIONS.map((status) => (
+                <option key={status} value={status}>
+                  {status.charAt(0) + status.slice(1).toLowerCase()}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
+
         {error && <p className={styles.statusErr}>{error}</p>}
       </div>
-
-
-
 
       <div className={styles.chaptersWrap}>
         <WritingChaptersPanel
@@ -61,9 +78,23 @@ function WritingPageSidePanel({
           onUpdateChapter={onUpdateChapter}
           onDeleteChapter={handleDeleteChapter}
           onPublishChapter={onPublishChapter}
+          bookStatus={book.status}
           isBusy={isBusy}
         />
       </div>
+
+      {showLaunch && (
+        <LaunchModal
+          chapters={chapters}
+          onLaunch={(prices) => {
+            onLaunchBook(prices);
+            setShowLaunch(false);
+          }}
+          onClose={() => setShowLaunch(false)}
+          isPending={isLaunchPending}
+          error={error}
+        />
+      )}
     </aside>
   );
 }

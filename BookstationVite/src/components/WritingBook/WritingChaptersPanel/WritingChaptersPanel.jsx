@@ -10,6 +10,7 @@ function WritingChaptersPanel({
   onDeleteChapter,
   onUpdateChapter,
   onPublishChapter,
+  bookStatus,
   isBusy,
 }) {
   const handleAdd = () => {
@@ -45,6 +46,7 @@ function WritingChaptersPanel({
             onDeleteChapter={onDeleteChapter}
             onPublishChapter={onPublishChapter}
             bookId={bookId}
+            bookStatus={bookStatus}
             isBusy={isBusy}
           />
         ))}

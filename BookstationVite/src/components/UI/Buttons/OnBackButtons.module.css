@@ -1,9 +1,8 @@
 .goBackBtn{
-  max-width: 100px;
+  max-width: 90px;
   background-color: transparent;
   color: white;
   border: 1px solid #3f3f46 !important;
-  box-shadow: none;
   padding: 8px 8px;
   border-radius: 8px;
   cursor: pointer;

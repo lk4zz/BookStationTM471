@@ -6,7 +6,7 @@ const checkAccess = async (chapterId, currentUserId) => {
     where: { id: parseInt(chapterId) },
     include: {
       book: {
-        select: { userId: true }
+        select: { userId: true, status: true }
       }
     },
   });
@@ -18,6 +18,9 @@ const checkAccess = async (chapterId, currentUserId) => {
   const isFree = chapter.price === 0 || chapter.chapterNum === 1;
 
   if (isAuthor) return { hasAccess: true, chapter };
+
+  if (chapter.book.status === "DRAFT")
+    return { hasAccess: false, reason: "not_published", chapter };
 
   if (!chapter.isPublished) return { hasAccess: false, reason: "not_published", chapter };
 

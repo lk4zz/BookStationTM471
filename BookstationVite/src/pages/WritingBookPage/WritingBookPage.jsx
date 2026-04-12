@@ -15,7 +15,8 @@ function WritingBookPage() {
   if (checkIfGuest()) return null;
   const { book, bookLoading, bookError, chapters, chaptersLoading, pagesLoading, selectedChapterId,
     selectChapter, initialHtml, isBusy, handleStatusChange, handleDeleteChapter,
-    onCreateChapter, onUpdateChapter, onPublishChapter, isStatusPending, error } = useWritingBookPageData(numericBookId);
+    onCreateChapter, onUpdateChapter, onPublishChapter, handleLaunchBook, isStatusPending,
+    isLaunchPending, error } = useWritingBookPageData(numericBookId);
   const isLoading = chaptersLoading || pagesLoading;
   const { editor, words, approxPages, saveStatus } = useWritingCanvas({
     chapterId: selectedChapterId,
@@ -53,6 +54,8 @@ function WritingBookPage() {
           onUpdateChapter={onUpdateChapter}
           handleDeleteChapter={handleDeleteChapter}
           onPublishChapter={onPublishChapter}
+          onLaunchBook={handleLaunchBook}
+          isLaunchPending={isLaunchPending}
           isBusy={isBusy}
           error={error}
           />

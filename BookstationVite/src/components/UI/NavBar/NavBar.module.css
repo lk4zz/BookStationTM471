@@ -103,59 +103,9 @@
     background-color: var(--hover-bg);
 }
 
-.searchContainer {
-    display: flex;
-    align-items: center;
-    background-color: transparent;
-    border-radius: 20px;
-    padding: 6px 12px;
-    height: 20px;
-    transition: all var(--transition-speed) ease;
-}
-
-.searchIcon {
-    color: var(--color-text-secondary);
-    transition: color var(--transition-speed) ease;
-}
-
-.searchInput {
-    background: transparent;
-    border: none;
-    color: var(--color-text-primary);
-    font-size: 0.95rem;
-    outline: none;
-    width: 0px;
-    padding: 0;
-    opacity: 0;
-    transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.searchInput::placeholder {
-    color: var(--color-text-secondary);
-}
-
-.searchContainer.searchActive {
-    background-color: var(--hover-bg);
-}
-
-.searchContainer.searchActive .searchIcon {
-    color: var(--color-text-primary);
-    margin-right: 8px;
-}
-
-.searchContainer.searchActive .searchInput {
-    width: 180px;
-    opacity: 1;
-}
-
-
 @media (max-width: 900px) {
     .navLinks {
         gap: 20px;
-    }
-
-    .searchContainer.searchActive .searchInput {
-        width: 120px;
     }
 }
 

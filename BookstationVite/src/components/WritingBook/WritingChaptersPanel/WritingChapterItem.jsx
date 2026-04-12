@@ -9,6 +9,7 @@ function WritingChapterItem({
   onDeleteChapter,
   onPublishChapter,
   bookId,
+  bookStatus,
   isBusy,
 }) {
   const [priceDraft, setPriceDraft] = useState(ch.price ?? 0);
@@ -43,8 +44,10 @@ function WritingChapterItem({
       </button>
       <div className={styles.row}>
         <button className={styles.linkBtn} onClick={renameChapter}>Rename</button>
-        {!ch.isPublished && <button className={styles.linkBtn}
-          onClick={() => setShowPublish((v) => !v)}>Publish</button>}
+        {!ch.isPublished && bookStatus !== "DRAFT" && (
+          <button className={styles.linkBtn}
+            onClick={() => setShowPublish((v) => !v)}>Publish</button>
+        )}
         <button className={styles.dangerBtn} onClick={deleteChapter}>Delete</button>
       </div>
       {showPublish && !ch.isPublished && (

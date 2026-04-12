@@ -17,7 +17,7 @@ function OnBackButton() {
 
     return (
         <button className={styles.goBackBtn} onClick={handleBack}>
-            &larr; Go Back
+            &larr; Back
         </button>
     );
 }

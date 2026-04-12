@@ -14,10 +14,16 @@ export const formatBookData = (book) => {
     userId,
   } = book;
 
+  const resolvedCoverUrl = !coverImage
+    ? "/fallback-cover.jpg"
+    : coverImage.startsWith("http")
+      ? coverImage
+      : `${BASE_URL}/${coverImage}`;
+
   return {
     name,
     description,
-    coverUrl: coverImage ? `${BASE_URL}/${coverImage}` : "/fallback-cover.jpg",
+    coverUrl: resolvedCoverUrl,
     ratingAverage,
     ratingCount,
     authorName: author?.name || "Unknown",

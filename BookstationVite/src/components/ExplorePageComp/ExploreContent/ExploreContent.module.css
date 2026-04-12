@@ -1,0 +1,6 @@
+.exploreContent {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+    padding: 10px 10%;
+}

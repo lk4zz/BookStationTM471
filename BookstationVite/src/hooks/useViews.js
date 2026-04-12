@@ -1,6 +1,6 @@
-import { getMostViewedBook, getTopBooks } from "../api/views";
+import { getMostViewedBook } from "../api/views";
 import { getViews } from "../api/views";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 
 export const useViews = (numericId) => {
 
@@ -20,6 +20,23 @@ export const useViews = (numericId) => {
 
 }
 
+export const useViewsByBookIds = (bookIds = []) => {
+    const viewQueries = useQueries({
+        queries: bookIds.map((bookId) => ({
+            queryKey: ["views", bookId],
+            queryFn: () => getViews(bookId),
+            enabled: Number.isFinite(bookId),
+        })),
+    });
+
+    const viewsByBookId = bookIds.reduce((acc, bookId, index) => {
+        acc[bookId] = viewQueries[index]?.data?.data;
+        return acc;
+    }, {});
+
+    return { viewsByBookId, viewQueries };
+};
+
 export const useMostViewedBook = () => {
     const {
         data: mostViewedBookId,
@@ -34,22 +51,5 @@ export const useMostViewedBook = () => {
     const mostViewedBook = mostViewedBookId?.data || null;
 
     return { mostViewedBook, isMostViewedBookLoading, mostViewedBookError }
-
-}
-
-export const useTopBooks = () => {
-    const {
-        data: topBooksData,
-        isLoading: isTopBooksLoading,
-        error: topBooksError,
-    } = useQuery({
-        queryKey: ["topBooks"],
-        queryFn: () => getTopBooks(),
-        enabled: true,
-    });
-
-    const topBooks = topBooksData?.data || null;
-
-    return { topBooks, isTopBooksLoading, topBooksError }
 
 }

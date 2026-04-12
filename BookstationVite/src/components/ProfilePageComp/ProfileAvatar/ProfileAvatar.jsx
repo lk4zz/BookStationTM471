@@ -6,7 +6,7 @@ function ProfileAvatar({ imageUrl, name, isEditing, onImageChange }) {
             <img
                 src={imageUrl}
                 alt={`${name}'s avatar`}
-                className={styles.avatarImage}
+                className="avatarImage"
             />
             {isEditing && (
                 <label className={styles.editOverlay}>

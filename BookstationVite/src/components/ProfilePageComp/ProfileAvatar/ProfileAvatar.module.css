@@ -11,12 +11,6 @@
     box-shadow: var(--shadow-card);
 }
 
-.avatarImage {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
 .editOverlay {
     position: absolute;
     inset: 0;

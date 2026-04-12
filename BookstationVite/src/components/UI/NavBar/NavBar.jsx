@@ -1,31 +1,31 @@
 import Styles from "./NavBar.module.css";
-import React, { useState, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; // i am using react-router-dom (do research)
-import { BookLogo, NotifButton, SearchButton } from "../Icons/IconLibrary";
+import React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { BookLogo, NotifButton } from "../Icons/IconLibrary";
 import { useGetWallet } from "../../../hooks/useWallet";
 import { checkIfGuest } from "../../../utils/checkIfGuest";
 import Wallet from "../wallet/Wallet";
 import UserAvatar from "../UserAvatar/UserAvatar";
 import { useCurrentUserId } from "../../../hooks/useUser";
+import { useUser } from "../../../hooks/useUser";
+import { resolveImageUrl } from "../../../utils/ImageUrl";
+import SearchBar from "../../NavbarComp/SearchBar";
 
 
-function NavBar() {
+function NavBar({ onSearch }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { balance, isWalletLoading, walletError } = useGetWallet();
   const { currentUserId } = useCurrentUserId();
+  const {user, isUserLoading, userError} = useUser(currentUserId);
+  
 
-  const [isSearchActive, setIsSearchActive] = useState(false);
-  const searchInputRef = useRef(null);
 
   if (isWalletLoading && !checkIfGuest) return <p className="loading"> wallet loading..</p>
+  if (isUserLoading && !checkIfGuest) return <p className="loading"> loading..</p>
 
-  const handleSearchClick = () => {
-    setIsSearchActive(true);
-    setTimeout(() => {
-      searchInputRef.current?.focus();
-    }, 10);
-  };
+  const profileUrl = resolveImageUrl(user?.profileImage);
+
   const isActive = (path) => location.pathname === path;
   return (
     <nav className={Styles.navBar}>
@@ -66,26 +66,7 @@ function NavBar() {
 
       {/* profile Section */}
       <div className={Styles.controls}>
-        <div
-          className={`${Styles.searchContainer} ${isSearchActive ? Styles.searchActive : ""}`}
-        >
-          <SearchButton
-            className={Styles.iconButton}
-            aria-label="Search"
-            onClick={handleSearchClick}
-          />
-
-          <input
-            ref={searchInputRef}
-            type="text"
-            placeholder="Search..."
-            className={Styles.searchInput}
-            onFocus={() => setIsSearchActive(true)}
-            onBlur={(e) => {
-              if (!e.target.value) setIsSearchActive(false);
-            }}
-          />
-        </div>
+        <SearchBar iconClassName={Styles.iconButton} onSearch={onSearch} />
         <Wallet balance={balance} />
 
         <button className={Styles.iconButton} aria-label="Notifications">
@@ -94,6 +75,7 @@ function NavBar() {
 
         {/* profile Avatar  */}
         <UserAvatar
+        profileUrl={profileUrl}
           onClick={() => {
             if (currentUserId) {
               navigate(`/author/${currentUserId}`);

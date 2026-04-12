@@ -1,4 +1,50 @@
 /*  clean it  out and make it  responsive */
+.createCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 15PX;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.12);
+  cursor: pointer;
+  transition: 0.2s ease;
+  aspect-ratio: 2/3.9;
+}
+
+.createCard:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+
+.plus {
+  /* Won't get smaller than 1.5rem, or bigger than 2.5rem */
+  font-size: clamp(1.5rem, 15cqw, 2.5rem); 
+  margin-bottom: 5px;
+  opacity: 0.8;
+}
+
+.createCard h3 {
+  font-size: clamp(1.2rem, 10cqw, 1.2rem);
+  margin: 0 0 4px 0;
+  line-height: 1.2;
+}
+
+.createCard p {
+  font-size: clamp(0.9rem, 8cqw, 0.9rem);
+  color: var(--color-text-muted); /* Assuming you want it slightly dimmed */
+  margin: 0;
+}
+
+/* 
+------------------------------------------------------------------------------ */
+
+
+
+
+
 .pageWrapper {
   background-color: var(--color-bg-app);
   min-height: 100vh;
@@ -8,11 +54,12 @@
   color: var(--color-text-primary);
 }
 
+
 .genreBoxes {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 10px;
-    height: 80px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  height: 80px;
 }
 
 .navbar {
@@ -48,7 +95,8 @@
   gap: var(--space-4);
 }
 
-.loginBtn, .signupBtn {
+.loginBtn,
+.signupBtn {
   font-family: var(--font-body);
   font-weight: 600;
   padding: var(--space-2) var(--space-5);
@@ -143,7 +191,7 @@
   padding: var(--space-10) 10%;
   max-width: 1400px;
   margin: 0 auto;
-  width: 80%; 
+  width: 80%;
 }
 
 .showcaseHeader {
@@ -171,20 +219,17 @@
   color: var(--color-accent-hover);
 }
 
-.bookGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 15px;
-}
 
-.loadingState, .errorState {
+
+.loadingState,
+.errorState {
   text-align: center;
   padding: var(--space-8);
   font-size: 1.2rem;
 }
 
 .errorState {
-  color: #ef4444; 
+  color: #ef4444;
 }
 
 .loadingState {
@@ -206,17 +251,18 @@
   .navbar {
     padding: var(--space-4);
   }
-  
+
   .authActions {
     gap: var(--space-2);
   }
-  
-  .features, .showcase {
+
+  .features,
+  .showcase {
     padding-left: var(--space-5);
     padding-right: var(--space-5);
     width: auto;
   }
-  
+
   .showcaseHeader {
     flex-direction: column;
     align-items: flex-start;

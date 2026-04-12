@@ -3,10 +3,15 @@ const prisma = require("../db");
 const BadRequestError = require("../errors/BadRequestError");
 const NotFoundError = require("../errors/NotFoundError");
 const ForbiddenError = require("../errors/ForbiddenError");
+const { addToLibraryTasteBlender } = require("../utils/AlgorithmTasteBlenders/LibraryBookTasteBlender");
 
 const addBookToLibrary = async (currentUserId, bookId) => {
+
+  const parsedUserId = parseInt(currentUserId, 10);
+  const parsedBookId = parseInt(bookId, 10);
+
   const book = await prisma.books.findUnique({
-    where: { id: parseInt(bookId) },
+    where: { id: parsedBookId },
   });
 
   if (!book) {
@@ -14,13 +19,13 @@ const addBookToLibrary = async (currentUserId, bookId) => {
   }
 
   let library = await prisma.library.findFirst({
-    where: { userId: currentUserId },
+    where: { userId: parsedUserId },
   });
 
   if (!library) {
     library = await prisma.library.create({
       data: {
-        userId: currentUserId,
+        userId: parsedUserId,
       },
     });
   }
@@ -29,9 +34,11 @@ const addBookToLibrary = async (currentUserId, bookId) => {
     savedBook = await prisma.libraryBook.create({
       data: {
         libraryId: library.id,
-        bookId: parseFloat(bookId),
+        bookId: parsedBookId,
       },
     });
+
+    await addToLibraryTasteBlender(parsedUserId, parsedBookId);
 
     return savedBook;
   } catch (error) {
@@ -84,8 +91,8 @@ const removeBookFromLibrary = async (currentUserId, bookId) => {
   if (!library) {
     throw new NotFoundError("YOU DON'T HAVE A LIBRARY YET.");
   }
-  
-if (library.userId !== currentUserId) {
+
+  if (library.userId !== currentUserId) {
     throw new ForbiddenError("YOU ARE NOT THE OWNER OF THIS LIBRARY.");
   }
 

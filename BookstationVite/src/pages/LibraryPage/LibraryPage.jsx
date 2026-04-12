@@ -4,6 +4,7 @@ import LibraryGrid from "../../components/LibraryComp/LibraryGrid/LibraryGrid";
 import { useLibraryBooks } from "../../hooks/useLibrary";
 import styles from "./LibraryPage.module.css";
 import EmptyLibrary from "../../components/LibraryComp/EmptyLibrary/EmptyLibrary";
+import { Loading } from "../../components/UI/Loading/Loading";
 
 function LibraryPage() {
 
@@ -29,7 +30,7 @@ function LibraryPage() {
         <NavBar />
         <main className={styles.centeredContent}>
 
-          <div className="loading">Loading library...</div>
+          <Loading/>
         </main>
       </div>
     );

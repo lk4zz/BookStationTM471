@@ -1,10 +1,11 @@
 import DraftBookCard from "../DraftBookCard/DraftBookCard";
 import styles from "../../../pages/WritingDashboardPage/WritingDashboardPage.module.css";
+import Loading from "../../UI/Loading/Loading";
 
 function DashboardBooksSection({ isLoading, error, onDelete,
   booksByAuthor, isBooksByAuthorLoading, booksByAuthorError, activeTab }) {
 
-  if (isBooksByAuthorLoading || isLoading) return <p className={styles.loading}>Loading your books…</p>
+  if (isBooksByAuthorLoading || isLoading) return <Loading />
   if (booksByAuthorError || error) booksByAuthor = [];
 
   const draftBooks = booksByAuthor?.filter((book) => book.status === "DRAFT");

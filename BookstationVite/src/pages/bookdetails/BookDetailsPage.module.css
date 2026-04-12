@@ -86,23 +86,12 @@
   background: #52525b;
 }
 
-/* add Comment Input */
 .commentInputWrapper {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 15px;
-  padding-top: 10px;
+
+  padding: 10px 0;
 
 }
 
-.avatarPlaceholder {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-color: #3f3f46;
-  flex-shrink: 0;
-}
 
 .commentInput {
   flex: 1;

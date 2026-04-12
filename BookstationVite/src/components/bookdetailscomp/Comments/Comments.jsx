@@ -1,11 +1,19 @@
 import styles from "./Comments.module.css";
+import { resolveImageUrl } from "../../../utils/ImageUrl";
+
 
 function Comments({ comment }) {
   //implement later on actual profile photo (not included in data base yet)
+  const displayImage = resolveImageUrl(comment.commenter?.profileImage);
+
   return (
     <div className={styles.commentCard}>
       <div className={styles.avatarPlaceholder}>
-        {comment.commenter?.name?.charAt(0).toUpperCase() || "U"}
+        <img 
+          src={displayImage}
+          alt={comment.commenter?.name.charAt(0).toUpperCase() || "U"}
+          className="avatarImage"
+        />
       </div>
       
       <div className={styles.commentContent}>

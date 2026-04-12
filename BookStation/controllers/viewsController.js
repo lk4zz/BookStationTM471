@@ -35,17 +35,8 @@ const getMostViewedBook = catchAsync(async (req, res) => {
     });
 }); 
 
-const getTopBooks = catchAsync(async (req, res) => {
-    const books = await viewsServices.getTopBooks();
-    res.status(200).json({
-        success: true,
-        data: books
-    });
-});
-
 module.exports = {
     addView,
     getViews,
     getMostViewedBook,
-    getTopBooks,
 };

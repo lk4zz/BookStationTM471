@@ -8,6 +8,7 @@ const ForbiddenError = require("../errors/ForbiddenError");
 const PaymentRequiredError = require("../errors/PaymentRequiredError");
 const { checkChapterRreceipt } = require("../utils/checkReceipt");
 const {checkEditAccess} = require("../utils/checkEditAccess");
+const { updateBookMasterEmbedding } = require("../utils/BookDataEmbedder");
 
 
 const createChapter = async (bookId, title, currentUserId) => {
@@ -181,15 +182,16 @@ const updateChapter = async (
 };
 
 const publishChapter = async (chapterId, currentUserId, requestedPrice) => {
-  // fetch chapter, book, and pages
   const chapter = await prisma.chapters.findUnique({
     where: { id: parseInt(chapterId, 10) },
-    include: { pages: true },
+    include: { pages: true, book: { select: { status: true } } },
   });
 
   if (!chapter) throw new NotFoundError("Chapter not found");
   if (chapter.isPublished)
     throw new BadRequestError("Chapter is already published");
+  if (chapter.book.status === "DRAFT")
+    throw new BadRequestError("Chapters cannot be published while the book is in DRAFT. Use Launch Book.");
 
   await getOwnedBook(chapter.bookId, currentUserId);
 
@@ -225,6 +227,8 @@ const publishChapter = async (chapterId, currentUserId, requestedPrice) => {
       wordCount: wordCount,
     },
   });
+
+  updateBookMasterEmbedding(chapter.bookId).catch(console.error);
 
   return publishedChapter;
 };

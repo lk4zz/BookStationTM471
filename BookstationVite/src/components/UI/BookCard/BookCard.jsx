@@ -8,13 +8,16 @@ import { useViews } from "../../../hooks/useViews";
 function BookCard({ book }) {
   //link works but might as well change it to navigate later since i am already using it in other files
   const {totalViews, isViewsLoading, viewsError} = useViews(book.id)
+  const coverSrc = book.coverImage?.startsWith("http")
+    ? book.coverImage
+    : `${BASE_URL}/${book.coverImage}`;
   console.log(totalViews)
   return (
     <Link onClick= { () => addView(book.id)} className={styles.link} to={`/book/${book.id}`}>
       <div className={styles.card}>
         <div className={styles.imageContainer}>
           <img
-            src={`${BASE_URL}/${book.coverImage}`}
+            src={coverSrc}
             alt={book.name}
             className={styles.cover}
           />

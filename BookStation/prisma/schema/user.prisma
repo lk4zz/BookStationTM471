@@ -6,6 +6,7 @@ model User {
     coinBalance Int @default(0)
     bio String?
     profileImage String?
+    tasteProfile    String? @db.LongText
     
     roleId Int 
     role UserRole @relation(fields: [roleId], references: [id])
@@ -15,6 +16,7 @@ model User {
 
     books Books[]
     views BookViews[]
+    ratings Rating[]
     chapterUnlocks ChapterUnlocks[]
     libraries Library[]
     comments Comments[]

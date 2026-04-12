@@ -26,6 +26,11 @@ export const getBooksByAuthor = async(userId) => {
     return res.data;
 }
 
+export const getForYouBooks = async () => {
+    const res = await privateApi.get("/books/recommendations/for-you");
+    return res.data;
+};
+
 export const createBook = async ({ title, description = "" }) => {
     const res = await privateApi.post("/books", { title, description });
     return res.data;
@@ -38,5 +43,29 @@ export const deleteBook = async (bookId) => {
 
 export const updateBookStatus = async (bookId, requestedStatus) => {
     const res = await privateApi.put(`/books/${bookId}/status`, { requestedStatus });
+    return res.data;
+};
+
+export const launchBook = async (bookId, chapterPrices) => {
+    const res = await privateApi.put(`/books/${bookId}/launch`, { chapterPrices });
+    return res.data;
+};
+
+
+export const getTrendingBooks = async (limit) => {
+    const res = await publicApi.get(`/books/trending`, { params: { limit } });
+    return res.data;
+};
+
+export const updateBookCover = async (imageFile, bookId) => {
+    const formData = new FormData();
+    console.log("using the bookId", bookId)
+    // key must match upload.single('file') in the express route
+    if (imageFile) {
+        formData.append("file", imageFile);
+    }
+    console.log("using the formData", formData)
+    console.log("using the image in API", imageFile)
+    const res = await privateApi.put(`/books/${bookId}/cover`, formData);
     return res.data;
 };

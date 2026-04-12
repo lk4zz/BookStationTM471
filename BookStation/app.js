@@ -21,8 +21,11 @@ const pagesRouter = require('./routes/pages');
 const chaptersRouter = require('./routes/chapters');
 const walletRouter = require('./routes/wallet');
 const viewsRouter = require('./routes/views');
+const rateRouter = require('./routes/rate');
 const progressRouter = require('./routes/progress')
 const AIRouter = require('./routes/AI')
+const searchRouter = require('./routes/search')
+
 
 
 // Custom Error Handling imports
@@ -61,9 +64,11 @@ app.use('/comments', commentsRouter);
 app.use('/following', followingRouter);
 app.use('/wallet', walletRouter);
 app.use('/views', viewsRouter);
+app.use('/rate', rateRouter);
 app.use('/progress', progressRouter);
 app.use('/AI', AIRouter);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/search', searchRouter);
 
 // Catch 404 for any unhandled routes and forward to error handler
 app.all('*', (req, res, next) => {

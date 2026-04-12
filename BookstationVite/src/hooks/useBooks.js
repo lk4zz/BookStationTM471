@@ -1,5 +1,8 @@
-import { getBookById, getAllBooks, getBooksByGenre, getBooksByAuthor,
-    createBook, deleteBook, updateBookStatus, } from "../api/books";
+import {
+    getBookById, getAllBooks, getBooksByGenre, getBooksByAuthor,
+    createBook, deleteBook, updateBookStatus, getTrendingBooks, getForYouBooks, updateBookCover,
+    launchBook,
+} from "../api/books";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useBookById = (numericId, includeAuth = false) => {
@@ -34,6 +37,21 @@ export const useAllBooks = () => {
     return { books, isBooksLoading, booksError };
 }
 
+export const useForYouBooks = () => {
+    const {
+        data: forYouData,
+        isLoading: isForYouLoading,
+        error: forYouError,
+    } = useQuery({
+        queryKey: ["books", "for-you"],
+        queryFn: getForYouBooks,
+    });
+
+    const forYouBooks = forYouData?.data ?? []; 
+
+    return { forYouBooks, isForYouLoading, forYouError };
+};
+
 export const useBooksByGenre = (genreId) => {
     const {
         data: booksData,
@@ -60,7 +78,7 @@ export const useBooksByAuthor = (userId) => { //all books made by author
     })
     const booksByAuthor = booksByAuthorData?.data ?? booksByAuthorData;
 
-    return { booksByAuthor, isBooksByAuthorLoading, booksByAuthorError};
+    return { booksByAuthor, isBooksByAuthorLoading, booksByAuthorError };
 }
 
 export const useCreateBook = () => {  //this creates book
@@ -93,4 +111,68 @@ export const useUpdateBookStatus = () => {
             queryClient.invalidateQueries({ queryKey: ["book", bookId] });
         },
     });
+};
+
+
+export const useLaunchBook = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ bookId, chapterPrices }) =>
+            launchBook(bookId, chapterPrices),
+        onSuccess: (_, { bookId }) => {
+            queryClient.invalidateQueries({ queryKey: ["books", "author"] });
+            queryClient.invalidateQueries({ queryKey: ["book", bookId] });
+            queryClient.invalidateQueries({ queryKey: ["chapters", bookId] });
+        },
+    });
+};
+
+export const useEditBookCover = (book, onSuccess) => {
+    const queryClient = useQueryClient();
+
+
+    // populate form whenever the user data arrives or changes
+ 
+
+    const mutation = useMutation({
+        mutationFn: ({ imageFile}) =>
+            updateBookCover(imageFile, book.id),
+
+        onSuccess: async () => {
+            //refresh quieries before exiting edit mode
+            await queryClient.refetchQueries({ queryKey: BOOK_QUERY_KEY(book.id) });
+            onSuccess?.(); //on success indicator (when everything succesully uploaded)
+        },
+    });
+
+
+    const handleSubmit = (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        e.preventDefault();
+        mutation.mutate({ imageFile: file});
+    };
+
+    return {
+        isLoading: mutation.isPending,
+        error: mutation.error ?? null,
+        handleSubmit,
+    };
+};
+
+
+export const useTrendingBooks = (limit) => {
+    const {
+        data: trendingData,
+        isLoading: isTrendingLoading,
+        error: trendingError,
+    } = useQuery({
+        queryKey: ["books", "trending", limit],
+        queryFn: () => getTrendingBooks(limit),
+    });
+
+    const trendingBooks = trendingData?.data ?? [];
+
+    return { trendingBooks, isTrendingLoading, trendingError };
 };
