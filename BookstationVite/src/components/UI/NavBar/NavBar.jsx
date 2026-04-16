@@ -9,7 +9,8 @@ import UserAvatar from "../UserAvatar/UserAvatar";
 import { useCurrentUserId } from "../../../hooks/useUser";
 import { useUser } from "../../../hooks/useUser";
 import { resolveImageUrl } from "../../../utils/ImageUrl";
-import SearchBar from "../../NavbarComp/SearchBar";
+import { linkStateFromHere } from "../../../utils/navigation";
+import SearchBar from "./SearchBar";
 
 
 function NavBar({ onSearch }) {
@@ -78,7 +79,7 @@ function NavBar({ onSearch }) {
         profileUrl={profileUrl}
           onClick={() => {
             if (currentUserId) {
-              navigate(`/author/${currentUserId}`);
+              navigate(`/author/${currentUserId}`, { state: linkStateFromHere(location) });
             } else {
               console.warn("No User ID found! Cannot navigate.");
             }

@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, useQueries } from "@tanstack/react-query";
 import { getReadingProgress, updateReadingProgress } from "../api/progress";
 
 // use this on the Book Details page to know which chapter to route the user to
@@ -32,4 +32,27 @@ export const useUpdateProgress = () => {
   });
 
   return { saveProgress };
+};
+
+/** Batch progress for many books (e.g. library grid). */
+export const useProgressForBookIds = (bookIds = []) => {
+  const ids = [...new Set((bookIds || []).filter((id) => Number.isFinite(Number(id))).map(Number))];
+
+  const results = useQueries({
+    queries: ids.map((bookId) => ({
+      queryKey: ["progress", bookId],
+      queryFn: () => getReadingProgress(bookId),
+      enabled: ids.length > 0,
+    })),
+  });
+
+  const progressByBookId = ids.reduce((acc, id, i) => {
+    const raw = results[i]?.data;
+    acc[id] = raw?.data ?? raw ?? null;
+    return acc;
+  }, {});
+
+  const isProgressLoading = results.some((r) => r.isPending);
+
+  return { progressByBookId, isProgressLoading };
 };

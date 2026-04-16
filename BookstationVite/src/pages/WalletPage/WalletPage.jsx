@@ -1,39 +1,33 @@
-import React from "react";
 import styles from "./WalletPage.module.css";
-import { useGetWallet } from "../../hooks/useWallet";
-import WalletHeader from "../../components/WalletPageComp/WalletHeader/WalletHeader";
-import CoinBundleList from "../../components/WalletPageComp/CoinBundleList/CoinBundleList";
-import StoreHero from "../../components/WalletPageComp/StoreHero/StoreHero";
-import FeaturesBreakdown from "../../components/WalletPageComp/FeaturesBreakdown/FeaturesBreakdown";
-
-const VALID_COIN_BUNDLES = [100, 500, 1200, 2500, 5000];
-const STANDARD_BUNDLES = VALID_COIN_BUNDLES.slice(0, 3);
-const PREMIUM_BUNDLES = VALID_COIN_BUNDLES.slice(3);
+import WalletLoadingSection from "./sections/WalletLoadingSection/WalletLoadingSection";
+import WalletErrorSection from "./sections/WalletErrorSection/WalletErrorSection";
+import WalletMainSection from "./sections/WalletMainSection/WalletMainSection";
+import { useWalletPage } from "./features/useWalletPage";
 
 function WalletPage() {
-  const { balance, isWalletLoading, walletError } = useGetWallet();
+  const {
+    balance,
+    isWalletLoading,
+    walletError,
+    standardBundles,
+    premiumBundles,
+  } = useWalletPage();
 
-  if (isWalletLoading) return <div className="loading">Loading...</div>;
-  if (walletError) return <div className={styles.error}>{walletError.message || "Failed to load wallet."}</div>;
+  if (isWalletLoading) return <WalletLoadingSection />;
+  if (walletError)
+    return (
+      <WalletErrorSection
+        message={walletError.message || "Failed to load wallet."}
+      />
+    );
 
   return (
-    <div className={styles.pageContainer}>
-      <WalletHeader className={styles.walletHeader} balance={balance} />
-      
-      <main className={styles.mainContent}>
-        <StoreHero />
-        <CoinBundleList bundles={STANDARD_BUNDLES} />
-
-        <div className={styles.transitionSection}>
-          <h2 className={styles.transitionTitle}>Need a bigger hoard?</h2>
-          <p className={styles.transitionDesc}>Grab our best value bundles and binge without limits.</p>
-        </div>
-        
-        <CoinBundleList bundles={PREMIUM_BUNDLES} />
-        
-        <FeaturesBreakdown />
-      </main>
-    </div>
+    <WalletMainSection
+      balance={balance}
+      standardBundles={standardBundles}
+      premiumBundles={premiumBundles}
+      walletHeaderClassName={styles.walletHeader}
+    />
   );
 }
 

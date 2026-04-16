@@ -1,0 +1,16 @@
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-6);
+  padding: var(--space-8) 10%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .features {
+    padding-left: var(--space-5);
+    padding-right: var(--space-5);
+    width: auto;
+  }
+}

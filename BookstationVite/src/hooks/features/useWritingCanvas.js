@@ -2,7 +2,7 @@ import { useEditor } from "@tiptap/react";
 import { useCallback, useEffect, useRef } from "react";
 import { useUpsertPrimaryPage } from "../useWritingPages";
 import {extensions} from "../../utils/tiptapExtensions";
-import styles from "../../components/writingBook/WritingCanvas/WritingCanvas.module.css";
+import styles from "../../pages/WritingBookPage/sections/WritingBookEditorSection/components/WritingCanvas/WritingCanvas.module.css";
 
 // save delay time
 const MILLISECONDS_TO_WAIT = 2000;

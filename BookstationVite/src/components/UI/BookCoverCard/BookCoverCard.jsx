@@ -1,16 +1,23 @@
 import styles from "./BookCoverCard.module.css";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { linkStateFromHere } from "../../../utils/navigation";
 const BASE_URL = import.meta.env.VITE_API_URL || "";
 import { EyeIcon, StarIcon } from "../Icons/IconLibrary";
 import { addView } from "../../../api/views";
 
 function BookCoverCard({ book, totalViews }) {
+  const location = useLocation();
   const coverSrc = book.coverImage?.startsWith("http")
     ? book.coverImage
     : `${BASE_URL}/${book.coverImage}`;
 
   return (
-    <Link onClick={() => addView(book.id)} className={styles.link} to={`/book/${book.id}`}>
+    <Link
+      onClick={() => addView(book.id)}
+      className={styles.link}
+      to={`/book/${book.id}`}
+      state={linkStateFromHere(location)}
+    >
       <div className={styles.card}>
         <img src={coverSrc} alt={book.name} className={styles.cover} />
 

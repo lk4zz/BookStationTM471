@@ -57,6 +57,16 @@ export const getTrendingBooks = async (limit) => {
     return res.data;
 };
 
+export const updateBook = async (bookId, { title, description }) => {
+    const res = await privateApi.put(`/books/${bookId}`, { title, description });
+    return res.data;
+};
+
+export const tagBook = async (bookId, genreIds) => {
+    const res = await privateApi.post(`/books/${bookId}/genres`, { genreIds });
+    return res.data;
+};
+
 export const updateBookCover = async (imageFile, bookId) => {
     const formData = new FormData();
     console.log("using the bookId", bookId)

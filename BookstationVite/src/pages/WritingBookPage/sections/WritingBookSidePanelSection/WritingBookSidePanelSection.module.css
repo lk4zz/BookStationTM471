@@ -1,0 +1,8 @@
+.chaptersPanelContainer {
+  height: 100%;
+  border-radius: 10px;
+  flex: 0 0 clamp(220px, 20vw, 320px);
+  min-width: 180px;
+  max-width: 19vw;
+  overflow: hidden;
+}

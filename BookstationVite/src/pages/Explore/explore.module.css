@@ -1,9 +1,22 @@
+.pageShell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.loading {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8, 2rem);
+}
+
 .explore p {
 
 }
 
-.GenreSection {
-    display: flex;
+.GenreSection {    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;

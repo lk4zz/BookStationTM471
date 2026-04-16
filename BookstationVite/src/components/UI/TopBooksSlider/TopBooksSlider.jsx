@@ -1,7 +1,8 @@
 import { useState, useRef } from "react";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { linkStateFromHere } from "../../../utils/navigation";
 import styles from "./TopBooksSlider.module.css";
 import { EyeIcon, StarIcon } from "../Icons/IconLibrary";
 import { addView } from "../../../api/views";
@@ -9,6 +10,7 @@ import { useViews } from "../../../hooks/useViews";
 import { formatBookData } from "../../../utils/bookUtils";
 
 function SlideContent({ book }) {
+  const location = useLocation();
   const formattedBook = formatBookData(book);
   if (!formattedBook) return null;
 
@@ -18,6 +20,7 @@ function SlideContent({ book }) {
   return (
     <Link
       to={`/book/${bookId}`}
+      state={linkStateFromHere(location)}
       onClick={() => addView(bookId)}
       className={styles.contentWrapper}
     >
@@ -69,9 +72,9 @@ function TopBooksSlider({ books = [] }) {
             type: "loop",
             perPage: 1,
             perMove: 1,
-            speed: 600,
+            speed: 500,
             autoplay: true,
-            interval: 5000,
+            interval: 4000,
             pauseOnHover: true,
             arrows: true,
             pagination: true,

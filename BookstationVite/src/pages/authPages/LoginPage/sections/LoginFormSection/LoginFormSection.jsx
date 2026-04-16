@@ -1,0 +1,48 @@
+import { InputField } from "../../../../../components/UI/InputFields/InputField";
+import styles from "../../../Auth.module.css";
+
+function LoginFormSection({
+  formData,
+  error,
+  isLoading,
+  handleChange,
+  handleSubmit,
+  isSubmitDisabled,
+}) {
+  return (
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <InputField
+        label="Email"
+        id="email"
+        type="email"
+        required
+        placeholder="reader@bookstation.com"
+        value={formData.email}
+        onChange={handleChange}
+        disabled={isLoading}
+      />
+      <InputField
+        label="Password"
+        id="password"
+        type="password"
+        required
+        placeholder="••••••••"
+        value={formData.password}
+        onChange={handleChange}
+        disabled={isLoading}
+      />
+
+      {error && <div className={styles.errorMessage}>{error}</div>}
+
+      <button
+        type="submit"
+        className={styles.submitBtn}
+        disabled={isSubmitDisabled}
+      >
+        {isLoading ? "Logging in..." : "Log In"}
+      </button>
+    </form>
+  );
+}
+
+export default LoginFormSection;

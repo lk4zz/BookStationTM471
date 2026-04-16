@@ -5,7 +5,33 @@
     align-items: center;
     justify-content: center;
     font-family: serif;
+    min-height: 200px;
+    padding: var(--space-6);
+}
 
+.loaderContainerInline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: serif;
+    min-height: 120px;
+    padding: var(--space-4);
+}
+
+.loaderContainerInline .logoPerspectiveWrapper {
+    width: 200px;
+    height: 72px;
+}
+
+.loaderContainerInline .bDoor {
+    width: 44px;
+    height: 66px;
+    font-size: 1.6rem;
+}
+
+.loaderContainerInline .brandName {
+    font-size: 0.75rem;
 }
 
 /* --- THE MAIN 3D CONTEXT --- */

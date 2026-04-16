@@ -1,9 +1,13 @@
 import {
     getBookById, getAllBooks, getBooksByGenre, getBooksByAuthor,
     createBook, deleteBook, updateBookStatus, getTrendingBooks, getForYouBooks, updateBookCover,
-    launchBook,
+    launchBook, updateBook, tagBook,
 } from "../api/books";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
+import { useAllGenres } from "./useGenres";
+
+const BOOK_QUERY_KEY = (bookId) => ["book", bookId, true];
 
 export const useBookById = (numericId, includeAuth = false) => {
 
@@ -127,31 +131,43 @@ export const useLaunchBook = () => {
     });
 };
 
-export const useEditBookCover = (book, onSuccess) => {
+export const useUpdateBook = () => {
     const queryClient = useQueryClient();
-
-
-    // populate form whenever the user data arrives or changes
- 
-
-    const mutation = useMutation({
-        mutationFn: ({ imageFile}) =>
-            updateBookCover(imageFile, book.id),
-
-        onSuccess: async () => {
-            //refresh quieries before exiting edit mode
-            await queryClient.refetchQueries({ queryKey: BOOK_QUERY_KEY(book.id) });
-            onSuccess?.(); //on success indicator (when everything succesully uploaded)
+    return useMutation({
+        mutationFn: ({ bookId, title, description }) =>
+            updateBook(bookId, { title, description }),
+        onSuccess: (_, { bookId }) => {
+            queryClient.invalidateQueries({ queryKey: ["books", "author"] });
+            queryClient.invalidateQueries({ queryKey: BOOK_QUERY_KEY(bookId) });
         },
     });
+};
 
+export const useTagBook = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ bookId, genreIds }) => tagBook(bookId, genreIds),
+        onSuccess: (_, { bookId }) => {
+            queryClient.invalidateQueries({ queryKey: BOOK_QUERY_KEY(bookId) });
+        },
+    });
+};
+
+export const useEditBookCover = (book) => {
+    const queryClient = useQueryClient();
+
+    const mutation = useMutation({
+        mutationFn: ({ imageFile }) =>
+            updateBookCover(imageFile, book.id),
+        onSuccess: async () => {
+            await queryClient.refetchQueries({ queryKey: BOOK_QUERY_KEY(book.id) });
+        },
+    });
 
     const handleSubmit = (e) => {
         const file = e.target.files?.[0];
         if (!file) return;
-
-        e.preventDefault();
-        mutation.mutate({ imageFile: file});
+        mutation.mutate({ imageFile: file });
     };
 
     return {
@@ -175,4 +191,87 @@ export const useTrendingBooks = (limit) => {
     const trendingBooks = trendingData?.data ?? [];
 
     return { trendingBooks, isTrendingLoading, trendingError };
+};
+
+export const useEditBookDetails = (book, onError) => {
+    const bookId = book?.id;
+
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [coverPreview, setCoverPreview] = useState(null);
+    const [selectedGenres, setSelectedGenres] = useState([]);
+
+    const extractGenreIds = (b) =>
+        (b?.bookGenres ?? []).map((bg) => bg.genreId ?? bg.bookGenre?.id);
+
+    useEffect(() => {
+        if (book) {
+            setTitle(book.name ?? "");
+            setDescription(book.description ?? "");
+            setSelectedGenres(extractGenreIds(book));
+            setCoverPreview(null);
+        }
+    }, [book]);
+
+    const { genres } = useAllGenres();
+
+    const { handleSubmit: handleCoverFileInput, isLoading: isCoverLoading } =
+        useEditBookCover(book);
+
+    const updateBookMutation = useUpdateBook();
+    const tagBookMutation = useTagBook();
+
+    const isSaving = updateBookMutation.isPending || tagBookMutation.isPending;
+
+    const handleCoverChange = (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        if (coverPreview?.startsWith("blob:")) URL.revokeObjectURL(coverPreview);
+        setCoverPreview(URL.createObjectURL(file));
+        handleCoverFileInput(e);
+    };
+
+    const toggleGenre = (genreId) => {
+        setSelectedGenres((prev) =>
+            prev.includes(genreId) ? prev.filter((g) => g !== genreId) : [...prev, genreId]
+        );
+    };
+
+    const handleSave = () => {
+        const currentGenreIds = extractGenreIds(book);
+        const titleChanged = title.trim() !== (book.name ?? "");
+        const descChanged = description.trim() !== (book.description ?? "");
+        const genresChanged =
+            JSON.stringify([...selectedGenres].sort()) !==
+            JSON.stringify([...currentGenreIds].sort());
+
+        if (titleChanged || descChanged) {
+            updateBookMutation.mutate(
+                { bookId, title: title.trim(), description: description.trim() },
+                { onError: (err) => onError?.(err?.message || "Could not update book.") }
+            );
+        }
+
+        if (genresChanged && selectedGenres.length > 0) {
+            tagBookMutation.mutate(
+                { bookId, genreIds: selectedGenres },
+                { onError: (err) => onError?.(err?.message || "Could not tag book.") }
+            );
+        }
+    };
+
+    return {
+        title,
+        setTitle,
+        description,
+        setDescription,
+        coverPreview,
+        isCoverLoading,
+        genres,
+        selectedGenres,
+        isSaving,
+        handleCoverChange,
+        toggleGenre,
+        handleSave,
+    };
 };
