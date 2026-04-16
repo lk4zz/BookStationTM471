@@ -1,0 +1,8 @@
+.AiPanelContainer {
+  height: 100%;
+  border-radius: 10px;
+  flex: 0 0 clamp(280px, 25vw, 400px);
+  min-width: 220px;
+  max-width: 30vw;
+  overflow: hidden;
+}

@@ -1,82 +1,40 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
 import NavBar from "../../components/UI/NavBar/NavBar";
-import CreateBookModal from "../../components/WritingDashboard/CreateBookModal/CreateBookModal";
-import DashboardBooksSection from "../../components/WritingDashboard/DraftBooksSection/DashboardBooksSection";
-import PageHeader from "../../components/WritingDashboard/PageHeader/PageHeader";
-import BookTabs from "../../components/WritingDashboard/BookTabPanel/BookTabs";
-
-import { useCreateBook, useDeleteBook, useBooksByAuthor } from "../../hooks/useBooks";
-import { checkIfGuest } from "../../utils/checkIfGuest";
-import { useCurrentUserId } from "../../hooks/useUser";
 import styles from "./WritingDashboardPage.module.css";
+import WritingDashboardMainSection from "./sections/WritingDashboardMainSection/WritingDashboardMainSection";
+import WritingDashboardCreateBookModalSection from "./sections/WritingDashboardCreateBookModalSection/WritingDashboardCreateBookModalSection";
+import { useWritingDashboardPage } from "./features/useWritingDashboardPage";
 
 function WritingDashboardPage() {
+  const {
+    isGuest,
+    activeTab,
+    handleActiveTab,
+    isNewBookModalOpen,
+    setNewBookModalOpen,
+    booksByAuthor,
+    isBooksByAuthorLoading,
+    booksByAuthorError,
+    createBook,
+    handleCreate,
+    handleDelete,
+  } = useWritingDashboardPage();
 
-  const navigate = useNavigate();
-  const { currentUserId } = useCurrentUserId();
-  const [activeTab, setActiveTab] = useState("DRAFTS");
-  const [isNewBookModalOpen, setNewBookModalOpen] = useState(false);
-  const { booksByAuthor, isBooksByAuthorLoading, booksByAuthorError
-  } = useBooksByAuthor(currentUserId);
-
-  
-  const createBook = useCreateBook(); //create new draft
-  const deleteBook = useDeleteBook(); //delete draft
-
-  useEffect(() => {
-    if (checkIfGuest()) {  //my utils function to checkif guest
-      navigate("/login", { replace: true, state: { from: "/writing" } }); //navigate to log in
-    }
-  }, [navigate]);
-
-  if (checkIfGuest()) return null;
-
-  const handleCreate = (payload) => {
-    createBook.mutate(payload, {
-      onSuccess: () => setNewBookModalOpen(false),
-    });
-  };
-
-  const handleDelete = (bookId) => {
-    if (!window.confirm("Delete this draft book? This cannot be undone.")) return;
-    deleteBook.mutate(bookId);
-  };
-
-  const handleActiveTab = (tab) => {
-    setActiveTab(tab);
-  }
+  if (isGuest) return null;
 
   return (
     <div className={styles.page}>
       <NavBar />
-      <main className={styles.main}>
+      <WritingDashboardMainSection
+        onNewBook={() => setNewBookModalOpen(true)}
+        activeTab={activeTab}
+        handleActiveTab={handleActiveTab}
+        booksByAuthor={booksByAuthor}
+        isBooksByAuthorLoading={isBooksByAuthorLoading}
+        booksByAuthorError={booksByAuthorError}
+        onDelete={handleDelete}
+      />
 
-        {/* section to add new books */}
-        <PageHeader
-          title="Writing"
-          subtitle="Drafts stay private until you publish your book."
-          onNewBook={() => setNewBookModalOpen(true)}
-        />
-      <div className={styles.booksPanel}>
-        <BookTabs handleActiveTab={handleActiveTab} activeTab={activeTab} />
-        
-        {/* draftbooks list */}
-        <DashboardBooksSection
-          booksByAuthor={booksByAuthor}
-          isBooksByAuthorLoading={isBooksByAuthorLoading}
-          booksByAuthorError={booksByAuthorError}
-          isLoading={isBooksByAuthorLoading}
-          error={booksByAuthorError}
-          onDelete={handleDelete}
-          activeTab={activeTab}
-        />
-        </div>
-      </main>
-
-      {/* modal window that pops when creating a new book */}
-      <CreateBookModal
+      <WritingDashboardCreateBookModalSection
         open={isNewBookModalOpen}
         onClose={() => setNewBookModalOpen(false)}
         onCreate={handleCreate}
@@ -84,8 +42,6 @@ function WritingDashboardPage() {
       />
     </div>
   );
-
 }
-
 
 export default WritingDashboardPage;

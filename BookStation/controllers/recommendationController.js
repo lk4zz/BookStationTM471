@@ -2,7 +2,7 @@ const recommendationService = require("../services/algorithmServices/recommendat
 const catchAsync = require("../middlewares/catchAsync"); 
 const prisma = require("../db");
 const {getTrendingBooks} = require("../services/bookServices");
-
+const libraryServices = require("../services/libraryServices");
 
 const getForYouRecommendations = catchAsync(async (req, res) => {
     
@@ -34,8 +34,13 @@ const getForYouRecommendations = catchAsync(async (req, res) => {
     // when user has profiletaste:
     const userTasteVector = JSON.parse(user.tasteProfile);
 
-    //  pass empty array [] for excludeBookIds to search the whole catalog
-    const personalizedBooks = await recommendationService.findRecommendations(userTasteVector, [], limit);
+    // fetch the user's library books to exclude them from the recommendations
+    const libraryBooks = await libraryServices.getLibraryBooks( userId );
+    const libraryBookIds = libraryBooks.map((lb) => lb.bookId);
+
+
+    //  pass the library book ids to exclude them from the recommendations
+    const personalizedBooks = await recommendationService.findRecommendations(userTasteVector, libraryBookIds, limit);
 
     res.status(200).json({
         success: true,

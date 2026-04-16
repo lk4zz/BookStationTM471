@@ -1,29 +1,28 @@
 import { useParams } from "react-router-dom";
-import { useAllGenres } from "../../hooks/useGenres";
-import styles from './GenresPage.module.css'
-import BooksByGenre from "../../components/GenrePageComp/BooksByGenre";
-import { MutationCache } from "@tanstack/react-query";
-
+import styles from "./GenresPage.module.css";
+import GenresBooksSection from "./sections/GenresBooksSection/GenresBooksSection";
+import { useGenresPage } from "./features/useGenresPage";
 
 function GenresPage() {
-    const params = useParams();
-    const currentGenreType = params.type;
+  const params = useParams();
+  const currentGenreType = params.type;
 
-    const { genres, isGenresLoading, genresError } = useAllGenres()
-    if (isGenresLoading) return <p className="loading">loading...</p>
-    if (genresError) return <p className="loading">{genresError.message || "No books with this genre"}</p>
-    const genreType = genres?.find(
-        g => g.type.toLowerCase() === currentGenreType.toLowerCase()
-    );
-    if (!genreType) return <p className="loading">Genre not found.</p>;
+  const { isGenresLoading, genresError, genreType } =
+    useGenresPage(currentGenreType);
 
-
+  if (isGenresLoading) return <p className="loading">loading...</p>;
+  if (genresError)
+    
     return (
-        <div className={styles.mainContent}>
-            <BooksByGenre genre={genreType.id} />
+      <p className="loading">{genresError.message || "No books with this genre"}</p>
+    );
+  if (!genreType) return <p className="loading">Genre not found.</p>;
 
-        </div>
-    )
+  return (
+    <div className={styles.mainContent}>
+      <GenresBooksSection genre={genreType.id} />
+    </div>
+  );
 }
 
 export default GenresPage;

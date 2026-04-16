@@ -1,0 +1,48 @@
+.genreSection {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: clamp(var(--space-5), 5vw, var(--space-8)) clamp(var(--space-4), 4vw, var(--space-8));
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-soft);
+  background-color: var(--color-bg-panel);
+  overflow: hidden;
+}
+
+.intro {
+  position: relative;
+  z-index: 1;
+  max-width: 42rem;
+  margin-bottom: var(--space-5);
+}
+
+.genreEyebrow {
+  margin: 0 0 var(--space-2);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+}
+
+.genreHeading {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-heading);
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.2;
+}
+
+.genreSub {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--color-text-secondary);
+}
+
+.carouselWrap {
+  position: relative;
+  z-index: 1;
+}

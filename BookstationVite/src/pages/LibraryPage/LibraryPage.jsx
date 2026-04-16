@@ -1,25 +1,35 @@
-import React from "react";
 import NavBar from "../../components/UI/NavBar/NavBar";
-import LibraryGrid from "../../components/LibraryComp/LibraryGrid/LibraryGrid";
-import { useLibraryBooks } from "../../hooks/useLibrary";
 import styles from "./LibraryPage.module.css";
-import EmptyLibrary from "../../components/LibraryComp/EmptyLibrary/EmptyLibrary";
-import { Loading } from "../../components/UI/Loading/Loading";
+import LibraryGuestSection from "./sections/LibraryGuestSection/LibraryGuestSection";
+import LibraryLoadingSection from "./sections/LibraryLoadingSection/LibraryLoadingSection";
+import LibraryEmptySection from "./sections/LibraryEmptySection/LibraryEmptySection";
+import LibraryErrorSection from "./sections/LibraryErrorSection/LibraryErrorSection";
+import LibraryMainSection from "./sections/LibraryMainSection/LibraryMainSection";
+import { useLibraryPage } from "./features/useLibraryPage";
 
 function LibraryPage() {
-
-  // quick guest check (el backend already prevent unauthorized entries)
-  const isGuest = !localStorage.getItem("token");
-  const { data: libraryItems, isLoading, isError, error } = useLibraryBooks(); //fetch books
+  const {
+    isGuest,
+    libraryItems,
+    isLoading,
+    isError,
+    error,
+    removeMutation,
+    genres,
+    genreFilter,
+    setGenreFilter,
+    sortBy,
+    setSortBy,
+    filteredSorted,
+    progressByBookId,
+    isProgressLoading,
+  } = useLibraryPage();
 
   if (isGuest) {
     return (
       <div className={styles.pageWrapper}>
         <NavBar />
-        <EmptyLibrary title={"Log in to view your Library"}
-          body={"Log in to view your Library"}
-          suggestion={"Login"}
-          path={"/login"} />
+        <LibraryGuestSection />
       </div>
     );
   }
@@ -28,10 +38,7 @@ function LibraryPage() {
     return (
       <div className={styles.pageWrapper}>
         <NavBar />
-        <main className={styles.centeredContent}>
-
-          <Loading/>
-        </main>
+        <LibraryLoadingSection />
       </div>
     );
   }
@@ -40,10 +47,7 @@ function LibraryPage() {
     return (
       <div className={styles.pageWrapper}>
         <NavBar />
-        <EmptyLibrary title={"Your Library is Empty"}
-          body={"You haven't added any books to your library yet."}
-          suggestion={"Explore Books"}
-          path={"/explore"} />
+        <LibraryEmptySection />
       </div>
     );
   }
@@ -52,9 +56,9 @@ function LibraryPage() {
     return (
       <div className={styles.pageWrapper}>
         <NavBar />
-        <main className={styles.centeredContent}>
-          <div className="error">{error?.message || "Oops! Something went wrong loading your library."}</div>
-        </main>
+        <LibraryErrorSection
+          message={error?.message || "Oops! Something went wrong loading your library."}
+        />
       </div>
     );
   }
@@ -62,16 +66,19 @@ function LibraryPage() {
   return (
     <div className={styles.pageWrapper}>
       <NavBar />
-      <main className={styles.mainContent}>
-        <div className={styles.header}>
-          <h1 className={styles.title}>My Library</h1>
-          <span className={styles.countBadge}>
-            {libraryItems.length} {libraryItems.length === 1 ? "Book" : "Books"}
-          </span>
-        </div>
-
-        <LibraryGrid libraryItems={libraryItems} />
-      </main>
+      <LibraryMainSection
+        libraryItems={libraryItems}
+        filteredSorted={filteredSorted}
+        genres={genres}
+        genreFilter={genreFilter}
+        setGenreFilter={setGenreFilter}
+        sortBy={sortBy}
+        setSortBy={setSortBy}
+        isProgressLoading={isProgressLoading}
+        progressByBookId={progressByBookId}
+        onRemoveBook={(bookId) => removeMutation.mutate(bookId)}
+        isRemoving={removeMutation.isPending}
+      />
     </div>
   );
 }

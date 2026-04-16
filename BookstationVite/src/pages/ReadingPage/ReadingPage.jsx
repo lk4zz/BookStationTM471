@@ -1,69 +1,44 @@
-import { useEffect } from "react";
-import ChaptersPanel from "../../components/ReadingPageComp/ChaptersPanel/ChaptersPanel";
-import ReadingCanvas from "../../components/ReadingPageComp/ReadingCanvas/ReadingCanvas";
-import WritingAiPanel from "../../components/WritingBook/WritingAiPanel/WritingAiPanel";
-import { useChapterById, useChaptersByBook } from "../../hooks/useChapters";
-import { usePagesByChatper } from "../../hooks/usePages";
 import { useParams } from "react-router-dom";
-import styles from './ReadingPage.module.css'
-import { useUpdateProgress } from "../../hooks/useProgress";
-
+import styles from "./ReadingPage.module.css";
+import ReadingChaptersPanelSection from "./sections/ReadingChaptersPanelSection/ReadingChaptersPanelSection";
+import ReadingCanvasSection from "./sections/ReadingCanvasSection/ReadingCanvasSection";
+import ReadingAiPanelSection from "./sections/ReadingAiPanelSection/ReadingAiPanelSection";
+import { useReadingPage } from "./features/useReadingPage";
 
 function ReadingPage() {
-  const { bookId } = useParams();
-  const { chapterId } = useParams();
+  const { bookId, chapterId } = useParams();
   const numericBookId = Number(bookId);
   const numericChapterId = Number(chapterId);
 
-
-  const { chapters, isChaptersLoading } = useChaptersByBook(numericBookId);
-  const { chapterData, isChapterLoading } = useChapterById(numericChapterId)
-  const { pagesData, isPagesLoading, pagesError } = usePagesByChatper(numericChapterId);
-
-  const { saveProgress } = useUpdateProgress();
-  useEffect(() => {
-    if (numericBookId && numericChapterId) {
-      saveProgress({ bookId: numericBookId, chapterId: numericChapterId });
-    }
-  }, [numericBookId, numericChapterId, saveProgress]);
-
-  if (isPagesLoading) return <p>Loading Pages</p>
-  if (isChaptersLoading) return <p className="loading">Loading..</p>
-  if (isChapterLoading) return <p className="loading">Loading..</p>
-
-  const { chapter, hasAccess } = chapterData ?? {};
-  const pages = Array.isArray(pagesData)
-    ? pagesData
-    : pagesData?.pages ?? [];
-  const firstPage = pages[0] ?? { id: 0, text: "" };
+  const {
+    chapters,
+    chapter,
+    isChapterLoading,
+    isBootLoading,
+    isContentLoading,
+    isPagesLoading,
+    firstPage,
+  } = useReadingPage(numericBookId, numericChapterId);
 
   return (
     <div className={styles.readingPage}>
+      <ReadingChaptersPanelSection
+        isBootLoading={isBootLoading}
+        chapter={chapter}
+        chapters={chapters}
+        isChapterLoading={isChapterLoading}
+      />
 
-      <section className={styles.chaptersPanelContainer}>
-        <ChaptersPanel chapter={chapter} chapters={chapters} isChapterLoading={isChapterLoading} />
-      </section>
+      <ReadingCanvasSection
+        chapter={chapter}
+        isContentLoading={isContentLoading}
+        firstPage={firstPage}
+        isPagesLoading={isPagesLoading}
+      />
 
-      <section className={styles.middleSection} >
-        <div className={styles.aboveCanvas}>
-          <h1>{chapter.book.name}</h1>
-        </div>
-        <div className={styles.canvasContainer}>
-          <ReadingCanvas
-            key={firstPage.id}
-            page={firstPage}
-            chapter={chapter}
-            isPagesLoading={isPagesLoading}
-          />
-        </div>
-      </section>
-
-      <section className={styles.AiPanelContainer}>
-        <WritingAiPanel chapterId={numericChapterId} />
-      </section>
-
+      <ReadingAiPanelSection chapterId={numericChapterId} />
     </div>
-  )
+  );
 }
 
 export default ReadingPage;

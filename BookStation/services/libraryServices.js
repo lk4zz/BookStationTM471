@@ -65,7 +65,16 @@ const getLibraryBooks = async (currentUserId) => {
       libraryId: library.id,
     },
     include: {
-      book: true,
+      book: {
+        include: {
+          author: { select: { id: true, name: true } },
+          bookGenres: { include: { bookGenre: true } },
+          chapters: {
+            select: { id: true, chapterNum: true },
+            orderBy: { chapterNum: "asc" },
+          },
+        },
+      },
     },
   });
 

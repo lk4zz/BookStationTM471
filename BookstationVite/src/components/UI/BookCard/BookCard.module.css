@@ -1,3 +1,8 @@
+.cardWrap {
+  position: relative;
+  width: 100%;
+}
+
 .link {
   text-decoration: none;
   color: inherit;
@@ -5,7 +10,7 @@
 }
 
 .card {
-  background-color: #242424;
+  background-color: var(--color-bg-card, #242424);
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -15,9 +20,9 @@
   width: 100%;
 }
 
-.card:hover {
+.cardWrap:hover .card {
   transform: translateY(-4px);
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
 .imageContainer {
@@ -28,7 +33,6 @@
   border-radius: 8px;
   overflow: hidden;
   background-color: #2a2a2a;
-
 }
 
 .cover {
@@ -43,6 +47,7 @@
   flex-direction: column;
   gap: 1px;
   padding-left: 5%;
+  padding-right: 5%;
 }
 
 .title {
@@ -67,43 +72,94 @@
   text-overflow: ellipsis;
 }
 
-.footer {
-
+.progressBlock {
+  padding: 0 5% 10px;
   display: flex;
-  padding-left: 5%;
-  align-items: center;
-  max-height: 30px;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.progressMeta {
+  display: flex;
   justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
 }
 
+.progressLabel {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  color: var(--color-text-muted, #888);
+}
 
-.rating {
+.progressPct {
   font-family: var(--font-heading);
-  font-size: 0.75rem;
-  color: #aaaaaa;
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  padding-right: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-primary, #f1f1f1);
 }
 
-.star {
-  width: 16px;
-  height: 16px;
-  fill: #eab308;
+.progressTrack {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
 }
-.views{
+
+.progressFill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--color-accent, #6366f1),
+    var(--color-accent-soft, #a5b4fc)
+  );
+  transition: width 0.25s ease;
+}
+
+.removeIconBtn {
+  position: absolute;
+  top: 10px;
+  right: 6%;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  color: white;
-  font-family: var(--font-heading);
-  font-size: 0.75rem;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #e5e5e5;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.92);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    background 0.15s ease,
+    color 0.15s ease;
 }
-.eye{
-  width: 13px;
-  height: 13px;
-  stroke: var(--color-text-primary);
-  fill: none;
+
+.cardWrap:hover .removeIconBtn {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+.removeIconBtn:hover:not(:disabled) {
+  background: rgba(248, 113, 113, 0.25);
+  color: #fecaca;
+}
+
+.removeIconBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.removeIconSvg {
+  width: 18px;
+  height: 18px;
 }

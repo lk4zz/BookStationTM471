@@ -1,25 +1,3 @@
-.page {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background: var(--color-bg-app);
-  width: 100vw;
-}
-
-.centerMsg {
-  text-align: center;
-  padding: var(--space-10);
-  color: var(--color-text-muted);
-
-}
-
-.backLink {
-  color: var(--color-accent);
-}
-
-
-
 .writingPageViewport {
   height: 100vh;
   width: 100%;
@@ -41,46 +19,4 @@
   min-width: 0;
   box-sizing: border-box;
   margin: 0 auto;
-}
-
-.chaptersPanelContainer {
-  height: 100%;
-  border-radius: 10px;
-  flex: 0 0 clamp(220px, 20vw, 320px);
-  min-width: 180px;
-  max-width: 19vw;
-  overflow: hidden;
-}
-
-.middleSection {
-  display: flex;
-  flex-direction: column;
-  flex: 0 0 auto;
-  max-width: 55vw;
-  overflow: hidden;
-}
-
-.aboveCanvas {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 68px;
-  padding: 10px 12px;
-}
-
-.canvasContainer {
-  display: flex;
-  justify-content: center;
-  height: 100%;
-  min-width: 0;
-  overflow: hidden;
-}
-
-.AiPanelContainer {
-  height: 100%;
-  border-radius: 10px;
-  flex: 0 0 clamp(280px, 25vw, 400px);
-  min-width: 220px;
-  max-width: 30vw;
-  overflow: hidden;
 }

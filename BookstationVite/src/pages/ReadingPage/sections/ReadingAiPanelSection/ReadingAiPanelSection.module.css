@@ -1,0 +1,8 @@
+.aiPanelContainer {
+  flex: 0 0 clamp(240px, 26vw, 360px);
+  min-width: 0;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-panel);
+  overflow: hidden;
+}

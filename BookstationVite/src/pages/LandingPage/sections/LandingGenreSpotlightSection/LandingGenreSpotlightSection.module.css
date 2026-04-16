@@ -1,0 +1,14 @@
+.showcase {
+  padding: var(--space-10) 10%;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 80%;
+}
+
+@media (max-width: 768px) {
+  .showcase {
+    padding-left: var(--space-5);
+    padding-right: var(--space-5);
+    width: auto;
+  }
+}

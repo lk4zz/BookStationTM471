@@ -1,102 +1,77 @@
-import { useParams, useNavigate } from "react-router-dom";
-import BookDetails from "../../components/bookdetailscomp/BookDetails/BookDetails";
-import BookDescription from "../../components/bookdetailscomp/BookDescription/BookDescription";
-import BookChapters from "../../components/bookdetailscomp/BookChapter/BookChapters";
-import Comments from "../../components/bookdetailscomp/Comments/Comments";
+import BookDetails from "./sections/BookDetails/BookDetails";
+import BookDescription from "./sections/BookDescription/BookDescription";
 import styles from "./BookDetailsPage.module.css";
-import { useViews } from "../../hooks/useViews";
-import { useState } from "react";
-import { useBookById } from "../../hooks/useBooks";
-import { useChaptersByBook } from "../../hooks/useChapters";
-import { useCommentsByBook } from "../../hooks/useComments";
-import { useAddComment } from "../../hooks/useComments";
-import InputText from "../../components/UI/InputFields/InputText";
 import Loading from "../../components/UI/Loading/Loading";
+import CommentSection from "./sections/CommentSection/CommentSection";
+import { useBookDetails } from "./features/useBookDetails";
+import { useParams } from "react-router-dom";
+import ChapterSection from "./sections/ChapterSection/ChapterSection";
 
-
-//might need toclean could useless jsx and  they could be added to components
 function BookDetailsPage() {
   const { id } = useParams();
-  const numericId = Number(id);
-  const navigate = useNavigate();
-  const [commentInput, setCommentInput] = useState("");
-  const submitCommentMutation = useAddComment(numericId);
+  const bookId = Number(id);
 
-  const handleAddComment = () => {
-    if (!commentInput.trim()) return;
-    submitCommentMutation.mutate(commentInput, {
-      onSuccess: () => {
-        setCommentInput("");
-      },
-    });
-  };
+  const {
+    book,
+    isBookLoading,
+    bookError,
+    comments,
+    isCommentsLoading,
+    totalViews,
+    commentInput,
+    setCommentInput,
+    handleAddComment,
+    submitCommentMutation,
+    chapters,
+    isChapterLoading,
+    publishedChapters,
+  } = useBookDetails(bookId);
 
-  const { book, isBookLoading, bookError } = useBookById(numericId);
-  const { chapters, isChapterLoading } = useChaptersByBook(numericId);
-  const { comments, isCommentsLoading } = useCommentsByBook(numericId);
-  const { totalViews } = useViews(numericId);
+  if (!Number.isFinite(bookId)) {
+    return <p className={styles.error}>Invalid book link.</p>;
+  }
 
-  if (isBookLoading) return <Loading/>;
+  if (isBookLoading) return <Loading />;
   if (bookError) return <p className={styles.error}>{bookError.message || "Error loading data."}</p>;
-  const publishedChapters = chapters?.filter((chapter) => chapter.isPublished);
 
   return (
     <div className={styles.page}>
+
       <div className={styles.upperContainer}>
-        <BookDetails
-          book={book}
-          views={totalViews}
-        />
+
+        <section>
+          <BookDetails
+            book={book}
+            views={totalViews}
+          />
+        </section>
+
       </div>
 
       <div className={styles.lowerContainer}>
-        <div className={styles.column}>
+
+        <section className={styles.bookDescriptionColumn}>
           <h3 className={styles.sectionTitle}>Book Description</h3>
           <BookDescription book={book} />
-        </div>
+        </section>
 
-        <div className={styles.commetscolumn}>
-          <h3 className={styles.sectionTitle}>User Comments</h3>
-          <div className={styles.scrollList}>
-            {isCommentsLoading ? (
-              <Loading/>
-            ) : comments?.length > 0? (
-              comments?.map((comment) => (
-                <Comments key={comment.id} comment={comment} />
-              ))
-            ) : (
-              <p>No comments yet.</p>
-            )}
+        <section className={styles.commentSectionColumn}>
+          <CommentSection comments={comments}
+            isCommentsLoading={isCommentsLoading}
+            commentInput={commentInput}
+            setCommentInput={setCommentInput}
+            handleAddComment={handleAddComment}
+            submitCommentMutation={submitCommentMutation} />
+        </section>
 
+        <section className={styles.chapterSectionColumn}>
+          <ChapterSection
+            chapters={chapters}
+            isChapterLoading={isChapterLoading}
+            publishedChapters={publishedChapters}
+          />
+        </section>
 
-          </div>
-          <div className={styles.commentInputWrapper}>
-            <div />
-            <InputText
-              value={commentInput}
-              onChange={setCommentInput}
-              onSubmit={handleAddComment}
-              placeholder="Add a Comment"
-              disabled={submitCommentMutation.isPending}
-            />
-
-          </div>
-        </div>
-        <div className={styles.chaptercolumn}>
-          <h3 className={styles.sectionTitle}>Chapters</h3>
-          <div className={styles.scrollList}>
-            {isChapterLoading ? (
-              <Loading/>
-            ) : chapters?.length > 0 && publishedChapters?.length > 0? (
-              chapters
-              .map((chapter) => (
-                <BookChapters key={chapter.id} chapter={chapter} />
-              ))
-            ) : (
-              <p className={styles.emptyState}>No chapters available.</p>
-            )}
-          </div>
-        </div>
       </div>
     </div>
   );

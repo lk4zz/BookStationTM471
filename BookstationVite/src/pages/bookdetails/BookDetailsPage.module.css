@@ -7,6 +7,11 @@
   color: #ffffff;
 }
 
+.error {
+  padding: 2rem 5%;
+  color: #f87171;
+}
+
 .upperContainer {
   height: 50%;
   position: relative;
@@ -22,105 +27,27 @@
 
 }
 
-.commetscolumn {
+.bookDescriptionColumn {
+  display: flex;
+  flex-direction: column;
+  height: 40vh;
+  min-height: 300px;
+  flex: 2;
+}
+
+.commentSectionColumn {
   display: flex;
   flex-direction: column;
   height: 40vh;
   min-height: 300px;
   flex: 1.5;
-
 }
 
-.chaptercolumn {
+.chapterSectionColumn {
   display: flex;
   flex-direction: column;
-  flex: 1;
   height: 40vh;
   min-height: 300px;
-  width: 100%;
-}
-
-.column {
-  display: flex;
-  flex-direction: column;
-  flex: 2;
-  height: 40vh;
-  min-height: 300px;
-  width: 100%;
-}
-
-.sectionTitle {
-
-  font-family: var(--font-heading);
-  font-size: 1.3rem;
-  font-weight: 600;
-  margin: 0 0 20px 0;
-  color: #ffffff;
-}
-
-.scrollList {
-  padding-right: 5%;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  overflow-y: auto;
   flex: 1;
 }
 
-/* custom Scrollbar */
-.scrollList::-webkit-scrollbar {
-  width: 6px;
-}
-
-.scrollList::-webkit-scrollbar-track {
-  background: #1e1e1e;
-  border-radius: 10px;
-}
-
-.scrollList::-webkit-scrollbar-thumb {
-  background: #3f3f46;
-  border-radius: 10px;
-}
-
-.scrollList::-webkit-scrollbar-thumb:hover {
-  background: #52525b;
-}
-
-.commentInputWrapper {
-
-  padding: 10px 0;
-
-}
-
-
-.commentInput {
-  flex: 1;
-  background-color: transparent;
-  border: 1px solid #3f3f46;
-  border-radius: 20px;
-  padding: 10px 16px;
-  color: white;
-  font-size: 0.95rem;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.commentInput:focus {
-  border-color: #3b82f6;
-}
-
-@media (max-width: 1024px) {
-  .lowerContainer {
-    flex-direction: column;
-    height: auto;
-  }
-
-  .scrollList {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    overflow-y: visible;
-    flex: 1;
-  }
-
-}

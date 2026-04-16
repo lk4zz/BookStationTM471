@@ -1,51 +1,67 @@
-import { useWritingBookPageData } from "../../hooks/features/useWritingBook";
 import { useParams } from "react-router-dom";
 import { checkIfGuest } from "../../utils/checkIfGuest";
-import { Link } from "react-router-dom";
 import styles from "./WritingBookPage.module.css";
-import WritingCanvas from "../../components/WritingBook/WritingCanvas/WritingCanvas";
-import WritingAiPanel from "../../components/WritingBook/WritingAiPanel/WritingAiPanel";
-import WritingToolbar from "../../components/WritingBook/WritingToolBar/WritingToolbar";
-import WritingPageSidePanel from "../../components/WritingBook/WritingPageSidePanel/WritingPageSidePanel";
-import { useWritingCanvas } from "../../hooks/features/useWritingCanvas";
+import WritingBookLoadingSection from "./sections/WritingBookLoadingSection/WritingBookLoadingSection";
+import WritingBookErrorSection from "./sections/WritingBookErrorSection/WritingBookErrorSection";
+import WritingBookSidePanelSection from "./sections/WritingBookSidePanelSection/WritingBookSidePanelSection";
+import WritingBookEditorSection from "./sections/WritingBookEditorSection/WritingBookEditorSection";
+import WritingBookAiPanelSection from "./sections/WritingBookAiPanelSection/WritingBookAiPanelSection";
+import WritingBookModalsSection from "./sections/WritingBookModalsSection/WritingBookModalsSection";
+import { useWritingBookPage } from "./features/useWritingBookPage";
 
 function WritingBookPage() {
   const { bookId } = useParams();
   const numericBookId = Number(bookId);
   if (checkIfGuest()) return null;
-  const { book, bookLoading, bookError, chapters, chaptersLoading, pagesLoading, selectedChapterId,
-    selectChapter, initialHtml, isBusy, handleStatusChange, handleDeleteChapter,
-    onCreateChapter, onUpdateChapter, onPublishChapter, handleLaunchBook, isStatusPending,
-    isLaunchPending, error } = useWritingBookPageData(numericBookId);
-  const isLoading = chaptersLoading || pagesLoading;
-  const { editor, words, approxPages, saveStatus } = useWritingCanvas({
-    chapterId: selectedChapterId,
-    bookId: numericBookId,
-    initialHtml,
-    isLoading,
-  });
-  
+
+  const {
+    book,
+    bookLoading,
+    bookError,
+    chapters,
+    selectedChapterId,
+    selectChapter,
+    isBusy,
+    handleStatusChange,
+    handleDeleteChapter,
+    onCreateChapter,
+    onUpdateChapter,
+    onPublishChapter,
+    handleLaunchBook,
+    isStatusPending,
+    isLaunchPending,
+    error,
+    setError,
+    editor,
+    words,
+    approxPages,
+    saveStatus,
+    showEditBook,
+    setShowEditBook,
+    showLaunch,
+    setShowLaunch,
+  } = useWritingBookPage(numericBookId);
+
   if (bookLoading) {
-    return <div className={styles.page}><p className={styles.centerMsg}>Loading book...</p></div>;
+    return <WritingBookLoadingSection />;
   }
   if (bookError || !book) {
     return (
-      <div className={styles.page}>
-        <p className={styles.centerMsg}>
-          {bookError?.message ?? "Book not found."}{" "}
-          <Link to="/writing" className={styles.backLink}>Back to writing</Link>
-        </p>
-      </div>
+      <WritingBookErrorSection
+        message={bookError?.message ?? "Book not found."}
+      />
     );
   }
+
   return (
     <div className={styles.writingPageViewport}>
       <div className={styles.writingPage}>
-        <section className={styles.chaptersPanelContainer}>
-          <WritingPageSidePanel
+        <WritingBookSidePanelSection
           book={book}
           onStatusChange={handleStatusChange}
           isStatusPending={isStatusPending}
+          onLaunchBook={() => setShowLaunch(true)}
+          isBusy={isBusy}
           numericBookId={numericBookId}
           chapters={chapters}
           selectedChapterId={selectedChapterId}
@@ -54,30 +70,34 @@ function WritingBookPage() {
           onUpdateChapter={onUpdateChapter}
           handleDeleteChapter={handleDeleteChapter}
           onPublishChapter={onPublishChapter}
-          onLaunchBook={handleLaunchBook}
-          isLaunchPending={isLaunchPending}
-          isBusy={isBusy}
+          bookStatus={book.status}
           error={error}
-          />
-        </section>
-        <section className={styles.middleSection}>
-          <div className={styles.aboveCanvas}>
-            <WritingToolbar editor={editor} />
-          </div>
-          <div className={styles.canvasContainer}>
-            <WritingCanvas
-              editor={editor}
-              words={words}
-              approxPages={approxPages}
-              saveStatus={saveStatus}
-              chapterId={selectedChapterId}
-            />
-          </div>
-        </section>
-        <section className={styles.AiPanelContainer}>
-          <WritingAiPanel chapterId={selectedChapterId} />
-        </section>
+        />
+
+        <WritingBookEditorSection
+          editor={editor}
+          onEditBook={() => setShowEditBook(true)}
+          words={words}
+          approxPages={approxPages}
+          saveStatus={saveStatus}
+          chapterId={selectedChapterId}
+        />
+
+        <WritingBookAiPanelSection chapterId={selectedChapterId} />
       </div>
+
+      <WritingBookModalsSection
+        showEditBook={showEditBook}
+        book={book}
+        setError={setError}
+        setShowEditBook={setShowEditBook}
+        showLaunch={showLaunch}
+        chapters={chapters}
+        handleLaunchBook={handleLaunchBook}
+        setShowLaunch={setShowLaunch}
+        isLaunchPending={isLaunchPending}
+        error={error}
+      />
     </div>
   );
 }
