@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCreateBook, useDeleteBook, useBooksByAuthor } from "../../../hooks/useBooks";
+import { useDeleteBook, useBooksByAuthor } from "../../../hooks/useBooks";
 import { checkIfGuest } from "../../../utils/checkIfGuest";
 import { useCurrentUserId } from "../../../hooks/useUser";
 
@@ -15,7 +15,6 @@ export function useWritingDashboardPage() {
     booksByAuthorError,
   } = useBooksByAuthor(currentUserId);
 
-  const createBook = useCreateBook();
   const deleteBook = useDeleteBook();
 
   useEffect(() => {
@@ -23,12 +22,6 @@ export function useWritingDashboardPage() {
       navigate("/login", { replace: true, state: { from: "/writing" } });
     }
   }, [navigate]);
-
-  const handleCreate = (payload) => {
-    createBook.mutate(payload, {
-      onSuccess: () => setNewBookModalOpen(false),
-    });
-  };
 
   const handleDelete = (bookId) => {
     if (!window.confirm("Delete this draft book? This cannot be undone.")) return;
@@ -48,8 +41,6 @@ export function useWritingDashboardPage() {
     booksByAuthor,
     isBooksByAuthorLoading,
     booksByAuthorError,
-    createBook,
-    handleCreate,
     handleDelete,
   };
 }

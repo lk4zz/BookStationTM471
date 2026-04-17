@@ -10,11 +10,7 @@ function ReadingCanvasSection({
 }) {
   return (
     <section className={styles.middleSection}>
-      <div className={styles.aboveCanvas}>
-        <h1 className={styles.chapterTitle}>
-          {chapter?.book?.name ?? "Loading…"}
-        </h1>
-      </div>
+
       <div className={styles.canvasContainer}>
         {isContentLoading ? (
           <div className={styles.canvasPad}>

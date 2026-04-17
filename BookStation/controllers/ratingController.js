@@ -3,15 +3,15 @@ const catchAsync = require('../middlewares/catchAsync');
 
 const addOrUpdateRating = catchAsync(async (req, res) => {
   const { bookId } = req.params;
-  const { value } = req.body;
+  const { rating } = req.body;
   const currentUserId = req.user.userId;
 
-  const rating = await ratingServices.addOrUpdateRating(bookId, currentUserId, value);
+  const newRating = await ratingServices.addOrUpdateRating(bookId, currentUserId, rating);
 
   res.status(200).json({
     success: true,
     message: "Rating saved successfully",
-    data: rating,
+    data: newRating,
   });
 });
 

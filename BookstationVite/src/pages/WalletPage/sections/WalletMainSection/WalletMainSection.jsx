@@ -9,10 +9,11 @@ function WalletMainSection({
   standardBundles,
   premiumBundles,
   walletHeaderClassName,
+  navigate,
 }) {
   return (
     <div className={styles.pageContainer}>
-      <WalletHeader className={walletHeaderClassName} balance={balance} />
+      <WalletHeader className={walletHeaderClassName} balance={balance} navigate={navigate} />
 
       <main className={styles.mainContent}>
         <StoreHero />

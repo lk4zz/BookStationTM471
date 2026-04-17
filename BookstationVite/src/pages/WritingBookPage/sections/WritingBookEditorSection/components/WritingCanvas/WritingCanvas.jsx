@@ -16,14 +16,6 @@ function WritingCanvas({ editor, words, approxPages, saveStatus, chapterId}) {
       <div className={styles.sheet}>
         {editor && <EditorContent editor={editor} className={styles.editorRoot} />}
       </div>
-
-      {/* <footer className={styles.footer}>
-        <span className={styles.hint}>
-          ~{words} words · approx. {approxPages} page{approxPages !== 1 ? "s" : ""}{" "}
-          (display only)
-        </span>
-        <span className={styles.saveState}>{saveStatus}</span>
-      </footer> */}
     </div>
   );
 }

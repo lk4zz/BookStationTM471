@@ -20,13 +20,14 @@ function WritingPageSidePanel({
   onPublishChapter,
   bookStatus,
   error,
+  navigate,
 }) {
   const isDraft = book.status === "DRAFT";
 
   return (
     <aside className={styles.panel}>
       <div className={styles.header}>
-        <OnBackButton fallbackPath="/writing" className={styles.back} />
+        <OnBackButton onClick={() => navigate("/writing")} />
 
         <div className={styles.headerRight}>
           {isDraft ? (

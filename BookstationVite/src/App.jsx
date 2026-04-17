@@ -13,6 +13,7 @@ import WalletPage from "./pages/WalletPage/WalletPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import WritingDashboardPage from "./pages/WritingDashboardPage/WritingDashboardPage";
 import WritingBookPage from "./pages/WritingBookPage/WritingBookPage";
+import RadarTestPage from "./pages/RadarTestPage";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SingupPage />} />
         <Route path="/explore" element={<Explore />} />
+        <Route path="/radar-test" element={<RadarTestPage />} />
         <Route path="/books/:type" element={<GenresPage />} />
         <Route path="/library" element={<LibraryPage />} />
         <Route path="/book/:id" element={<BookDetailsPage />} />

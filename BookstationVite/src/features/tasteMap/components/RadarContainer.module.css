@@ -1,0 +1,134 @@
+/* Same theme tokens as RadarMap.wrap so embedded map inherits colors */
+.card {
+  --rm-bg-surface: #0f172a;
+  --rm-bg-radar: #020617;
+  --rm-text-primary: #f8fafc;
+  --rm-text-muted: #94a3b8;
+  --rm-border: rgba(255, 255, 255, 0.1);
+  --rm-ring: rgba(255, 255, 255, 0.08);
+  --rm-crosshair: rgba(255, 255, 255, 0.04);
+  --rm-accent-user: #f97316;
+  --rm-accent-book: #38bdf8;
+  --rm-accent-top: #a855f7;
+
+  text-align: left;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  background: var(--rm-bg-surface);
+  border: 1px solid var(--rm-border);
+  border-radius: 16px;
+  color: var(--rm-text-primary);
+  font-family: system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
+}
+
+.cardTitle {
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.35rem;
+}
+
+.cardHint {
+  font-size: 0.88rem;
+  color: var(--rm-text-muted);
+  margin: 0 0 1rem;
+  line-height: 1.45;
+  max-width: 40rem;
+}
+
+.label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--rm-text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.textarea {
+  width: 100%;
+  max-width: 280px;
+  padding: 0.55rem 0.65rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  border: 1px solid var(--rm-border);
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--rm-text-primary);
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.textarea::placeholder {
+  color: var(--rm-text-muted);
+  opacity: 0.7;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.15);
+}
+
+.actions {
+  margin-top: 0.75rem;
+}
+
+.button {
+  padding: 0.5rem 1.1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  background: rgba(56, 189, 248, 0.12);
+  color: var(--rm-text-primary);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: rgba(56, 189, 248, 0.2);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--rm-accent-book);
+  outline-offset: 2px;
+}
+
+.invalid {
+  margin: 0.85rem 0 0;
+  font-size: 0.88rem;
+  color: #fca5a5;
+}
+
+.inlineState {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rm-border);
+}
+
+.inlineText {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--rm-text-muted);
+}
+
+.error {
+  margin: 1.25rem 0 0;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rm-border);
+  font-size: 0.9rem;
+  color: #fca5a5;
+}
+
+.radarBody {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rm-border);
+}

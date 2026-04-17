@@ -16,7 +16,11 @@ function LandingPage() {
     genresError,
     trendingBooks,
     genres,
+    viewsByBookId,
+    ratingsByBookId,
     randomGenre,
+    genreSpotlightBooks,
+    isGenreSpotlightBooksLoading,
   } = useLandingPage();
 
   if (isTrendingLoading) return <p className="loading"> Loading...</p>;
@@ -36,9 +40,17 @@ function LandingPage() {
         trendingBooks={trendingBooks}
         isTrendingLoading={isTrendingLoading}
         trendingError={trendingError}
+        viewsByBookId={viewsByBookId}
+        ratingsByBookId={ratingsByBookId}
       />
 
-      <LandingGenreSpotlightSection randomGenre={randomGenre} />
+      <LandingGenreSpotlightSection
+        randomGenre={randomGenre}
+        genreSpotlightBooks={genreSpotlightBooks}
+        isGenreSpotlightBooksLoading={isGenreSpotlightBooksLoading}
+        viewsByBookId={viewsByBookId}
+        ratingsByBookId={ratingsByBookId}
+      />
 
       <LandingGenrePickSection genres={genres} />
 

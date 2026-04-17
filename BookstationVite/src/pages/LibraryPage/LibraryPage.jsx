@@ -43,15 +43,6 @@ function LibraryPage() {
     );
   }
 
-  if (isError && error?.status === 404) {
-    return (
-      <div className={styles.pageWrapper}>
-        <NavBar />
-        <LibraryEmptySection />
-      </div>
-    );
-  }
-
   if (isError) {
     return (
       <div className={styles.pageWrapper}>
@@ -59,6 +50,16 @@ function LibraryPage() {
         <LibraryErrorSection
           message={error?.message || "Oops! Something went wrong loading your library."}
         />
+      </div>
+    );
+  }
+
+  const items = libraryItems ?? [];
+  if (items.length === 0) {
+    return (
+      <div className={styles.pageWrapper}>
+        <NavBar />
+        <LibraryEmptySection />
       </div>
     );
   }

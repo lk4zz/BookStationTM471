@@ -4,8 +4,15 @@ import { useCommentsByBook } from "../../../hooks/useComments";
 import { useViews } from "../../../hooks/useViews";
 import { useState } from "react";
 import { useAddComment } from "../../../hooks/useComments";
+import { useRatings } from "../../../hooks/useRatings";
 
 export function useBookDetails(numericId) {
+
+  const [ratingModal, setRatinModal] = useState(false);
+
+  const OpenRatinModal = () => setRatinModal(true);
+  const closeRatinModal = () => setRatinModal(false);
+
   const [commentInput, setCommentInput] = useState("");
   const submitCommentMutation = useAddComment(numericId);
 
@@ -21,12 +28,13 @@ export function useBookDetails(numericId) {
   const { book, isBookLoading, bookError } = useBookById(numericId);
   const { chapters, isChapterLoading } = useChaptersByBook(numericId);
   const { comments, isCommentsLoading } = useCommentsByBook(numericId);
+  const { ratingAverage, ratingCount } = useRatings(numericId);
   const { totalViews } = useViews(numericId);
   const publishedChapters = (Array.isArray(chapters) ? chapters : []).filter(
     (chapter) => chapter.isPublished
   );
 
-  return {
+    return {
     book,
     isBookLoading,
     bookError,
@@ -40,5 +48,10 @@ export function useBookDetails(numericId) {
     handleAddComment,
     submitCommentMutation,
     publishedChapters,
+    ratingModal,
+    OpenRatinModal,
+    closeRatinModal,
+    ratingAverage,
+    ratingCount,
   };
 }

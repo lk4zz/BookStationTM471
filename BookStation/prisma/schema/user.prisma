@@ -25,4 +25,5 @@ model User {
     followers Followers[] @relation("FollowingRelation")
     readingProgress ReadingProgress[]
     pageChunks  PageChunk[]
+    tasteSnapshots UserTasteSnapshot[]
 }

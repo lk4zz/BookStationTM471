@@ -20,7 +20,8 @@
 /* check these later might have to remove and make global css */
 .chapterList{
   margin: 20% 0 0 0;
-  width: 100%;
+  width: 80%;
+  justify-self: center;
   
 }
 .chaptercolumn {

@@ -1,5 +1,6 @@
 import styles from "./ReadingCanvas.module.css";
 import { useReadingPaginate } from "./useReadingPaginate";
+import { Loading } from "../../../../../../components/UI/Loading/Loading";
 
 function ReadingCanvas({ page, isPagesLoading, chapter }) {
   const html = page?.text ?? "";
@@ -12,7 +13,7 @@ function ReadingCanvas({ page, isPagesLoading, chapter }) {
   const { wrapRef, pageBodies } = useReadingPaginate(html, chapter?.title, classNames);
 
   if (isPagesLoading) {
-    return <p className="loading">Loading...</p>;
+    return <Loading variant="inline"/>;
   }
 
   return (

@@ -8,6 +8,7 @@ import WritingBookEditorSection from "./sections/WritingBookEditorSection/Writin
 import WritingBookAiPanelSection from "./sections/WritingBookAiPanelSection/WritingBookAiPanelSection";
 import WritingBookModalsSection from "./sections/WritingBookModalsSection/WritingBookModalsSection";
 import { useWritingBookPage } from "./features/useWritingBookPage";
+import { useNavigate } from "react-router-dom";
 
 function WritingBookPage() {
   const { bookId } = useParams();
@@ -41,6 +42,7 @@ function WritingBookPage() {
     showLaunch,
     setShowLaunch,
   } = useWritingBookPage(numericBookId);
+  const navigate = useNavigate();
 
   if (bookLoading) {
     return <WritingBookLoadingSection />;
@@ -72,6 +74,7 @@ function WritingBookPage() {
           onPublishChapter={onPublishChapter}
           bookStatus={book.status}
           error={error}
+          navigate={navigate}
         />
 
         <WritingBookEditorSection

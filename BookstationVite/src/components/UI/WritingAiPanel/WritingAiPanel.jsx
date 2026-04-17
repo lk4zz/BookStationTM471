@@ -15,9 +15,6 @@ function WritingAiPanel({ chapterId }) {
     <aside className={styles.panel}>
       <div>
         <h2 className={styles.title}>Writing assistant</h2>
-        {/* <p className={styles.placeholder}>
-          AI tools for brainstorming, tone, and continuity will appear here.
-        </p> */}
       </div>
       <AIChat messages={messages} />
       <InputText

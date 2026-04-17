@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "seed": "prisma db seed"
+    "seed": "prisma db seed",
+    "gutenberg:ingest": "node ./scripts/gutenbergIngest.js"
   },
   "dependencies": {
     "@prisma/client": "^6.19.2",

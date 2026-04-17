@@ -6,6 +6,8 @@ function LandingTrendingSection({
   trendingBooks,
   isTrendingLoading,
   trendingError,
+  viewsByBookId = {},
+  ratingsByBookId = {},
 }) {
   return (
     <section className={styles.showcase}>
@@ -20,7 +22,12 @@ function LandingTrendingSection({
       ) : (
         <div className="gridContainer">
           {trendingBooks?.map((book) => (
-            <BookCoverCard key={book.id} book={book} />
+            <BookCoverCard
+              key={book.id}
+              book={book}
+              totalViews={viewsByBookId[book.id]}
+              ratingAverage={ratingsByBookId[book.id]?.ratingAverage}
+            />
           ))}
 
           <CreateBookCard />

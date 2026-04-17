@@ -1,0 +1,290 @@
+/* Inject local dark-mode variables to ensure UI integrity regardless of parent */
+.wrap {
+  --rm-bg-surface: #0f172a;       /* Deep slate */
+  --rm-bg-radar: #020617;         /* Almost black for the radar well */
+  --rm-text-primary: #f8fafc;
+  --rm-text-muted: #94a3b8;
+  --rm-border: rgba(255, 255, 255, 0.1);
+  --rm-ring: rgba(255, 255, 255, 0.08);
+  --rm-crosshair: rgba(255, 255, 255, 0.04);
+  --rm-accent-user: #f97316;      /* Vibrant Orange */
+  --rm-accent-book: #38bdf8;      /* Neon Cyan */
+  --rm-accent-top: #a855f7;       /* Purple for top 3 */
+  
+  text-align: left;
+  padding: 1.5rem;
+  background: var(--rm-bg-surface);
+  border: 1px solid var(--rm-border);
+  border-radius: 16px;
+  margin-top: 1rem;
+  color: var(--rm-text-primary);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Inside RadarContainer card: no second frame */
+.wrapEmbedded {
+  text-align: left;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.25rem;
+}
+
+.statusBadge {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--rm-text-muted);
+}
+
+.blurb, .fallback {
+  font-size: 0.95rem;
+  color: var(--rm-text-muted);
+  margin: 0;
+  line-height: 1.5;
+  max-width: 480px;
+}
+
+/* --- Control Panel & Custom Slider --- */
+.controlPanel {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--rm-border);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.sliderLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.sliderTextRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--rm-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sliderValue {
+  font-family: ui-monospace, monospace;
+  color: var(--rm-accent-book);
+  font-size: 1rem;
+}
+
+/* Custom Webkit Slider */
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--rm-accent-book);
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+  transition: transform 0.1s;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* --- Radar SVG Canvas --- */
+.radarContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  background: var(--rm-bg-radar);
+  border: 1px solid var(--rm-border);
+  border-radius: 12px;
+  padding: 2rem;
+  overflow: hidden;
+}
+
+.svgShell {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  aspect-ratio: 1 / 1;
+}
+
+.svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.radarBase {
+  fill: #020617; /* Matches bg-radar */
+}
+
+.crosshair {
+  stroke: var(--rm-crosshair);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+
+.guideRing {
+  stroke: var(--rm-ring);
+  stroke-width: 1.5;
+}
+
+.ringLabel {
+  fill: var(--rm-text-muted);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* --- Nodes --- */
+.userDot {
+  fill: var(--rm-accent-user);
+  animation: pulse 3s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+.bookGroup {
+  cursor: pointer;
+}
+
+.bookDot {
+  fill: var(--rm-accent-book);
+  stroke: var(--rm-bg-radar);
+  stroke-width: 2;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bookDotTop {
+  fill: var(--rm-accent-top);
+}
+
+.bookDotLibrary {
+  fill: #facc15;
+  stroke: rgba(15, 23, 42, 0.9);
+}
+
+.bookGroup:hover .bookDot,
+.bookGroup:focus-within .bookDot {
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+/* --- Glassmorphic Tooltip --- */
+.tooltip {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 260px;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  animation: slideIn 0.2s ease-out forwards;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.tooltipRank {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--rm-accent-book);
+  margin-bottom: 0.25rem;
+}
+
+.tooltipTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tooltipLibrary {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #facc15;
+  margin: -0.35rem 0 0.65rem;
+}
+
+.tooltipGrid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.4rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--rm-border);
+}
+
+.tooltipLabel {
+  color: var(--rm-text-muted);
+}
+
+.tooltipValue {
+  color: #fff;
+  font-weight: 500;
+  text-align: right;
+}
+
+.tooltipAction {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--rm-text-muted);
+  text-align: right;
+}

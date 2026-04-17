@@ -34,17 +34,17 @@ const getForYouRecommendations = catchAsync(async (req, res) => {
     // when user has profiletaste:
     const userTasteVector = JSON.parse(user.tasteProfile);
 
-    // fetch the user's library books to exclude them from the recommendations
-    const libraryBooks = await libraryServices.getLibraryBooks( userId );
+    const libraryBooks = await libraryServices.getLibraryBooks(userId);
     const libraryBookIds = libraryBooks.map((lb) => lb.bookId);
-
-
-    //  pass the library book ids to exclude them from the recommendations
-    const personalizedBooks = await recommendationService.findRecommendations(userTasteVector, libraryBookIds, limit);
+    const personalizedBooks = await recommendationService.findRecommendations(
+        userTasteVector,
+        libraryBookIds,
+        limit
+    );
 
     res.status(200).json({
         success: true,
-        isPersonalized: true, // flag indicating the AI generated this list (basically is personalized)
+        isPersonalized: true,
         count: personalizedBooks.length,
         data: personalizedBooks,
     });

@@ -3,7 +3,7 @@ import WalletLoadingSection from "./sections/WalletLoadingSection/WalletLoadingS
 import WalletErrorSection from "./sections/WalletErrorSection/WalletErrorSection";
 import WalletMainSection from "./sections/WalletMainSection/WalletMainSection";
 import { useWalletPage } from "./features/useWalletPage";
-
+import { useNavigate } from "react-router-dom";
 function WalletPage() {
   const {
     balance,
@@ -12,6 +12,7 @@ function WalletPage() {
     standardBundles,
     premiumBundles,
   } = useWalletPage();
+  const navigate = useNavigate();
 
   if (isWalletLoading) return <WalletLoadingSection />;
   if (walletError)
@@ -27,6 +28,7 @@ function WalletPage() {
       standardBundles={standardBundles}
       premiumBundles={premiumBundles}
       walletHeaderClassName={styles.walletHeader}
+      navigate={navigate}
     />
   );
 }
