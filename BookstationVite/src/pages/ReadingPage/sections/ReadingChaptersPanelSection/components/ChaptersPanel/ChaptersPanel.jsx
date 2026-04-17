@@ -46,8 +46,7 @@ function ChaptersPanel({ chapter, chapters, isChapterLoading }) {
 
       <section className={styles.upperPanel}>
         <OnBackButton
-          fallbackPath={chapter?.book?.id ? `/book/${chapter.book.id}` : "/explore"}
-          preferDestinationOverHistory
+          onClick={() => navigate(-1)}
         />
         <h3>{chapter.book.name}</h3>
       </section>
@@ -76,7 +75,7 @@ function ChaptersPanel({ chapter, chapters, isChapterLoading }) {
                 chapterTitle={selectedChapter.title}
                 onUnlock={() => {
                   onUnlock(selectedChapter.id)
-                  onClose
+                  onClose()
                 }}
               />
             )}

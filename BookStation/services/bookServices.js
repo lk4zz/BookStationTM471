@@ -65,6 +65,7 @@ const getBookByGenre = async (genreId) => {
       },
     },
     include: {
+      author: { select: { name: true } },
       bookGenres: {
         include: { bookGenre: true },
       },

@@ -25,8 +25,13 @@ function BookDetailsPage() {
     chapters,
     isChapterLoading,
     publishedChapters,
+    ratingModal,
+    OpenRatinModal,
+    closeRatinModal,
+    ratingAverage,
+    ratingCount,
   } = useBookDetails(bookId);
-
+  
   if (!Number.isFinite(bookId)) {
     return <p className={styles.error}>Invalid book link.</p>;
   }
@@ -43,6 +48,11 @@ function BookDetailsPage() {
           <BookDetails
             book={book}
             views={totalViews}
+            ratingModal={ratingModal}
+            OpenRatinModal={OpenRatinModal}
+            closeRatinModal={closeRatinModal}
+            ratingAverage={ratingAverage}
+            ratingCount={ratingCount}
           />
         </section>
 

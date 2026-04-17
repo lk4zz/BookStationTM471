@@ -9,14 +9,17 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { linkStateFromHere } from "../../../../utils/navigation";
 import { useGetProgress } from "../../../../hooks/useProgress";
 import { useChaptersByBook } from "../../../../hooks/useChapters";
+import RatingModal from "../../../../components/UI/RatingModal/RatingModal";
 
-function BookDetails({ book, views }) {
+function BookDetails({ book, views, ratingModal, OpenRatinModal, closeRatinModal, ratingAverage, ratingCount }) {
   const navigate = useNavigate();
   const location = useLocation();
+  console.log(ratingAverage);
+  console.log(ratingCount);
 
   const formattedBook = formatBookData(book);
   if (!formattedBook) return null;
-  const { name, bookId, coverUrl, ratingAverage, ratingCount, authorName, userId } =
+  const { name, bookId, coverUrl, authorName, userId } =
     formattedBook;
   const { data: libraryBooks } = useLibraryBooks();
   const isBookInLibrary = libraryBooks?.some((book) => book.bookId === bookId);
@@ -59,15 +62,31 @@ function BookDetails({ book, views }) {
 
           <div className={styles.statsRow}>
             <div className={styles.statItem}>
-              <Rating
-                initialValue={ratingAverage}
-                readonly
-                allowFraction
-                size={18}
-                fillColor="#eab308"
-                emptyColor="#3f3f46"
-              />
-              <span>({ratingCount} votes)</span>
+              <div
+                onClick={OpenRatinModal}
+                style={{ cursor: 'pointer' }} // Add a pointer cursor to indicate it's clickable
+              >
+                <Rating
+                  initialValue={ratingAverage}
+                  readonly // Keep this so they can't "drag" to change stars here
+                  allowFraction
+                  size={18}
+                  fillColor="#eab308"
+                  emptyColor="#3f3f46"
+                />
+              </div>
+
+
+              {ratingModal && (
+                <div>
+                  <RatingModal bookId={bookId}
+                   closeRatinModal={closeRatinModal}
+                    />
+                </div>
+              )}
+
+
+                <span>({ratingCount} votes)</span>
             </div>
             <div className={styles.statItem}>
               <EyeIcon className={styles.iconEye} />
@@ -79,7 +98,7 @@ function BookDetails({ book, views }) {
             <button
               className={styles.primaryBtn}
               onClick={handleReadClick}
-              disabled={isDataLoading }
+              disabled={isDataLoading}
             >
               {isDataLoading ? "Loading..." :
                 progress ? "Continue Reading" : "Read First Chapter"}

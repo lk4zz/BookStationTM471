@@ -5,4 +5,5 @@
   border-radius: var(--radius-lg);
   background: var(--color-bg-panel);
   overflow: hidden;
+  max-width: 25%;
 }

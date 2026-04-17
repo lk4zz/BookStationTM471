@@ -20,11 +20,14 @@ function ProfileMainSection({
   handleSubmit,
   booksByAuthor,
   isBooksByAuthorLoading,
+  viewsByBookId,
+  ratingsByBookId,
+  navigate,
 }) {
   return (
     <div className={styles.pageInner}>
       <header className={styles.pageHeader}>
-        <OnBackButton fallbackPath="/explore" />
+        <OnBackButton onClick={() => navigate(-1)} />
       </header>
 
       <div className={styles.profileCard}>
@@ -59,6 +62,8 @@ function ProfileMainSection({
         books={booksByAuthor}
         authorName={user.name}
         isLoading={isBooksByAuthorLoading}
+        viewsByBookId={viewsByBookId}
+        ratingsByBookId={ratingsByBookId}
       />
     </div>
   );

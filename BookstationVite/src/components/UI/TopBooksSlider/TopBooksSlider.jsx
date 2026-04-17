@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css";
 import { Link, useLocation } from "react-router-dom";
@@ -6,16 +6,16 @@ import { linkStateFromHere } from "../../../utils/navigation";
 import styles from "./TopBooksSlider.module.css";
 import { EyeIcon, StarIcon } from "../Icons/IconLibrary";
 import { addView } from "../../../api/views";
-import { useViews } from "../../../hooks/useViews";
 import { formatBookData } from "../../../utils/bookUtils";
 
-function SlideContent({ book }) {
+function SlideContent({ book, totalViews, ratingAverage }) {
   const location = useLocation();
   const formattedBook = formatBookData(book);
   if (!formattedBook) return null;
 
-  const { name, bookId, coverUrl, description, ratingAverage, authorName } = formattedBook;
-  const { totalViews } = useViews(bookId);
+  const { name, bookId, coverUrl, description, ratingAverage: bookRatingAvg, authorName } =
+    formattedBook;
+  const displayRating = ratingAverage ?? bookRatingAvg;
 
   return (
     <Link
@@ -36,7 +36,9 @@ function SlideContent({ book }) {
           <p>by {authorName}</p>
           <div className={styles.statItem}>
             <StarIcon className={styles.iconStar} />
-            {ratingAverage?.toFixed(1) ?? "0.0"}
+            {displayRating != null && !Number.isNaN(Number(displayRating))
+              ? Number(displayRating).toFixed(1)
+              : "0.0"}
           </div>
           <div className={styles.statItem}>
             <EyeIcon className={styles.iconEye} />
@@ -52,7 +54,11 @@ function SlideContent({ book }) {
   );
 }
 
-function TopBooksSlider({ books = [] }) {
+function TopBooksSlider({
+  books = [],
+  viewsByBookId = {},
+  ratingsByBookId = {},
+}) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   if (!books.length) return null;
@@ -85,7 +91,11 @@ function TopBooksSlider({ books = [] }) {
         >
           {books.map((book) => (
             <SplideSlide key={book.id ?? book.name}>
-              <SlideContent book={book} />
+              <SlideContent
+                book={book}
+                totalViews={viewsByBookId[book.id]}
+                ratingAverage={ratingsByBookId[book.id]?.ratingAverage}
+              />
             </SplideSlide>
           ))}
         </Splide>

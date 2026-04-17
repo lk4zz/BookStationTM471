@@ -1,6 +1,4 @@
 import { renderToStaticMarkup } from "react-dom/server";
-import { useBooksByGenre } from "../../../../../../hooks/useBooks";
-import { useViewsByBookIds } from "../../../../../../hooks/useViews";
 import {
   ActionGenreBg,
   ComedyGenreBg,
@@ -30,10 +28,13 @@ const buildSvgBackgroundImage = (BackgroundComponent) => {
 const normalizeGenreType = (genreType = "") =>
   genreType.toLowerCase().replace(/[^a-z0-9]/g, "");
 
-function GenreSection({ genre }) {
-  const { books, isBooksLoading } = useBooksByGenre(genre.id);
-  const { viewsByBookId } = useViewsByBookIds((books ?? []).map((bookItem) => bookItem.id));
-
+function GenreSection({
+  genre,
+  books = [],
+  isBooksLoading,
+  viewsByBookId = {},
+  ratingsByBookId = {},
+}) {
   const genreTitlePhrases = {
     Action: "Feel the adrenaline with nonstop action",
     Fantasy: "Escape into worlds beyond imagination",
@@ -105,7 +106,11 @@ function GenreSection({ genre }) {
         <p className={styles.genreSub}>{subphrase}</p>
       </div>
       <div className={styles.carouselWrap}>
-        <BooksCarousel books={books} viewsByBookId={viewsByBookId} />
+        <BooksCarousel
+          books={books}
+          viewsByBookId={viewsByBookId}
+          ratingsByBookId={ratingsByBookId}
+        />
       </div>
     </div>
   );

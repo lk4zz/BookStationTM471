@@ -5,6 +5,7 @@ import ProfileLoadingSection from "./sections/ProfileLoadingSection/ProfileLoadi
 import ProfileMessageSection from "./sections/ProfileMessageSection/ProfileMessageSection";
 import ProfileMainSection from "./sections/ProfileMainSection/ProfileMainSection";
 import { useProfilePage } from "./features/useProfilePage";
+import { useNavigate } from "react-router-dom";
 
 function ProfilePage() {
   const { authorId } = useParams();
@@ -18,6 +19,8 @@ function ProfilePage() {
     setIsEditing,
     booksByAuthor,
     isBooksByAuthorLoading,
+    viewsByBookId,
+    ratingsByBookId,
     formData,
     isUpdating,
     updateError,
@@ -26,6 +29,7 @@ function ProfilePage() {
     handleSubmit,
     displayImage,
   } = useProfilePage(authorId);
+  const navigate = useNavigate();
 
   if (isUserLoading) {
     return (
@@ -71,6 +75,9 @@ function ProfilePage() {
         handleSubmit={handleSubmit}
         booksByAuthor={booksByAuthor}
         isBooksByAuthorLoading={isBooksByAuthorLoading}
+        viewsByBookId={viewsByBookId}
+        ratingsByBookId={ratingsByBookId}
+        navigate={navigate}
       />
     </div>
   );

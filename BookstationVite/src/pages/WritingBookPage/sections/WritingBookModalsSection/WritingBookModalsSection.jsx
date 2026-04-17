@@ -1,4 +1,4 @@
-import BookDetailsPanel from "./components/BookDetailsPanel/BookDetailsPanel";
+import EditBookModal from "../../../../components/UI/EditBookModal/EditBookModal";
 import LaunchModal from "./components/LaunchModal/LaunchModal";
 
 function WritingBookModalsSection({
@@ -16,7 +16,7 @@ function WritingBookModalsSection({
   return (
     <>
       {showEditBook && (
-        <BookDetailsPanel
+        <EditBookModal
           book={book}
           onError={setError}
           onClose={() => setShowEditBook(false)}

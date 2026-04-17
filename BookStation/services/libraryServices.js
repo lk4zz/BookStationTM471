@@ -1,4 +1,3 @@
-const { NOTFOUND } = require("dns");
 const prisma = require("../db");
 const BadRequestError = require("../errors/BadRequestError");
 const NotFoundError = require("../errors/NotFoundError");
@@ -57,10 +56,10 @@ const getLibraryBooks = async (currentUserId) => {
     where: { userId: currentUserId },
   });
   if (!library) {
-    throw new NotFoundError("YOU DONT HAVE A LIBRARY YET.");
+    return [];
   }
 
-  const libraryBooks = await prisma.libraryBook.findMany({
+  return prisma.libraryBook.findMany({
     where: {
       libraryId: library.id,
     },
@@ -77,11 +76,6 @@ const getLibraryBooks = async (currentUserId) => {
       },
     },
   });
-
-  if (!libraryBooks || libraryBooks.length === 0) {
-    throw new NotFoundError("YOU DONT HAVE ANY BOOKS IN YOUR LIBRARY.");
-  }
-  return libraryBooks;
 };
 
 const removeBookFromLibrary = async (currentUserId, bookId) => {

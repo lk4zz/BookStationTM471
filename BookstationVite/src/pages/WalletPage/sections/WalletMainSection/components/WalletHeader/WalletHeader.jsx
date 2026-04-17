@@ -3,11 +3,11 @@ import styles from "./WalletHeader.module.css";
 import OnBackButton from "../../../../../../components/UI/Buttons/OnBackButtons";
 import { WalletIcon, CoinsIcon } from "../../../../../../components/UI/Icons/IconLibrary";
 
-function WalletHeader({ balance }) {
+function WalletHeader({ balance, navigate }) {
   return (
     <header className={styles.header}>
       <div className={styles.headerLeft}>
-        <OnBackButton fallbackPath="/explore" />
+        <OnBackButton onClick={() => navigate(-1)} />
         <h1 className={styles.title}>Store</h1>
       </div>
       

@@ -7,8 +7,6 @@ export const formatBookData = (book) => {
     name = "Untitled",
     description = "",
     coverImage = "",
-    ratingAverage = 0,
-    ratingCount = 0,
     author,
     id,
     userId,
@@ -24,10 +22,8 @@ export const formatBookData = (book) => {
     name,
     description,
     coverUrl: resolvedCoverUrl,
-    ratingAverage,
-    ratingCount,
     authorName: author?.name || "Unknown",
-    bookId : id,
+    bookId: id,
     userId,
   };
 

@@ -4,6 +4,8 @@
   display: block;
 }
 
+
+
 .card {
   position: relative;
   width: 100%;
@@ -40,10 +42,19 @@
   opacity: 1;
 }
 
+.title{
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 1.8rem;
+  padding: 0;
+  color: var(--color-text-primary);
+
+}
+
 .author {
   font-family: var(--font-body);
-  font-size: 0.75rem;
-  color: #e4e4e7;
+  font-size: 0.6rem;
+  color: var(--color-text-secondary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

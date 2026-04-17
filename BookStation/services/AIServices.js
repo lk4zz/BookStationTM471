@@ -13,7 +13,7 @@ const client = new OpenAI({
     baseURL: "https://api.groq.com/openai/v1",
 });
 
-const PromptAI = async (input, currentUserId) => {
+const PromptAI = async (input) => {
     try {
         let messages = Array.isArray(input?.messages) ? input.messages : [];
         const chapterId = input?.chapterId;
@@ -30,7 +30,7 @@ const PromptAI = async (input, currentUserId) => {
         // --- RAG RETRIEVAL PIPELINE ---
         let systemPromptContext = "";
 
-        if (chapterId && currentUserId) {
+        if (chapterId) {
             const userQuestion = sanitizedMessages[sanitizedMessages.length - 1].content;
 
             const queryVector = await EmbeddingService.generateEmbedding(userQuestion);
@@ -38,7 +38,6 @@ const PromptAI = async (input, currentUserId) => {
             const chunks = await prisma.pageChunk.findMany({
                 where: {
                     chapterId: parseInt(chapterId, 10),
-                    userId: currentUserId
                 }
             });
 

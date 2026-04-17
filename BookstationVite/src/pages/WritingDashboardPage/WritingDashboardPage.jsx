@@ -1,7 +1,7 @@
 import NavBar from "../../components/UI/NavBar/NavBar";
+import EditBookModal from "../../components/UI/EditBookModal/EditBookModal";
 import styles from "./WritingDashboardPage.module.css";
 import WritingDashboardMainSection from "./sections/WritingDashboardMainSection/WritingDashboardMainSection";
-import WritingDashboardCreateBookModalSection from "./sections/WritingDashboardCreateBookModalSection/WritingDashboardCreateBookModalSection";
 import { useWritingDashboardPage } from "./features/useWritingDashboardPage";
 
 function WritingDashboardPage() {
@@ -14,8 +14,6 @@ function WritingDashboardPage() {
     booksByAuthor,
     isBooksByAuthorLoading,
     booksByAuthorError,
-    createBook,
-    handleCreate,
     handleDelete,
   } = useWritingDashboardPage();
 
@@ -34,12 +32,12 @@ function WritingDashboardPage() {
         onDelete={handleDelete}
       />
 
-      <WritingDashboardCreateBookModalSection
-        open={isNewBookModalOpen}
-        onClose={() => setNewBookModalOpen(false)}
-        onCreate={handleCreate}
-        isPending={createBook.isPending}
-      />
+      {isNewBookModalOpen && (
+        <EditBookModal
+          book={null}
+          onClose={() => setNewBookModalOpen(false)}
+        />
+      )}
     </div>
   );
 }

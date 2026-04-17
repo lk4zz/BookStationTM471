@@ -21,6 +21,10 @@ function Explore() {
     book,
     displayedBooks,
     viewsByBookId,
+    ratingsByBookId,
+    searchResults,
+    isSearchLoading,
+    searchError,
     isSearching,
   } = useExplore();
 
@@ -49,7 +53,11 @@ function Explore() {
 
       {!isSearching && (
         <section>
-          <TrendingSection books={trendingBooks} />
+          <TrendingSection
+            books={trendingBooks}
+            viewsByBookId={viewsByBookId}
+            ratingsByBookId={ratingsByBookId}
+          />
         </section>
       )}
 
@@ -58,7 +66,11 @@ function Explore() {
           searchQuery={searchQuery}
           displayedBooks={displayedBooks}
           viewsByBookId={viewsByBookId}
+          ratingsByBookId={ratingsByBookId}
           forYouBooks={forYouBooks}
+          searchResults={searchResults}
+          isSearchLoading={isSearchLoading}
+          searchError={searchError}
         />
       </section>
     </div>

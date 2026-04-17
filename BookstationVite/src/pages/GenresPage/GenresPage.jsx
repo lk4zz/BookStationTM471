@@ -7,10 +7,19 @@ function GenresPage() {
   const params = useParams();
   const currentGenreType = params.type;
 
-  const { isGenresLoading, genresError, genreType } =
-    useGenresPage(currentGenreType);
+  const {
+    isGenresLoading,
+    genresError,
+    genreType,
+    books,
+    isBooksLoading,
+    booksError,
+    viewsByBookId,
+    ratingsByBookId,
+  } = useGenresPage(currentGenreType);
 
-  if (isGenresLoading) return <p className="loading">loading...</p>;
+  if (isGenresLoading || (genreType && isBooksLoading))
+    return <p className="loading">loading...</p>;
   if (genresError)
     
     return (
@@ -20,7 +29,13 @@ function GenresPage() {
 
   return (
     <div className={styles.mainContent}>
-      <GenresBooksSection genre={genreType.id} />
+      <GenresBooksSection
+        books={books}
+        isBooksLoading={isBooksLoading}
+        booksError={booksError}
+        viewsByBookId={viewsByBookId}
+        ratingsByBookId={ratingsByBookId}
+      />
     </div>
   );
 }
