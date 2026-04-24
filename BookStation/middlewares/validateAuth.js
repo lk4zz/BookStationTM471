@@ -39,7 +39,6 @@ const BadRequestError = require('../errors/BadRequestError');
             return next(new BadRequestError( "email and password are required."));
         }
 
-        //clean the login email so it matches the lowercase one in the database
         email = email.trim().toLowerCase();
         
         if (!emailRegex.test(email)) {

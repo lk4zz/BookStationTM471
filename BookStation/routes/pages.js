@@ -10,7 +10,4 @@ router.put('/primary/:chapterId', verifyToken, validatePage.validatePrimaryPageH
 router.get('/:chapterId',verifyTokenOptional, pageController.getPagesByChapter);
 
 
-// delete all three of those if they didnt come to use later!!!
-router.delete('/:id', verifyToken, pageController.deletePage);
-
 module.exports = router;

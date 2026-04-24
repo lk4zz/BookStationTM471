@@ -20,8 +20,8 @@ require("dotenv").config();
 
 const fs = require("fs");
 const path = require("path");
-const ChunkingService = require("../services/VectorEmbedServces/ChunkingService");
-const EmbeddingService = require("../services/VectorEmbedServces/EmbeddingService");
+const ChunkingService = require("../services/AIServices/VectorServices/PageChunkingService");
+const EmbeddingService = require("../services/AIServices/VectorServices/EmbeddingService");
 const { updateBookMasterEmbedding } = require("../utils/BookDataEmbedder");
 const {
   stripGutenbergBoilerplate,

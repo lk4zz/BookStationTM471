@@ -23,6 +23,7 @@ function WritingBookPage() {
     selectedChapterId,
     selectChapter,
     isBusy,
+    cannotEdit,
     handleStatusChange,
     handleDeleteChapter,
     onCreateChapter,
@@ -41,6 +42,9 @@ function WritingBookPage() {
     setShowEditBook,
     showLaunch,
     setShowLaunch,
+    compWarning,
+    setCompWarning,
+    confirmCompletedStatus,
   } = useWritingBookPage(numericBookId);
   const navigate = useNavigate();
 
@@ -75,6 +79,7 @@ function WritingBookPage() {
           bookStatus={book.status}
           error={error}
           navigate={navigate}
+          compWarning={compWarning}
         />
 
         <WritingBookEditorSection
@@ -84,6 +89,7 @@ function WritingBookPage() {
           approxPages={approxPages}
           saveStatus={saveStatus}
           chapterId={selectedChapterId}
+          cannotEdit={cannotEdit}
         />
 
         <WritingBookAiPanelSection chapterId={selectedChapterId} />
@@ -100,6 +106,10 @@ function WritingBookPage() {
         setShowLaunch={setShowLaunch}
         isLaunchPending={isLaunchPending}
         error={error}
+        compWarning={compWarning}
+        setCompWarning={setCompWarning}
+        confirmCompletedStatus={confirmCompletedStatus}
+        isStatusPending={isStatusPending}
       />
     </div>
   );

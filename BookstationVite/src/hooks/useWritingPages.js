@@ -11,6 +11,8 @@ export const useAuthorPages = (chapterId) => {
     queryKey: ["pages", "author", chapterId],
     queryFn: () => getPagesForAuthor(chapterId),
     enabled: Number.isFinite(chapterId),
+    staleTime: 0,
+    refetchOnMount: "always",
   });
 
   const inner = raw?.data ?? raw;

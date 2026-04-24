@@ -24,8 +24,8 @@ const validateChapterPricing = (pages, requestedPrice, chapterNum) => {
     } else {
         // Determine the MAX ceiling based on word count
         let maxAllowedPrice = 0;
-        
-        if (wordCount <= 500) maxAllowedPrice = 10;
+        if (wordCount <= 50) throw new BadRequestError("Each chapter must have atleast 50 words to publish");
+        else if (wordCount <= 500) maxAllowedPrice = 10;
         else if (wordCount <= 1000) maxAllowedPrice = 20;
         else if (wordCount <= 2000) maxAllowedPrice = 35;
         else if (wordCount <= 3500) maxAllowedPrice = 50;

@@ -20,6 +20,8 @@
   object-fit: cover;
   display: block;
   transition: filter 0.25s ease, transform 0.25s ease;
+    border-radius: 8px;
+
 }
 
 .card:hover .cover {

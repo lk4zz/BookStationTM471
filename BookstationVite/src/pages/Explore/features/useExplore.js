@@ -4,6 +4,8 @@ import {
   useTrendingBooks,
   useForYouBooks,
   useBookById,
+  useBooksByAuthor,
+  useBooksByFollowedAuthors,
 } from "../../../hooks/useBooks";
 import { useMostViewedBook, useViewsByBookIds } from "../../../hooks/useViews";
 import { useRatingsByBookIds } from "../../../hooks/useRatings";
@@ -17,6 +19,8 @@ export function useExplore() {
   const { forYouBooks, isForYouLoading, forYouError } = useForYouBooks();
   const { mostViewedBook } = useMostViewedBook();
   const { book } = useBookById(mostViewedBook);
+  const { booksByFollowedAuthors } = useBooksByFollowedAuthors();
+
 
   const displayedBooks = books.slice(8, 21);
 
@@ -28,8 +32,9 @@ export function useExplore() {
     (forYouBooks ?? []).forEach((b) => ids.add(b.id));
     (trendingBooks ?? []).forEach((b) => ids.add(b.id));
     (searchResults ?? []).forEach((b) => ids.add(b.id));
+    (booksByFollowedAuthors ?? []).forEach((b) => ids.add(b.id));
     return [...ids];
-  }, [displayedBooks, forYouBooks, trendingBooks, searchResults]);
+  }, [displayedBooks, forYouBooks, trendingBooks, searchResults, booksByFollowedAuthors]);
 
   const { viewsByBookId } = useViewsByBookIds(statsBookIds);
   const { ratingsByBookId } = useRatingsByBookIds(statsBookIds);
@@ -56,5 +61,6 @@ export function useExplore() {
     isSearchLoading,
     searchError,
     isSearching,
+    booksByFollowedAuthors,
   };
 }

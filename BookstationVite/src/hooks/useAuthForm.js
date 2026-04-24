@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 export const useAuthForm = (apiFunction, initialData, redirectRoute) => {
   const navigate = useNavigate();
@@ -21,12 +22,19 @@ export const useAuthForm = (apiFunction, initialData, redirectRoute) => {
       const response = await apiFunction(formData);
       if (response?.token) {
         localStorage.setItem("token", response.token);
-        navigate(redirectRoute);
+
+        const decodedUser = jwtDecode(response.token);
+
+        if (decodedUser.roleId === 2) {
+          navigate("/admin");
+        } else {
+          navigate(redirectRoute);
+        }
       }
     } catch (err) {
       setError(
         err?.message ||
-          "Authentication failed. Please try again.",
+        "Authentication failed. Please try again.",
       );
     } finally {
       setIsLoading(false);

@@ -1136,15 +1136,52 @@ async function ensureRoles() {
 async function seedUsers() {
   const userRole = await prisma.userRole.findUnique({ where: { name: "USER" } });
   const adminRole = await prisma.userRole.findUnique({ where: { name: "ADMIN" } });
-  if (!userRole || !adminRole) throw new Error("USER and ADMIN roles must exist before seeding users.");
 
+  if (!userRole || !adminRole) {
+    throw new Error("USER and ADMIN roles must exist before seeding users.");
+  }
+
+  // ==========================================
+  // 1. SECURE SUPER ADMIN SEEDING (via .env)
+  // ==========================================
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+
+  if (!adminEmail || !adminPassword) {
+    console.warn("⚠️ Admin credentials missing in .env. Skipping Super Admin creation.");
+  } else {
+    const adminHash = await bcrypt.hash(adminPassword, 10);
+
+    // Using upsert prevents crashes if you run the seed script multiple times
+    await prisma.user.upsert({
+      where: { email: adminEmail },
+      update: {}, // If the admin already exists, do nothing
+      create: {
+        name: "Super Admin",
+        email: adminEmail,
+        password: adminHash,
+        coinBalance: 0, // Added this since your schema requires it!
+        roleId: adminRole.id,
+      },
+    });
+    console.log(`✅ Super Admin created: ${adminEmail}`);
+  }
+
+  // ==========================================
+  // 2. BLUEPRINT USERS SEEDING
+  // ==========================================
   const passwordHash = await bcrypt.hash("password123", 10);
   const users = [];
 
   for (const bp of userBlueprints) {
     const roleId = bp.role === "ADMIN" ? adminRole.id : userRole.id;
-    const user = await prisma.user.create({
-      data: {
+
+    // Using upsert here as well is highly recommended for blueprints
+    // to prevent errors on multiple seed runs!
+    const user = await prisma.user.upsert({
+      where: { email: bp.email },
+      update: {},
+      create: {
         name: bp.name,
         email: bp.email,
         password: passwordHash,
@@ -1155,6 +1192,7 @@ async function seedUsers() {
     users.push(user);
   }
 
+  console.log(`✅ Seeded ${users.length} blueprint users.`);
   return users;
 }
 

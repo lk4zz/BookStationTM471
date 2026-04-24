@@ -1,0 +1,79 @@
+.pageContainer {
+  min-height: 100vh;
+  background-color: var(--color-bg-app);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+}
+
+.mainContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-6) var(--space-10);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.tabPanels {
+  flex: 1;
+  min-height: 0;
+}
+
+.tabPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.pageTitle {
+  color: var(--color-text-primary);
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.tabRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.tabBtn {
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-soft);
+  background: var(--color-bg-panel);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background var(--transition-speed) var(--ease-standard),
+    border-color var(--transition-speed) var(--ease-standard);
+}
+
+.tabBtn:hover {
+  background: var(--color-bg-hover);
+  border-color: var(--color-border-medium);
+}
+
+.tabBtn[aria-selected="true"] {
+  border-color: var(--color-accent);
+  background: var(--color-bg-elevated);
+}
+
+.meta {
+  margin: 0 0 var(--space-3) 0;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.alertError, .error {
+  background-color: rgba(212, 163, 115, 0.1); /* Using your warning color with low opacity */
+  color: var(--color-warning);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-warning);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}

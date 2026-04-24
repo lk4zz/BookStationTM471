@@ -1,0 +1,31 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.heading {
+  font-family: var(--font-heading);
+  color: var(--color-accent);
+  margin: 0;
+}
+
+.hint {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  margin: 0 0 var(--space-4) 0;
+}
+
+.radarWrapper {
+  background-color: var(--color-bg-panel);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  border: 1px solid var(--color-border-soft);
+  box-shadow: var(--shadow-card);
+  
+  /* Centers the radar container if it doesn't take up full width */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px; 
+}

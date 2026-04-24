@@ -4,8 +4,57 @@ import { useBooksByAuthor } from "../../../hooks/useBooks";
 import { resolveImageUrl } from "../../../utils/ImageUrl";
 import { useViewsByBookIds } from "../../../hooks/useViews";
 import { useRatingsByBookIds } from "../../../hooks/useRatings";
+import {useFollowStatus, useFollow, useUnfollow} from "../../../hooks/useFollow"
+import { useEffect } from "react";
+
 
 export function useProfilePage(authorId) {
+
+  
+
+  const followMutation = useFollow();
+  const unfollowMutation = useUnfollow();
+  const {
+    isFollowingFromServer,
+    isFollowStatusLoading,
+    followStatusError,
+  } = useFollowStatus(authorId);
+
+  const [isFollowing, setIsFollowing] = useState(false);
+
+  useEffect(() => {
+    setIsFollowing(isFollowingFromServer);
+  }, [isFollowingFromServer]);
+
+  const handleToggleFollow = (targetAuthorId) => {
+    if (isFollowing) {
+      unfollowMutation.mutate(targetAuthorId, {
+        onSuccess: () => {
+          setIsFollowing(false);
+        },
+      });
+    } else {
+      followMutation.mutate(targetAuthorId, {
+        onSuccess: () => {
+          setIsFollowing(true);
+        },
+      });
+    }
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   const { currentUserId } = useCurrentUserId();
   const isOwnProfile = currentUserId === Number(authorId);
 
@@ -58,5 +107,9 @@ export function useProfilePage(authorId) {
     handleImageChange,
     handleSubmit,
     displayImage,
+    handleToggleFollow,
+    isFollowing,
+    isFollowStatusLoading,
+    followStatusError,
   };
 }

@@ -6,9 +6,10 @@ const searchServices = require("../services/searchServices");
 const getSearch = async (req, res) => {
 
     const searchQuery = req.query.q;
+    const currentUserId = req.user?.userId;
     const limit = parseInt(req.query.limit) || 10;
 
-    const searchResults = await searchServices.getSearch(searchQuery, limit);
+    const searchResults = await searchServices.getSearch(searchQuery, limit, currentUserId);
 
     res.status(200).json({
         success: true,

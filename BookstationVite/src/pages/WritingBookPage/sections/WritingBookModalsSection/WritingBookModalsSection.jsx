@@ -1,5 +1,6 @@
 import EditBookModal from "../../../../components/UI/EditBookModal/EditBookModal";
 import LaunchModal from "./components/LaunchModal/LaunchModal";
+import CompletedWarningModal from "./components/CompletedWarningModal/CompletedWarningModal";
 
 function WritingBookModalsSection({
   showEditBook,
@@ -12,6 +13,10 @@ function WritingBookModalsSection({
   setShowLaunch,
   isLaunchPending,
   error,
+  compWarning,
+  setCompWarning,
+  confirmCompletedStatus,
+  isStatusPending,
 }) {
   return (
     <>
@@ -33,6 +38,14 @@ function WritingBookModalsSection({
           onClose={() => setShowLaunch(false)}
           isPending={isLaunchPending}
           error={error}
+        />
+      )}
+
+      {compWarning && (
+        <CompletedWarningModal
+          onConfirm={confirmCompletedStatus}
+          onClose={() => setCompWarning(false)}
+          isPending={isStatusPending}
         />
       )}
     </>

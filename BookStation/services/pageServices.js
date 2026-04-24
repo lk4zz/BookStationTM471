@@ -4,8 +4,8 @@ const ForbiddenError = require("../errors/ForbiddenError");
 const unauthroizedError = require("../errors/unauthorizedError");
 const accessDetector = require("../utils/accessDetector");
 const { getOwnedBook } = require("../utils/BookOwnership");
-const { pageChunking } = require("../utils/pageChunking");
-const { checkEditAccess } = require("../utils/checkEditAccess");
+const { pageChunking } = require("../utils/AIUtils/vectorUtils/pageChunking");
+const { checkEditAccess, checkChapterEditAccess } = require("../utils/checkEditAccess");
 
 const getPagesByChapter = async (chapterId, currentUserId) => {
   const accessData = await accessDetector.checkAccess(chapterId, currentUserId);
@@ -63,52 +63,20 @@ const getPagesForAuthor = async (chapterId, currentUserId) => {
   };
 };
 
-const deletePage = async (pageId, currentUserId) => {
-  const page = await prisma.pages.findUnique({
-    where: { id: parseInt(pageId, 10) },
-    select: {
-      id: true,
-      chapterId: true,
-      pageNum: true,
-      chapter: {
-        select: {
-          bookId: true,
-        },
-      }
-
-    }
-  });
-
-  if (!page) {
-    throw new NotFoundError("PAGE NOT FOUND");
-  }
-  const { book } = await getOwnedBook(page.chapter.bookId, currentUserId);
-  await checkEditAccess(book);
-
-  await prisma.pages.delete({
-    where: { id: parseInt(pageId, 10) },
-  });
-
-  await prisma.pages.updateMany({  //might need to remove later since content is only in page 1
-    where: {
-      chapterId: page.chapterId,
-      pageNum: { gt: page.pageNum }
-    },
-    data: {
-      pageNum: { decrement: 1 }
-    }
-  });
-
-  return true;
-};
-
-
 const upsertPrimaryPage = async (chapterId, text, currentUserId) => {
+  // 1. The Bouncer: Validate the ID immediately
   const parsedChapterId = parseInt(chapterId, 10);
+  if (isNaN(parsedChapterId)) {
+    throw new Error("Invalid chapter ID provided.");
+  }
 
+  // 2. Fast-fail validation
   const chapter = await prisma.chapters.findUnique({
     where: { id: parsedChapterId },
-    select: { bookId: true }
+    select: {
+      bookId: true,
+      isPublished: true,
+    }
   });
 
   if (!chapter) {
@@ -116,44 +84,43 @@ const upsertPrimaryPage = async (chapterId, text, currentUserId) => {
   }
 
   const { book } = await getOwnedBook(chapter.bookId, currentUserId);
-  await checkEditAccess(book);
+  await checkChapterEditAccess(chapter);
 
-  // Find existing page (only one should exist)
   const existingPage = await prisma.pages.findFirst({
     where: { chapterId: parsedChapterId },
+    select: { id: true }
   });
 
-  let targetPageId;
+  let savedPage; // We will store the final result here
 
   if (!existingPage) {
-    const newPage = await prisma.pages.create({
+    savedPage = await prisma.pages.create({
       data: {
         chapterId: parsedChapterId,
         text,
         pageNum: 1,
       },
     });
-    targetPageId = newPage.id;
-
   } else {
-    const updated = await prisma.pages.update({
+    savedPage = await prisma.pages.update({
       where: { id: existingPage.id },
       data: {
         text,
         pageNum: 1,
       },
     });
-    targetPageId = updated.id;
   }
 
-  await pageChunking(chapterId, text, currentUserId, targetPageId, chapter);
+  void pageChunking(parsedChapterId, text, currentUserId, savedPage.id, chapter).catch((err) => {
+    console.error("[pageChunking] background job failed:", err);
+  });
 
-  return prisma.pages.findUnique({ where: { id: targetPageId } });
+
+  return savedPage;
 };
 
 module.exports = {
   getPagesByChapter,
   getPagesForAuthor,
   upsertPrimaryPage,
-  deletePage,
 };
