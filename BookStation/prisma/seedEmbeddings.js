@@ -1,6 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
-const ChunkingService = require("../services/VectorEmbedServces/ChunkingService");
-const EmbeddingService = require("../services/VectorEmbedServces/EmbeddingService");
+const ChunkingService = require("../services/AIServices/VectorServices/PageChunkingService");
+const EmbeddingService = require("../services/AIServices/VectorServices/EmbeddingService");
 const { calculateAverageVector } = require("../utils/vectorMath");
 
 const prisma = new PrismaClient();

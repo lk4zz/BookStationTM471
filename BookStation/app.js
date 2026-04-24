@@ -25,7 +25,7 @@ const rateRouter = require('./routes/rate');
 const progressRouter = require('./routes/progress')
 const AIRouter = require('./routes/AI')
 const searchRouter = require('./routes/search')
-const radarRouter = require('./routes/radar')
+const adminRouter = require('./routes/admin')
 
 
 
@@ -70,7 +70,7 @@ app.use('/progress', progressRouter);
 app.use('/AI', AIRouter);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/search', searchRouter);
-app.use('/radar', radarRouter);
+app.use('/admin', adminRouter);
 
 // Catch 404 for any unhandled routes and forward to error handler
 app.all('*', (req, res, next) => {

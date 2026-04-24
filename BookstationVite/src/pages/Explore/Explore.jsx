@@ -26,6 +26,7 @@ function Explore() {
     isSearchLoading,
     searchError,
     isSearching,
+    booksByFollowedAuthors,
   } = useExplore();
 
   if (!book || !books || isBooksLoading || isTrendingLoading || isForYouLoading)
@@ -71,6 +72,7 @@ function Explore() {
           searchResults={searchResults}
           isSearchLoading={isSearchLoading}
           searchError={searchError}
+          booksByFollowedAuthors={booksByFollowedAuthors}
         />
       </section>
     </div>

@@ -9,6 +9,7 @@ function WritingBookEditorSection({
   approxPages,
   saveStatus,
   chapterId,
+  cannotEdit,
 }) {
   return (
     <section className={styles.middleSection}>
@@ -22,7 +23,9 @@ function WritingBookEditorSection({
           approxPages={approxPages}
           saveStatus={saveStatus}
           chapterId={chapterId}
+          cannotEdit={cannotEdit}
         />
+        
       </div>
     </section>
   );

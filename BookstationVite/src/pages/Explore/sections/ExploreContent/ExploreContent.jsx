@@ -12,6 +12,7 @@ function ExploreContent({
   searchResults = [],
   isSearchLoading,
   searchError,
+  booksByFollowedAuthors,
 }) {
   const isSearching = searchQuery?.trim().length > 0;
 
@@ -55,6 +56,22 @@ function ExploreContent({
         viewsByBookId={viewsByBookId}
         ratingsByBookId={ratingsByBookId}
       />
+
+      <div>
+        <p className="headers">Authors you follow</p>
+              <div className="gridContainer">
+        {booksByFollowedAuthors.map((book) => (
+          <BookCoverCard
+            key={book.id}
+            book={book}
+            totalViews={viewsByBookId[book.id]}
+            ratingAverage={ratingsByBookId[book.id]?.ratingAverage}
+          />
+        ))}
+      </div>
+
+
+      </div>
 
       <p className="headers">For you</p>
       <div className="gridContainer">

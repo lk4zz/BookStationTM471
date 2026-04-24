@@ -28,6 +28,10 @@ function ProfilePage() {
     handleImageChange,
     handleSubmit,
     displayImage,
+    handleToggleFollow,
+    isFollowing,
+    isFollowStatusLoading,
+    
   } = useProfilePage(authorId);
   const navigate = useNavigate();
 
@@ -78,6 +82,10 @@ function ProfilePage() {
         viewsByBookId={viewsByBookId}
         ratingsByBookId={ratingsByBookId}
         navigate={navigate}
+        handleToggleFollow={handleToggleFollow}
+        isFollowing={isFollowing}
+        isFollowStatusLoading={isFollowStatusLoading}
+
       />
     </div>
   );

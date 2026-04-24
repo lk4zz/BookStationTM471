@@ -1,6 +1,8 @@
+import Loading from "../../../../../../components/UI/Loading/Loading";
 import infoStyles from "./ProfileInfo.module.css";
 
-export function ProfileInfo({ user, isOwnProfile, onEditClick }) {
+export function ProfileInfo({ user, isOwnProfile, onEditClick, handleToggleFollow, isFollowing,
+    isFollowStatusLoading, }) {
     const handle = user.name.toLowerCase().replace(/\s+/g, "");
 
     return (
@@ -15,9 +17,14 @@ export function ProfileInfo({ user, isOwnProfile, onEditClick }) {
                     <button className={infoStyles.editButton} onClick={onEditClick}>
                         Edit Profile
                     </button>
+                ) : isFollowStatusLoading ? (
+                    <Loading />
                 ) : (
-                    <button className={infoStyles.followButton}>Follow</button>
-                )}
+                        <button
+                            onClick={() => handleToggleFollow(user.id)}
+                            className={infoStyles.followButton}
+                        >{isFollowing ? "Unfollow" : "Follow"}</button>
+                    )}
             </div>
 
             <p className={infoStyles.bio}>

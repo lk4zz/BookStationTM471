@@ -1,8 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
-import { getUserById, updateUserProfile } from "../api/users";
+import { getCurrentUserId, getUserById, updateUserProfile } from "../api/users";
 
 export const USER_QUERY_KEY = (userId) => ["user", String(userId)];
+
+export const CURRENT_USER_ID_QUERY_KEY = ["currentUserId"];
 
 export const useUser = (userId) => {
     const { data, isLoading, error } = useQuery({
@@ -18,9 +20,21 @@ export const useUser = (userId) => {
 
 
 export const useCurrentUserId = () => {
-    const stored = localStorage.getItem("userId");
-    const currentUserId = stored ? Number(stored) : null;
-    return { currentUserId, isAuthenticated: !!currentUserId }; //fetches current user from local storage
+    const hasToken =
+        typeof window !== "undefined" && !!localStorage.getItem("token");
+
+    const { data: currentUserId, isLoading, error } = useQuery({
+        queryKey: CURRENT_USER_ID_QUERY_KEY,
+        queryFn: () => getCurrentUserId(),
+        enabled: hasToken,
+    });
+
+    return {
+        currentUserId: currentUserId ?? null,
+        isAuthenticated: !!currentUserId,
+        isLoading,
+        error,
+    };
 };
 
 

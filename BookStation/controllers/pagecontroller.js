@@ -13,7 +13,7 @@ const getPagesForAuthor = catchAsync(async (req, res) => {
 });
 
 const upsertPrimaryPage = catchAsync(async (req, res) => {
-    const chapterId = req.params.chapterId;
+    const chapterId = parseInt(req.params.chapterId);
     const currentUserId = req.user.userId;
     const { text } = req.body;
     const page = await pageServices.upsertPrimaryPage(chapterId, text, currentUserId);
@@ -37,23 +37,9 @@ const getPagesByChapter = catchAsync(async (req, res) => {
     
 });
 
-const deletePage = catchAsync(async (req, res) => {
-
-    const PageId = req.params.id;
-    const currentUserId = req.user.userId;
-    await pageServices.deletePage(PageId, currentUserId);
-    res.status(200).json({
-        success: true,
-        message: "Page deleted successfully!"
-        });
-
-});
-
 
 module.exports = {
     getPagesByChapter,
     getPagesForAuthor,
     upsertPrimaryPage,
-    deletePage
-
 }

@@ -5,6 +5,11 @@ export const getUserById = async (userId) => {
     return res.data;
 };
 
+export const getCurrentUserId = async () => {
+    const res = await privateApi.get("/users/currentUserId");
+    return res.data;
+};
+
 export const updateUserProfile = async (name, bio, imageFile) => {
     const formData = new FormData();
 
@@ -20,3 +25,18 @@ export const updateUserProfile = async (name, bio, imageFile) => {
     const res = await privateApi.post("/users", formData);
     return res.data;
 };
+
+export const follow = async (userId) => {
+    const res = await privateApi.post(`/following/${userId}`);
+    return res.data;
+}
+
+export const unfollow = async (userId) => {
+    const res = await privateApi.delete(`/following/${userId}`);
+    return res.data;
+}
+
+export const followStatus = async (userId) => {
+    const res = await privateApi.get(`/following/${userId}`);
+    return res.data;
+}

@@ -1,6 +1,6 @@
 const prisma = require("../db");
-const { calculateAverageVector } = require("./vectorMath");
-const EmbeddingService = require("../services/VectorEmbedServces/EmbeddingService");
+const { calculateAverageVector } = require("./AIUtils/vectorUtils/calculateAverageVector");
+const EmbeddingService = require("../services/AIServices/VectorServices/EmbeddingService");
 
 const updateBookMasterEmbedding = async (bookId) => {
   try {

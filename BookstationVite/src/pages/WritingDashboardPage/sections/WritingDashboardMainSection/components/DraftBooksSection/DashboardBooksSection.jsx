@@ -19,7 +19,7 @@ function DashboardBooksSection({ isLoading, error, onDelete,
     booksToShow = onGoingBooks;
   }
 
-  if (booksToShow.length === 0) {
+  if (booksToShow?.length === 0) {
     return (
       <div className={styles.empty}>
         <p>No books yet.</p>
@@ -31,7 +31,7 @@ function DashboardBooksSection({ isLoading, error, onDelete,
     <ul className={styles.grid}>
 
 
-      {booksToShow.map((book) => (
+      {booksToShow?.map((book) => (
         <li key={book.id}>
           <DraftBookCard book={book} onDelete={onDelete} />
         </li>

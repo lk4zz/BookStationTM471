@@ -1,5 +1,5 @@
 const prisma = require("../../db");
-const { cosineSimilarity } = require("../../utils/cosineSimilarity");
+const { cosineSimilarity } = require("../../utils/AIUtils/vectorUtils/cosineSimilarity");
 const NotFoundError = require("../../errors/NotFoundError");
 
 //layer A pure math calculation give it vector it gives back related content 

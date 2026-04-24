@@ -1,7 +1,7 @@
 import {
     getBookById, getAllBooks, getBooksByGenre, getBooksByAuthor,
     createBook, deleteBook, updateBookStatus, getTrendingBooks, getForYouBooks, updateBookCover,
-    launchBook, updateBook, tagBook,
+    launchBook, updateBook, tagBook, getBooksByFollowedAuthors,
 } from "../api/books";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect, useRef } from "react";
@@ -390,3 +390,26 @@ export const useEditBookDetails = (book, onError) => {
         isCreateMode,
     };
 };
+
+export const useBooksByFollowedAuthors = () => {
+    const {
+        data: booksByFollowedAuthorsData,
+        isLoading: isBooksByFollowedAuthorsLoading,
+        error: booksByFollowedAuthorsError,
+    } = useQuery({
+        queryKey: ["books", "followed-authors"],
+        queryFn: getBooksByFollowedAuthors,
+    });
+
+    const booksByFollowedAuthors =
+        booksByFollowedAuthorsData?.books ??
+        booksByFollowedAuthorsData?.data ??
+        [];
+
+    return {
+        booksByFollowedAuthors,
+        isBooksByFollowedAuthorsLoading,
+        booksByFollowedAuthorsError,
+    };
+
+}

@@ -79,3 +79,8 @@ export const updateBookCover = async (imageFile, bookId) => {
     const res = await privateApi.put(`/books/${bookId}/cover`, formData);
     return res.data;
 };
+
+export const getBooksByFollowedAuthors = async () => {
+    const res = await privateApi.get("/books/recommendations/followedAuthors");
+    return res.data;
+};

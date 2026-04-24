@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const  { verifyToken, verifyTokenOptional } = require('../middlewares/verifyToken');
-const chapterController = require('../controllers/chapterController');
+const chapterController = require('../controllers/chapterController/chapterController');
 const validateChapter = require('../middlewares/validateChapter.js');
 
 // Public Routes (No jwt required)

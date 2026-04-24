@@ -1,20 +1,20 @@
 const jwt = require('jsonwebtoken');
 
-const verifyToken = (req, res,next) => {
+const verifyToken = (req, res, next) => {
 
     const authHeader = req.header('Authorization')       //look for authroization header in the request
 
     if (!authHeader) {
-        return res.status(401).json({error: 'Access denied. No token provided.'})   //if not found
+        return res.status(401).json({ error: 'Access denied. No token provided.' })   //if not found
     }
-    
+
     const token = authHeader.split(' ')[1];    //cleans form 
 
-    if(!token) { 
-        return res.status(401).json({error: 'Access denied. Token format is invalid.'})
+    if (!token) {
+        return res.status(401).json({ error: 'Access denied. Token format is invalid.' })
     }
 
-    try { 
+    try {
         const verified = jwt.verify(token, process.env.JWT_SECRET);
         req.user = verified
         next();
@@ -38,21 +38,34 @@ const verifyTokenOptional = (req, res, next) => {
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
             // if the token is expired or fake kick them out
-            return res.status(403).json({ 
-                success: false, 
-                message: "Invalid or expired token. Please log in again." 
+            return res.status(403).json({
+                success: false,
+                message: "Invalid or expired token. Please log in again."
             });
         }
-        
+
         // Success! Attach the user just like the strict bouncer does
         req.user = decoded;
         next();
     });
-    
+
+};
+
+const verifyAdmin = (req, res, next) => {
+
+    if (!req.user) {
+        return res.status(401).json({ error: "Access denied. Please log in." });
+    }
+
+    if (req.user.roleId !== 2) {
+        return res.status(403).json({ error: "Forbidden. Admin access required." });
+    }
+
+    next();
 };
 
 module.exports = {
     verifyToken,
-    verifyTokenOptional
+    verifyTokenOptional,
+    verifyAdmin 
 };
-

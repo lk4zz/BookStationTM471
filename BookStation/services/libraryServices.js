@@ -37,7 +37,8 @@ const addBookToLibrary = async (currentUserId, bookId) => {
       },
     });
 
-    await addToLibraryTasteBlender(parsedUserId, parsedBookId);
+    //no await incase blending failed the add to library function doesnt fail to user
+    addToLibraryTasteBlender(parsedUserId, parsedBookId);
 
     return savedBook;
   } catch (error) {

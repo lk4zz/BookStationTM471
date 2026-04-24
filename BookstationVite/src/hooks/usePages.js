@@ -11,8 +11,12 @@ export const usePagesByChatper =  (numericChapterId) => {
         queryKey: ["pages", numericChapterId],
         queryFn: () => getPagesByChapter(numericChapterId),
         enabled: Number.isFinite(numericChapterId),
-
-    });
+        onError (error) {
+            console.error(error)
+        }
+    },
+    
+    );
     const pagesData = pagesDataObjects?.data ?? pagesDataObjects ?? [];
 
     return { pagesData, isPagesLoading, pagesError }

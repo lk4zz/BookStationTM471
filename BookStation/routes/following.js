@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const followingController = require('../controllers/followingController');
+const followingController = require('../controllers/interactionController/followingController');
 const { verifyToken }  = require('../middlewares/verifyToken');
 
+router.get('/:authorId', verifyToken, followingController.followStatus);
 router.post('/:authorId', verifyToken, followingController.follow);
-router.delete('/:followedId' , verifyToken, followingController.unfollow);
+router.delete('/:authorId' , verifyToken, followingController.unfollow);
 
 module.exports = router;

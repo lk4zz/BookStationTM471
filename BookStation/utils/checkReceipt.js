@@ -24,7 +24,7 @@ const checkChapterRreceipt = async (chapterId) => {
         where: {chapterId: parseInt(chapterId)}
     })
     if (receipt) {
-        return next(new ForbiddenError("THIS CHAPTER HAS PAYMENT RECEIPTS CANNOT DELETE"));
+       throw new ForbiddenError("THIS CHAPTER HAS PAYMENT RECEIPTS CANNOT DELETE");
     }
 }
 

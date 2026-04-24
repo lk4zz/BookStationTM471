@@ -5,15 +5,16 @@ const upload = require('../middlewares/multerUploadCover');
 const { verifyToken, verifyTokenOptional } = require('../middlewares/verifyToken');
 const { validateBook, validateStatus, validateBookCover } = require('../middlewares/validateBook.js');
 
-const bookGenreController = require('../controllers/bookGenreController');
-const bookController = require('../controllers/bookController');
-const recommendationController = require('../controllers/recommendationController');
+const bookGenreController = require('../controllers/booksController/bookGenreController');
+const bookController = require('../controllers/booksController/booksController');
+const recommendationController = require('../controllers/algorithmController/recommendationController');
 
 // STATIC GET ROUTES (Must come first)
 router.get('/', verifyTokenOptional, bookController.getAllPublicBooks);
 router.get('/trending', verifyTokenOptional, bookController.getTrendingBooks);
 
 // DYNAMIC GET ROUTES (More specific to least specific)
+router.get('/recommendations/followedAuthors', verifyToken, bookController.getFollowedAuthorsBooks) 
 router.get("/recommendations/for-you", verifyTokenOptional,
     recommendationController.getForYouRecommendations);
 router.get('/genres/:genreId', verifyTokenOptional, bookController.getAllBooksByGenre);

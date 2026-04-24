@@ -23,12 +23,13 @@ function ProfileMainSection({
   viewsByBookId,
   ratingsByBookId,
   navigate,
+  handleToggleFollow,
+  isFollowing,
+  isFollowStatusLoading,
 }) {
   return (
     <div className={styles.pageInner}>
-      <header className={styles.pageHeader}>
-        <OnBackButton onClick={() => navigate(-1)} />
-      </header>
+
 
       <div className={styles.profileCard}>
         <ProfileBanner imageUrl={displayImage} />
@@ -54,6 +55,9 @@ function ProfileMainSection({
             user={user}
             isOwnProfile={isOwnProfile}
             onEditClick={() => setIsEditing(true)}
+            handleToggleFollow={handleToggleFollow}
+            isFollowing={isFollowing}
+            isFollowStatusLoading={isFollowStatusLoading}
           />
         )}
       </div>

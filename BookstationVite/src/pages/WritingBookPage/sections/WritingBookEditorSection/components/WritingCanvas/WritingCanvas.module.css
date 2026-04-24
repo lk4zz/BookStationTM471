@@ -7,6 +7,7 @@
   min-width: 0;
   /* Centers the sheet safely within the available space */
   align-items: center; 
+  color: white;
 }
 
 .sheet {
@@ -123,4 +124,23 @@
 .saveState {
   color: var(--color-text-muted);
   font-variant-numeric: tabular-nums;
+}
+
+.cannotEdit {
+  pointer-events: none;
+}
+
+.tooltip {
+  position: fixed;
+  background-color: rgb(24, 24, 24);
+  color: var(--color-text-muted, #aaa);
+  padding: 6px 12px;
+  border: 1px solid var(--border-color, #333);
+  border-radius: var(--radius-lg, 6px);
+  font-size: 0.85rem;
+  
+  /* CRITICAL: prevents the tooltip from blocking mouse events */
+  pointer-events: none; 
+  z-index: 9999;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
 }
