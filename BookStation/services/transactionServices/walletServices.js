@@ -1,6 +1,7 @@
 const prisma = require('../../db');
 const ForbiddenError = require('../../errors/ForbiddenError');
 const NotFoundError = require('../../errors/NotFoundError');
+const BadRequestError = require('../../errors/BadRequestError');
 
 const VALID_COIN_BUNDLES = [100, 500, 1200, 2500, 5000];
 
@@ -49,8 +50,51 @@ const getCoinBalanceByUser = async (userId) => {
     return balance;
 }
 
+const purchaseAIPass = async (userId) => {
+    const AI_PASS_COST = 100;
+    const parsedId = parseInt(userId);
+
+    const user = await prisma.user.findUnique({
+        where: { id: parsedId },
+        select: { coinBalance: true, aiAccessExpires: true }
+    });
+
+    if (!user) throw new NotFoundError("USER NOT FOUND");
+    
+    const now = new Date();
+
+    if (user.aiAccessExpires && user.aiAccessExpires > now) {
+        throw new BadRequestError("Active subscription already exists.");
+    }
+
+    if (user.coinBalance < AI_PASS_COST) {
+        throw new ForbiddenError("Not enough coins to unlock AI.");
+    }
+
+    const newExpiration = new Date(now.getTime() + 3 * 60 * 60 * 1000);
+
+    const [paymentResult, accessResult] = await prisma.$transaction([
+        prisma.user.update({
+            where: { id: parsedId },
+            data: { coinBalance: { decrement: AI_PASS_COST } }
+        }),
+        prisma.user.update({
+            where: { id: parsedId },
+            data: { aiAccessExpires: newExpiration },
+            select: {
+                id: true,
+                coinBalance: true,
+                aiAccessExpires: true
+            }
+        })
+    ]);
+
+    return accessResult;
+};
+
 module.exports = {
     buyCoins,
     getCoinBalance,
-    getCoinBalanceByUser
+    getCoinBalanceByUser,
+    purchaseAIPass,
 };

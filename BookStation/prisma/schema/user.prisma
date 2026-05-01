@@ -1,29 +1,31 @@
 model User {
-    id  Int @id @default(autoincrement())
-    name String
-    email String @unique
-    password String
-    coinBalance Int @default(0)
-    bio String?
-    profileImage String?
+    id              Int @id @default(autoincrement())
+    name            String
+    email           String @unique
+    password        String
+    coinBalance     Int @default(0)
+    bio             String?
+    profileImage    String?
     tasteProfile    String? @db.LongText
     
-    roleId Int 
-    role UserRole @relation(fields: [roleId], references: [id])
+    roleId          Int 
+    role            UserRole @relation(fields: [roleId], references: [id])
     
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    aiAccessExpires DateTime?
+    
+    createdAt       DateTime @default(now())
+    updatedAt       DateTime @updatedAt
 
-    books Books[]
-    views BookViews[]
-    ratings Rating[]
-    chapterUnlocks ChapterUnlocks[]
-    libraries Library[]
-    comments Comments[]
-    transactions   TransactionLedger[]
-    following Followers[] @relation("FollowerRelation")
-    followers Followers[] @relation("FollowingRelation")
+    books           Books[]
+    views           BookViews[]
+    ratings         Rating[]
+    chapterUnlocks  ChapterUnlocks[]
+    libraries       Library[]
+    comments        Comments[]
+    transactions    TransactionLedger[]
+    following       Followers[] @relation("FollowerRelation")
+    followers       Followers[] @relation("FollowingRelation")
     readingProgress ReadingProgress[]
-    pageChunks  PageChunk[]
-    tasteSnapshots UserTasteSnapshot[]
+    pageChunks      PageChunk[]
+    applications AuthorApplication[]
 }

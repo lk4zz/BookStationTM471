@@ -1,8 +1,7 @@
 import { useMemo, useState } from "react";
-import { useUser, useCurrentUserId, useEditProfile } from "../../../hooks/useUser";
-import { useBooksByAuthor } from "../../../hooks/useBooks";
+import { useUser, useCurrentUser, useEditProfile } from "../../../hooks/useUser";
+import { useBooksByAuthor } from "../../../hooks/bookHooks/useBookQueries";
 import { resolveImageUrl } from "../../../utils/ImageUrl";
-import { useViewsByBookIds } from "../../../hooks/useViews";
 import { useRatingsByBookIds } from "../../../hooks/useRatings";
 import {useFollowStatus, useFollow, useUnfollow} from "../../../hooks/useFollow"
 import { useEffect } from "react";
@@ -10,7 +9,6 @@ import { useEffect } from "react";
 
 export function useProfilePage(authorId) {
 
-  
 
   const followMutation = useFollow();
   const unfollowMutation = useUnfollow();
@@ -44,19 +42,8 @@ export function useProfilePage(authorId) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-  const { currentUserId } = useCurrentUserId();
-  const isOwnProfile = currentUserId === Number(authorId);
+  const { currentUser } = useCurrentUser();
+  const isOwnProfile = currentUser.id === Number(authorId);
 
   const [isEditing, setIsEditing] = useState(false);
 
@@ -70,7 +57,6 @@ export function useProfilePage(authorId) {
         .filter((id) => Number.isFinite(Number(id))),
     [booksByAuthor]
   );
-  const { viewsByBookId } = useViewsByBookIds(bookIds);
   const { ratingsByBookId } = useRatingsByBookIds(bookIds);
 
   const {
@@ -98,7 +84,6 @@ export function useProfilePage(authorId) {
     setIsEditing,
     booksByAuthor,
     isBooksByAuthorLoading,
-    viewsByBookId,
     ratingsByBookId,
     formData,
     isUpdating,

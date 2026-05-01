@@ -1,0 +1,19 @@
+.primaryBtn {
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  transition: 0.2s;
+  background: var(--color-accent);
+  color: var(--color-text-primary);
+}
+
+.primaryBtn:hover:not(:disabled) { 
+  background: var(--color-accent-hover); 
+}
+
+.primaryBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

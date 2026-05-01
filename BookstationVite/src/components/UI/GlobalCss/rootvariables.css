@@ -1,93 +1,238 @@
+/* global.css */
+
 :root {
-  --bg-color: #111318;
-  --hover-bg: rgba(230, 225, 216, 0.06);
-  --transition-speed: 0.3s;
+   /* =========================================
+      1. CORE COLORS (Modern Graphite & Soft Indigo)
+      ========================================= */
 
-  /* Surface - Smoky, deep atmospheric slate instead of harsh black */
-  --color-bg-app: #0b0c10;
-  --color-bg-panel: #111318;
-  --color-bg-card: #1a1d24;
-  --color-bg-elevated: #22262f;
-  --color-bg-hover: #2b303b;
+   /* Backgrounds */
+   --color-bg-app: #0a0c10;
+   --color-bg-panel: #11141a;
+   --color-bg-card: #171b22;
+   --color-bg-elevated: #1f2430;
+   --color-bg-hover: #2a303d;
+   --color-bg-active: #353d4d;
 
-  /* Border - Softer, less aggressive lines */
-  --border-color: #2c313c;
-  --accent-color: #e6e1d8;
-  --color-border-soft: #2c313c;
-  --color-border-medium: #3f4654;
+   /* Accent */
+   --color-accent: #7c8cff;
+   --color-accent-hover: #98a4ff;
+   --color-accent-muted: rgba(124, 140, 255, 0.14);
 
-  /* Text - Warm, vintage paper tones for better nighttime reading */
-  --color-text-primary: #e6e1d8;
-  --color-text-secondary: #b5babe;
-  --color-text-muted: #858b94;
-  --color-text-dim: #5c626e;
+   /* Future Theme */
+   --color-future: #5b21b6;
+   --color-future-accent: #a78bfa;
+   --color-future-text: #d2c4ff;
+   --color-future-muted: rgba(91, 33, 182, 0.16);
 
-  /* Brand - Ethereal, moody lavender accent */
-  --color-accent: #9f86c0;
-  --color-accent-hover: #7e679c;
-  --color-warning: #d4a373;
-  --color-success: #82a08f;
+   /* Status & Alerts */
+   --color-success: #4fa87d;
+   --color-success-muted: rgba(79, 168, 125, 0.12);
 
-  /* Radius - Slightly softer, more organic curves */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-pill: 999px;
+   --color-warning: #d89b4d;
 
-  /* Spacing - (Kept exactly the same so your layouts don't break) */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 20px;
-  --space-6: 4%;
-  --space-8: 32px;
-  --space-10: 40px;
+   --color-danger: #d16464;
+   --color-danger-hover: #bb5555;
 
-  /* Typography - Added traditional serifs for headings to feel like a real book */
-  --font-heading: "Playfair Display", "Merriweather", Georgia, serif;
-  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-mono: ui-monospace, Consolas, monospace;
+   --color-error: #f87171;
+   --color-error-bg: rgba(248, 113, 113, 0.08);
+   --color-error-border: rgba(248, 113, 113, 0.18);
 
-  /* Shadow - Deeper, dreamier shadows */
-  --shadow-card: 0 12px 35px rgba(0, 0, 0, 0.4);
-  --shadow-cover: 0 24px 48px rgba(0, 0, 0, 0.7);
+   /* Actions */
+   --color-confirm: #b7791f;
+   --color-confirm-hover: #975f14;
+   --color-cancel-bg: #d1d5db;
 
-  /* Motion - Smoother transitions */
-  --ease-standard: cubic-bezier(0.33, 1, 0.68, 1);
-  --duration-fast: 0.25s;
-  --duration-normal: 0.35s;
+   /* =========================================
+      2. TEXT & TYPOGRAPHY (Sharp Minimal UI)
+      ========================================= */
+
+   /* Colors */
+   --color-text-primary: #f5f7fb;
+   --color-text-secondary: #b7beca;
+   --color-text-muted: #8a93a3;
+   --color-text-dim: #5f6877;
+
+   /* Font Families */
+   --font-heading: "Inter", "SF Pro Display", system-ui, sans-serif;
+   --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+   --font-mono: ui-monospace, SFMono-Regular, Consolas, monospace;
+
+   /* Font Weights */
+   --weight-regular: 400;
+   --weight-medium: 500;
+   --weight-semibold: 600;
+   --weight-bold: 700;
+
+   /* Line Heights */
+   --line-height-tight: 1.2;
+   --line-height-base: 1.55;
+   --line-height-relaxed: 1.75;
+
+   /* =========================================
+      3. BORDERS & DIVIDERS
+      ========================================= */
+
+   --color-border-subtle: rgba(255, 255, 255, 0.04);
+   --color-border-soft: #2a3140;
+   --color-border-medium: #3a4354;
+
+   /* Accessibility / Inputs */
+   --focus-ring:
+      0 0 0 2px var(--color-bg-app),
+      0 0 0 4px rgba(124, 140, 255, 0.45);
+
+   /* =========================================
+      4. RADII, SPACING & SIZING
+      ========================================= */
+
+   /* Border Radius */
+   --radius-sm: 10px;
+   --radius-md: 14px;
+   --radius-lg: 18px;
+   --radius-xl: 28px;
+   --radius-pill: 999px;
+
+   /* Spacing Scale */
+   --space-1: 4px;
+   --space-2: 8px;
+   --space-3: 12px;
+   --space-4: 16px;
+   --space-5: 20px;
+   --space-6: 24px;
+   --space-8: 32px;
+   --space-10: 40px;
+   --space-12: 48px;
+
+   /* =========================================
+      5. SHADOWS & ELEVATION
+      ========================================= */
+
+   --shadow-sm: 0 6px 18px rgba(0, 0, 0, 0.18);
+
+   --shadow-card:
+      0 18px 40px rgba(0, 0, 0, 0.32);
+
+   --shadow-cover:
+      0 28px 60px rgba(0, 0, 0, 0.55);
+
+   --shadow-glow:
+      0 0 30px rgba(124, 140, 255, 0.12);
+
+   /* =========================================
+      6. GLASSMORPHISM & GRADIENTS
+      ========================================= */
+
+   /* Glass Variables */
+   --glass-bg: rgba(17, 20, 26, 0.78);
+   --glass-border: 1px solid rgba(255, 255, 255, 0.06);
+   --glass-blur: blur(18px);
+
+   /* Gradients */
+   --gradient-app-bg:
+      radial-gradient(
+         circle at top center,
+         #1a2030 0%,
+         #0a0c10 68%
+      );
+
+   --gradient-accent:
+      linear-gradient(
+         135deg,
+         #202633 0%,
+         #151922 100%
+      );
+
+   --gradient-cover-overlay:
+      linear-gradient(
+         to top,
+         rgba(10, 12, 16, 0.95) 0%,
+         transparent 55%
+      );
+
+   --gradient-premium:
+      linear-gradient(
+         180deg,
+         var(--color-bg-card) 0%,
+         #192529 100%
+      );
+
+   --gradient-future:
+      linear-gradient(
+         145deg,
+         var(--color-bg-card) 0%,
+         #18132a 100%
+      );
+
+   /* =========================================
+      7. MOTION & Z-INDEX
+      ========================================= */
+
+   /* Easing & Timing */
+   --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+   --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+   --duration-fast: 0.18s;
+   --duration-normal: 0.28s;
+   --duration-slow: 0.45s;
+
+   /* Stacking Contexts */
+   --z-base: 1;
+   --z-elevated: 10;
+   --z-sticky: 100;
+   --z-overlay: 1000;
+   --z-modal: 9999;
 }
 
+/* =========================================
+   8. KEYFRAMES & ANIMATIONS
+   ========================================= */
+
+@keyframes pulse {
+   from {
+      opacity: 0.6;
+      transform: scale(0.995);
+   }
+
+   to {
+      opacity: 1;
+      transform: scale(1);
+   }
+}
+
+/* Base Utility Classes Refactored */
 .loading {
-  color: var(--color-accent); /* Tinted the loading text to match the new brand */
-  font-size: 3rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-mono);
+   color: var(--color-accent);
+   /* Tinted the loading text to match the new brand */
+   font-size: 3rem;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-family: var(--font-mono);
 }
 
 .gridContainer {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 15px;
+   display: grid;
+   grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+   gap: 15px;
 }
 
+
 .headers {
-    color: var(--color-text-primary);
-    font-family: var(--font-heading);
-    font-size: 2.5rem;
-    display: flex;
-    justify-content: left;
-    align-items: left;
-    text-wrap: auto;
-    margin: 0 0 30px 0;
-    letter-spacing: -0.02em; /* Tightens up the serif font nicely */
+   color: var(--color-text-primary);
+   font-family: var(--font-heading);
+   font-size: 2.5rem;
+   display: flex;
+   justify-content: left;
+   align-items: left;
+   text-wrap: auto;
+   margin: 0 0 30px 0;
+   letter-spacing: -0.02em;
+   /* Tightens up the serif font nicely */
 }
 
 .avatarImage {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
 }
+

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useChapterById } from "../../../hooks/useChapters";
+import { useChapterById } from "../../../hooks/useChapters/useChaptersForUser";
 
 /**
  * Keeps `selectedChapterId` aligned with `?chapter=` and the loaded `chapters` list.

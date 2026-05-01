@@ -45,8 +45,10 @@ const getBooksByAuthor = catchAsync(async (req, res) => {
 
 
 const getTrendingBooks = catchAsync(async (req, res) => {
-  const limit = req.query.limit ? parseInt(req.query.limit) : 10;
+  const limit = req.query.limit ? parseInt(req.query.limit, 10) : 12; 
+  
   const books = await bookService.getTrendingBooks(limit);
+  
   res.status(200).json({
     success: true,
     count: books.length,
@@ -54,10 +56,21 @@ const getTrendingBooks = catchAsync(async (req, res) => {
   });
 });
 
+const getHighEngagementBooks = catchAsync(async (req, res) => {
+  const limit = req.query.limit ? parseInt(req.query.limit, 10) : 25;
+  
+  const books = await bookService.getHighEngagementBooks(limit);
+  
+  res.status(200).json({
+    success: true,
+    count: books.length,
+    data: books,
+  });
+});
 
 const getFollowedAuthorsBooks = catchAsync(async (req, res) => {
   const currentUserId = req.user.userId;
-  const limit = 10;
+  const limit = 25;
   
   const books = await bookService.booksByFollowedAuthors(currentUserId, limit);
 
@@ -74,4 +87,5 @@ module.exports = {
   getAllBooksByGenre,
   getTrendingBooks,
   getFollowedAuthorsBooks,
+  getHighEngagementBooks,
 };

@@ -7,6 +7,8 @@ export function AdminUsersSection({
   showHeading = true,
   platformHasNoUsers = false,
   searchQuery = "",
+  onChangeRole,
+  isChangingRole = false,
 }) {
   if (!users || users.length === 0) {
     const msg =
@@ -38,6 +40,21 @@ export function AdminUsersSection({
                 <td>{user.email}</td>
                 <td>{user.coinBalance || 0}</td>
                 <td>
+                  <select
+                    className={styles.banBtn}
+                    disabled={isChangingRole}
+                    value={String(user.roleId)}
+                    onChange={(e) => {
+                      const newRole = Number(e.target.value);
+                      onChangeRole({
+                        userId: Number(user.id),
+                        roleId: newRole
+                      });
+                    }}
+                  >
+                    <option value="1">Reader</option>
+                    <option value="2">Author</option>
+                  </select>
                   <button
                     className={styles.banBtn}
                     disabled={isBanning}

@@ -1,4 +1,5 @@
 const userService = require('../../services/userServices/userService');
+const prisma = require('../../db');
 const catchAsync = require('../../middlewares/catchAsync');
 
 const getUserProfileById = catchAsync(async (req, res) => {
@@ -23,9 +24,20 @@ const updateUserProfile = catchAsync(async (req, res) => {
 });
 
 
-const getCurrentUserId = catchAsync(async (req, res) => {
+const getCurrentUser = catchAsync(async (req, res) => {
     const currentUserId = parseInt(req.user.userId, 10);
-    res.status(200).json(currentUserId);
+    const currentUser = await prisma.user.findUnique({
+        where: { id: currentUserId },
+        select: {
+            id: true,
+            name: true,
+            aiAccessExpires: true,
+            bio: true,
+            roleId: true,
+            profileImage: true,
+        },
+    });
+    res.status(200).json(currentUser);
 });
 
-module.exports = { getUserProfileById, updateUserProfile, getCurrentUserId };
+module.exports = { getUserProfileById, updateUserProfile, getCurrentUser };

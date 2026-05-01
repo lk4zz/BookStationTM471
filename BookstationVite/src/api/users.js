@@ -5,8 +5,8 @@ export const getUserById = async (userId) => {
     return res.data;
 };
 
-export const getCurrentUserId = async () => {
-    const res = await privateApi.get("/users/currentUserId");
+export const getCurrentUser = async () => {
+    const res = await privateApi.get("/users/currentUser");
     return res.data;
 };
 

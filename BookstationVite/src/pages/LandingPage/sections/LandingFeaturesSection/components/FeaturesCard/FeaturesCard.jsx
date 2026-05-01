@@ -1,4 +1,3 @@
-import { SparklesIcon } from "../../../../../../components/UI/Icons/IconLibrary";
 import styles from './FeaturesCard.module.css'
 
 function FeaturesCard({header, text, Icon}) {

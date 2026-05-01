@@ -26,7 +26,7 @@ const progressRouter = require('./routes/progress')
 const AIRouter = require('./routes/AI')
 const searchRouter = require('./routes/search')
 const adminRouter = require('./routes/admin')
-
+const applicationRouter = require('./routes/authorApplication')
 
 
 // Custom Error Handling imports
@@ -71,6 +71,7 @@ app.use('/AI', AIRouter);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/search', searchRouter);
 app.use('/admin', adminRouter);
+app.use('/applications', applicationRouter);
 
 // Catch 404 for any unhandled routes and forward to error handler
 app.all('*', (req, res, next) => {

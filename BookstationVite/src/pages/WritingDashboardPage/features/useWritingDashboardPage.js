@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDeleteBook, useBooksByAuthor } from "../../../hooks/useBooks";
+import { useDeleteBook } from "../../../hooks/bookHooks/useBookMutations";
+import { useBooksByAuthor } from "../../../hooks/bookHooks/useBookQueries";
 import { checkIfGuest } from "../../../utils/checkIfGuest";
-import { useCurrentUserId } from "../../../hooks/useUser";
+import { useCurrentUser } from "../../../hooks/useUser";
 
 export function useWritingDashboardPage() {
   const navigate = useNavigate();
-  const { currentUserId } = useCurrentUserId();
+  const { currentUser, isCurrentUserLoading } = useCurrentUser();
   const [activeTab, setActiveTab] = useState("DRAFTS");
   const [isNewBookModalOpen, setNewBookModalOpen] = useState(false);
   const {
     booksByAuthor,
     isBooksByAuthorLoading,
     booksByAuthorError,
-  } = useBooksByAuthor(currentUserId);
+  } = useBooksByAuthor(currentUser?.id);
 
   const deleteBook = useDeleteBook();
 
@@ -42,5 +43,7 @@ export function useWritingDashboardPage() {
     isBooksByAuthorLoading,
     booksByAuthorError,
     handleDelete,
+    currentUser,
+    isCurrentUserLoading,
   };
 }

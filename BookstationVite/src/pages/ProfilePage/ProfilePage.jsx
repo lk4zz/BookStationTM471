@@ -1,11 +1,13 @@
 import { useParams } from "react-router-dom";
 import styles from "./ProfilePage.module.css";
 import NavBar from "../../components/UI/NavBar/NavBar";
-import ProfileLoadingSection from "./sections/ProfileLoadingSection/ProfileLoadingSection";
-import ProfileMessageSection from "./sections/ProfileMessageSection/ProfileMessageSection";
-import ProfileMainSection from "./sections/ProfileMainSection/ProfileMainSection";
+import { Loading } from "../../components/UI/Loading/Loading";
+import ProfileBanner from "./components/ProfileBanner/ProfileBanner";
+import ProfileAvatar from "./components/ProfileAvatar/ProfileAvatar";
+import ProfileInfo from "./components/ProfileInfo/ProfileInfo";
+import EditProfileForm from "./components/EditProfile/EditProfileForm";
+import UserBooksList from "./components/UserBooksList/UserBooksList";
 import { useProfilePage } from "./features/useProfilePage";
-import { useNavigate } from "react-router-dom";
 
 function ProfilePage() {
   const { authorId } = useParams();
@@ -19,7 +21,6 @@ function ProfilePage() {
     setIsEditing,
     booksByAuthor,
     isBooksByAuthorLoading,
-    viewsByBookId,
     ratingsByBookId,
     formData,
     isUpdating,
@@ -31,62 +32,76 @@ function ProfilePage() {
     handleToggleFollow,
     isFollowing,
     isFollowStatusLoading,
-    
   } = useProfilePage(authorId);
-  const navigate = useNavigate();
 
+  // --- Inline Loading State ---
   if (isUserLoading) {
     return (
       <div className={styles.pageWrapper}>
         <NavBar />
-        <ProfileLoadingSection />
+        <main className={styles.loadingMain}>
+          <Loading variant="inline" />
+        </main>
       </div>
     );
   }
 
-  if (userError) {
+  // --- Inline Error & Not Found States ---
+  if (userError || !user) {
     return (
       <div className={styles.pageWrapper}>
         <NavBar />
-        <ProfileMessageSection message={userError.message} />
+        <p className={styles.error}>
+          {userError?.message || "User not found."}
+        </p>
       </div>
     );
   }
 
-  if (!user) {
-    return (
-      <div className={styles.pageWrapper}>
-        <NavBar />
-        <ProfileMessageSection message="User not found." />
-      </div>
-    );
-  }
-
+  // --- Main Profile Layout ---
   return (
     <div className={styles.pageWrapper}>
       <NavBar />
-      <ProfileMainSection
-        user={user}
-        isOwnProfile={isOwnProfile}
-        isEditing={isEditing}
-        setIsEditing={setIsEditing}
-        displayImage={displayImage}
-        formData={formData}
-        isUpdating={isUpdating}
-        updateError={updateError}
-        handleChange={handleChange}
-        handleImageChange={handleImageChange}
-        handleSubmit={handleSubmit}
-        booksByAuthor={booksByAuthor}
-        isBooksByAuthorLoading={isBooksByAuthorLoading}
-        viewsByBookId={viewsByBookId}
-        ratingsByBookId={ratingsByBookId}
-        navigate={navigate}
-        handleToggleFollow={handleToggleFollow}
-        isFollowing={isFollowing}
-        isFollowStatusLoading={isFollowStatusLoading}
+      
+      <div className={styles.pageInner}>
+        <div className={styles.profileCard}>
+          <ProfileBanner imageUrl={displayImage} />
 
-      />
+          <ProfileAvatar
+            imageUrl={displayImage}
+            name={user.name}
+            isEditing={isEditing}
+            onImageChange={handleImageChange}
+          />
+
+          {isEditing ? (
+            <EditProfileForm
+              formData={formData}
+              isLoading={isUpdating}
+              error={updateError}
+              handleChange={handleChange}
+              handleSubmit={handleSubmit}
+              onCancel={() => setIsEditing(false)}
+            />
+          ) : (
+            <ProfileInfo
+              user={user}
+              isOwnProfile={isOwnProfile}
+              onEditClick={() => setIsEditing(true)}
+              handleToggleFollow={handleToggleFollow}
+              isFollowing={isFollowing}
+              isFollowStatusLoading={isFollowStatusLoading}
+            />
+          )}
+        </div>
+
+        <UserBooksList
+          books={booksByAuthor}
+          authorName={user.name}
+          isLoading={isBooksByAuthorLoading}
+          ratingsByBookId={ratingsByBookId}
+        />
+      </div>
     </div>
   );
 }

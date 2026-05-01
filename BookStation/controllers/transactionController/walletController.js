@@ -22,13 +22,13 @@ const buyCoins = catchAsync(async (req, res) => {
 
 
 const getCoinBalance = catchAsync(async (req, res) => {
-    const currentUserId = req.user? req.user.userId : null;
+    const currentUserId = req.user ? req.user.userId : null;
     const walletBalance = await walletServices.getCoinBalance(currentUserId);
     res.status(200).json({
         success: true,
         data: walletBalance
     })
-}) 
+})
 
 
 const getCoinBalanceByUser = catchAsync(async (req, res) => {
@@ -40,8 +40,22 @@ const getCoinBalanceByUser = catchAsync(async (req, res) => {
     })
 })
 
+const purchaseAIPass = catchAsync(async (req, res) => {
+    const userId = req.user.userId; 
+
+    const result = await walletServices.purchaseAIPass(userId);
+
+    res.status(200).json({
+        success: true,
+        message: "AI access successfully unlocked for 3 hours.",
+        data: result
+    });
+});
+
 module.exports = {
     buyCoins,
     getCoinBalance,
     getCoinBalanceByUser,
+    purchaseAIPass,
 };
+

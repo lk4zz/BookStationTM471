@@ -3,11 +3,9 @@ import {
   useAllBooks,
   useTrendingBooks,
   useForYouBooks,
-  useBookById,
-  useBooksByAuthor,
   useBooksByFollowedAuthors,
-} from "../../../hooks/useBooks";
-import { useMostViewedBook, useViewsByBookIds } from "../../../hooks/useViews";
+  useHighEngagementBooks,
+} from "../../../hooks/bookHooks/useBookQueries";
 import { useRatingsByBookIds } from "../../../hooks/useRatings";
 import { useSearch } from "../../../hooks/useSearch";
 
@@ -16,13 +14,12 @@ export function useExplore() {
 
   const { books, isBooksLoading, booksError } = useAllBooks();
   const { trendingBooks, isTrendingLoading, trendingError } = useTrendingBooks();
+  const { highEngagementBooks } = useHighEngagementBooks();
   const { forYouBooks, isForYouLoading, forYouError } = useForYouBooks();
-  const { mostViewedBook } = useMostViewedBook();
-  const { book } = useBookById(mostViewedBook);
   const { booksByFollowedAuthors } = useBooksByFollowedAuthors();
 
 
-  const displayedBooks = books.slice(8, 21);
+  const displayedBooks = books.filter(book => book.wordCount > 10);
 
   const { searchResults, isSearchLoading, searchError } = useSearch(searchQuery);
 
@@ -36,7 +33,6 @@ export function useExplore() {
     return [...ids];
   }, [displayedBooks, forYouBooks, trendingBooks, searchResults, booksByFollowedAuthors]);
 
-  const { viewsByBookId } = useViewsByBookIds(statsBookIds);
   const { ratingsByBookId } = useRatingsByBookIds(statsBookIds);
 
   const isSearching = searchQuery.trim().length > 0;
@@ -47,15 +43,14 @@ export function useExplore() {
     books,
     isBooksLoading,
     booksError,
+    highEngagementBooks,
     trendingBooks,
     isTrendingLoading,
     trendingError,
     forYouBooks,
     isForYouLoading,
     forYouError,
-    book,
     displayedBooks,
-    viewsByBookId,
     ratingsByBookId,
     searchResults,
     isSearchLoading,

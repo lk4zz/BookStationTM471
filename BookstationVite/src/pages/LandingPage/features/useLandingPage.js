@@ -1,7 +1,6 @@
 import { useMemo, useRef } from "react";
-import { useAllBooks, useTrendingBooks, useBooksByGenre } from "../../../hooks/useBooks";
+import { useAllBooks, useTrendingBooks, useBooksByGenre } from "../../../hooks/bookHooks/useBookQueries";
 import { useAllGenres } from "../../../hooks/useGenres";
-import { useViewsByBookIds } from "../../../hooks/useViews";
 import { useRatingsByBookIds } from "../../../hooks/useRatings";
 
 export function useLandingPage() {
@@ -29,7 +28,6 @@ export function useLandingPage() {
     return [...ids];
   }, [trendingBooks, genreSpotlightBooks]);
 
-  const { viewsByBookId } = useViewsByBookIds(statsBookIds);
   const { ratingsByBookId } = useRatingsByBookIds(statsBookIds);
 
   return {
@@ -45,7 +43,6 @@ export function useLandingPage() {
     randomGenre,
     genreSpotlightBooks,
     isGenreSpotlightBooksLoading,
-    viewsByBookId,
     ratingsByBookId,
   };
 }

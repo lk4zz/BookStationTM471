@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import styles from "./GenresPage.module.css";
-import GenresBooksSection from "./sections/GenresBooksSection/GenresBooksSection";
+import GenresGrid from "./GenresGrid";
 import { useGenresPage } from "./features/useGenresPage";
 
 function GenresPage() {
@@ -14,7 +14,6 @@ function GenresPage() {
     books,
     isBooksLoading,
     booksError,
-    viewsByBookId,
     ratingsByBookId,
   } = useGenresPage(currentGenreType);
 
@@ -29,11 +28,10 @@ function GenresPage() {
 
   return (
     <div className={styles.mainContent}>
-      <GenresBooksSection
+      <GenresGrid
         books={books}
         isBooksLoading={isBooksLoading}
         booksError={booksError}
-        viewsByBookId={viewsByBookId}
         ratingsByBookId={ratingsByBookId}
       />
     </div>

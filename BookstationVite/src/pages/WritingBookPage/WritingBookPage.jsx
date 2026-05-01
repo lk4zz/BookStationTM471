@@ -1,18 +1,17 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { checkIfGuest } from "../../utils/checkIfGuest";
 import styles from "./WritingBookPage.module.css";
-import WritingBookLoadingSection from "./sections/WritingBookLoadingSection/WritingBookLoadingSection";
-import WritingBookErrorSection from "./sections/WritingBookErrorSection/WritingBookErrorSection";
-import WritingBookSidePanelSection from "./sections/WritingBookSidePanelSection/WritingBookSidePanelSection";
-import WritingBookEditorSection from "./sections/WritingBookEditorSection/WritingBookEditorSection";
-import WritingBookAiPanelSection from "./sections/WritingBookAiPanelSection/WritingBookAiPanelSection";
-import WritingBookModalsSection from "./sections/WritingBookModalsSection/WritingBookModalsSection";
+import WritingBookSidePanelSection from "./sections/SidePanel/WritingBookSidePanelSection";
+import WritingBookEditorSection from "./sections/EditorCanvas/WritingBookEditorSection";
+import WritingBookAiPanelSection from "./sections/AIPanel/WritingBookAiPanelSection";
+import WritingBookModalsSection from "./sections/ModalsSection/WritingBookModalsSection";
 import { useWritingBookPage } from "./features/useWritingBookPage";
-import { useNavigate } from "react-router-dom";
 
 function WritingBookPage() {
   const { bookId } = useParams();
   const numericBookId = Number(bookId);
+  const navigate = useNavigate();
+
   if (checkIfGuest()) return null;
 
   const {
@@ -45,17 +44,29 @@ function WritingBookPage() {
     compWarning,
     setCompWarning,
     confirmCompletedStatus,
+    currentUser,
   } = useWritingBookPage(numericBookId);
-  const navigate = useNavigate();
 
+  // --- Inline Loading State ---
   if (bookLoading) {
-    return <WritingBookLoadingSection />;
+    return (
+      <div className={styles.fullScreenState}>
+        <p className={styles.centerMsg}>Loading book...</p>
+      </div>
+    );
   }
+
+  // --- Inline Error State ---
   if (bookError || !book) {
     return (
-      <WritingBookErrorSection
-        message={bookError?.message ?? "Book not found."}
-      />
+      <div className={styles.fullScreenState}>
+        <p className={styles.centerMsg}>
+          {bookError?.message ?? "Book not found."}{" "}
+          <Link to="/writing" className={styles.backLink}>
+            Back to writing
+          </Link>
+        </p>
+      </div>
     );
   }
 
@@ -92,7 +103,9 @@ function WritingBookPage() {
           cannotEdit={cannotEdit}
         />
 
-        <WritingBookAiPanelSection chapterId={selectedChapterId} />
+        <WritingBookAiPanelSection 
+        currentUser={currentUser}
+        chapterId={selectedChapterId} />
       </div>
 
       <WritingBookModalsSection

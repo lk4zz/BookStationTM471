@@ -4,7 +4,7 @@ const userController = require('../controllers/userController/userController');
 const { verifyTokenOptional, verifyToken } = require('../middlewares/verifyToken'); 
 const upload = require('../middlewares/multerUploadCover');
 
-router.get("/currentUserId", verifyToken, userController.getCurrentUserId);
+router.get("/currentUser", verifyToken, userController.getCurrentUser);
 
 router.get('/:id', verifyTokenOptional, userController.getUserProfileById);
 

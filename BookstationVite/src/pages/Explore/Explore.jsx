@@ -12,15 +12,14 @@ function Explore() {
     books,
     isBooksLoading,
     booksError,
+    highEngagementBooks,
     trendingBooks,
     isTrendingLoading,
     trendingError,
     forYouBooks,
     isForYouLoading,
     forYouError,
-    book,
     displayedBooks,
-    viewsByBookId,
     ratingsByBookId,
     searchResults,
     isSearchLoading,
@@ -29,7 +28,7 @@ function Explore() {
     booksByFollowedAuthors,
   } = useExplore();
 
-  if (!book || !books || isBooksLoading || isTrendingLoading || isForYouLoading)
+  if ( !books || isBooksLoading || isTrendingLoading || isForYouLoading)
     return (
       <div className={styles.pageShell}>
         <NavBar onSearch={setSearchQuery} />
@@ -56,7 +55,6 @@ function Explore() {
         <section>
           <TrendingSection
             books={trendingBooks}
-            viewsByBookId={viewsByBookId}
             ratingsByBookId={ratingsByBookId}
           />
         </section>
@@ -66,13 +64,14 @@ function Explore() {
         <ExploreContent
           searchQuery={searchQuery}
           displayedBooks={displayedBooks}
-          viewsByBookId={viewsByBookId}
           ratingsByBookId={ratingsByBookId}
           forYouBooks={forYouBooks}
           searchResults={searchResults}
           isSearchLoading={isSearchLoading}
           searchError={searchError}
           booksByFollowedAuthors={booksByFollowedAuthors}
+          allBooks = {books}
+          highEngagementBooks={highEngagementBooks}
         />
       </section>
     </div>

@@ -8,7 +8,7 @@ export const getViews = async (id) => {
 
 export const addView = async (id) => {
   const res = await privateApi.post(`/views/${id}`);
-  console.log(res.data)
+  console.log(res.data);
 };
 
 export const getMostViewedBook = async () => {

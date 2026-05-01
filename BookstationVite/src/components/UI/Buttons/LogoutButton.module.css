@@ -1,0 +1,20 @@
+.logoutButton {
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--color-danger);
+  color: var(--color-text-primary);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-standard), transform 0.1s var(--ease-standard);
+  font-family: var(--font-body);
+}
+
+.logoutButton:hover {
+  background-color: var(--color-danger-hover);
+}
+
+.logoutButton:active {
+  transform: scale(0.96);
+}

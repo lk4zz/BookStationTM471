@@ -1,12 +1,15 @@
 import { useEffect } from "react";
-import { useChapterById, useChaptersByBook } from "../../../hooks/useChapters";
+import { useChapterById, useChaptersByBook } from "../../../hooks/useChapters/useChaptersForUser";
 import { usePagesByChatper } from "../../../hooks/usePages";
 import { useUpdateProgress } from "../../../hooks/useProgress";
+import { useCurrentUser } from "../../../hooks/useUser";
+
 
 export function useReadingPage(numericBookId, numericChapterId) {
   const { chapters, isChaptersLoading } = useChaptersByBook(numericBookId);
   const { chapterData, isChapterLoading } = useChapterById(numericChapterId);
   const { pagesData, isPagesLoading } = usePagesByChatper(numericChapterId);
+  const { currentUser } = useCurrentUser();
 
   const { saveProgress } = useUpdateProgress();
   useEffect(() => {
@@ -32,5 +35,6 @@ export function useReadingPage(numericBookId, numericChapterId) {
     isPagesLoading,
     firstPage,
     pages,
+    currentUser,
   };
 }

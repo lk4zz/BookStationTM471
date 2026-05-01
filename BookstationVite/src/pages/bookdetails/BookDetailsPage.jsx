@@ -17,7 +17,6 @@ function BookDetailsPage() {
     bookError,
     comments,
     isCommentsLoading,
-    totalViews,
     commentInput,
     setCommentInput,
     handleAddComment,
@@ -47,7 +46,6 @@ function BookDetailsPage() {
         <section>
           <BookDetails
             book={book}
-            views={totalViews}
             ratingModal={ratingModal}
             OpenRatinModal={OpenRatinModal}
             closeRatinModal={closeRatinModal}

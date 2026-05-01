@@ -1,11 +1,10 @@
 import NavBar from "../../components/UI/NavBar/NavBar";
-import styles from "./LibraryPage.module.css";
-import LibraryGuestSection from "./sections/LibraryGuestSection/LibraryGuestSection";
-import LibraryLoadingSection from "./sections/LibraryLoadingSection/LibraryLoadingSection";
-import LibraryEmptySection from "./sections/LibraryEmptySection/LibraryEmptySection";
-import LibraryErrorSection from "./sections/LibraryErrorSection/LibraryErrorSection";
-import LibraryMainSection from "./sections/LibraryMainSection/LibraryMainSection";
+import { Loading } from "../../components/UI/Loading/Loading";
+import EmptyLibrary from "./components/EmptyLibrary/EmptyLibrary";
+import LibraryToolbar from "./components/LibraryToolbar/LibraryToolbar";
+import LibraryGrid from "./components/LibraryGrid/LibraryGrid";
 import { useLibraryPage } from "./features/useLibraryPage";
+import styles from "./LibraryPage.module.css";
 
 function LibraryPage() {
   const {
@@ -25,11 +24,14 @@ function LibraryPage() {
     isProgressLoading,
   } = useLibraryPage();
 
+  const items = libraryItems ?? [];
+
+  // --- States ---
   if (isGuest) {
     return (
       <div className={styles.pageWrapper}>
         <NavBar />
-        <LibraryGuestSection />
+        <EmptyLibrary title="Log in to view your Library" body="Log in to view your Library" suggestion="Login" path="/login" />
       </div>
     );
   }
@@ -38,7 +40,7 @@ function LibraryPage() {
     return (
       <div className={styles.pageWrapper}>
         <NavBar />
-        <LibraryLoadingSection />
+        <main className={styles.centeredContent}><Loading /></main>
       </div>
     );
   }
@@ -47,39 +49,53 @@ function LibraryPage() {
     return (
       <div className={styles.pageWrapper}>
         <NavBar />
-        <LibraryErrorSection
-          message={error?.message || "Oops! Something went wrong loading your library."}
-        />
+        <main className={styles.centeredContent}>
+          <div className={styles.errorText}>{error?.message || "Oops! Something went wrong loading your library."}</div>
+        </main>
       </div>
     );
   }
 
-  const items = libraryItems ?? [];
   if (items.length === 0) {
     return (
       <div className={styles.pageWrapper}>
         <NavBar />
-        <LibraryEmptySection />
+        <EmptyLibrary title="Your Library is Empty" body="You haven't added any books yet." suggestion="Explore Books" path="/explore" />
       </div>
     );
   }
 
+  // --- Main Render ---
   return (
     <div className={styles.pageWrapper}>
       <NavBar />
-      <LibraryMainSection
-        libraryItems={libraryItems}
-        filteredSorted={filteredSorted}
-        genres={genres}
-        genreFilter={genreFilter}
-        setGenreFilter={setGenreFilter}
-        sortBy={sortBy}
-        setSortBy={setSortBy}
-        isProgressLoading={isProgressLoading}
-        progressByBookId={progressByBookId}
-        onRemoveBook={(bookId) => removeMutation.mutate(bookId)}
-        isRemoving={removeMutation.isPending}
-      />
+      
+      <main className={styles.mainContent}>
+      <section className={styles.libraryToolbar}>
+        <LibraryToolbar 
+          itemsCount={items.length}
+          genres={genres}
+          genreFilter={genreFilter}
+          setGenreFilter={setGenreFilter}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+        />
+        </section>
+
+        {isProgressLoading && (
+          <div className={styles.inlineLoad}>
+            <Loading variant="inline" />
+          </div>
+        )}
+        <section className={styles.libraryGrid}>
+        <LibraryGrid 
+          books={filteredSorted}
+          progressByBookId={progressByBookId}
+          onRemoveBook={(id) => removeMutation.mutate(id)}
+          isRemoving={removeMutation.isPending}
+        />
+        </section>
+      </main>
     </div>
   );
 }

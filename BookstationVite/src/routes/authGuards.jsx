@@ -21,7 +21,7 @@ export const AdminRoute = () => {
   try {
     const decodedUser = jwtDecode(token);
 
-    if (decodedUser.roleId !== 2) {
+    if (decodedUser.roleId !== 3) {
       return <Navigate to="/login" replace />; 
     }
 

@@ -6,7 +6,7 @@ import { useGetWallet } from "../../../hooks/useWallet";
 import { checkIfGuest } from "../../../utils/checkIfGuest";
 import Wallet from "../wallet/Wallet";
 import UserAvatar from "../UserAvatar/UserAvatar";
-import { useCurrentUserId } from "../../../hooks/useUser";
+import { useCurrentUser } from "../../../hooks/useUser";
 import { useUser } from "../../../hooks/useUser";
 import { resolveImageUrl } from "../../../utils/ImageUrl";
 import { linkStateFromHere } from "../../../utils/navigation";
@@ -17,15 +17,14 @@ function NavBar({ onSearch }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { balance, isWalletLoading, walletError } = useGetWallet();
-  const { currentUserId } = useCurrentUserId();
-  const {user, isUserLoading, userError} = useUser(currentUserId);
+  const { currentUser, isCurrentUserLoading, currentUserError} = useCurrentUser();
   
 
 
   if (isWalletLoading && !checkIfGuest) return <p className="loading"> wallet loading..</p>
-  if (isUserLoading && !checkIfGuest) return <p className="loading"> loading..</p>
+  if (isCurrentUserLoading && !checkIfGuest) return <p className="loading"> loading..</p>
 
-  const profileUrl = resolveImageUrl(user?.profileImage);
+  const profileUrl = resolveImageUrl(currentUser?.profileImage);
 
   const isActive = (path) => location.pathname === path;
   return (
@@ -70,16 +69,12 @@ function NavBar({ onSearch }) {
         <SearchBar iconClassName={Styles.iconButton} onSearch={onSearch} />
         <Wallet balance={balance} />
 
-        <button className={Styles.iconButton} aria-label="Notifications">
-          <NotifButton />
-        </button>
-
         {/* profile Avatar  */}
         <UserAvatar
         profileUrl={profileUrl}
           onClick={() => {
-            if (currentUserId) {
-              navigate(`/author/${currentUserId}`, { state: linkStateFromHere(location) });
+            if (currentUser.id) {
+              navigate(`/author/${currentUser.id}`, { state: linkStateFromHere(location) });
             } else {
               console.warn("No User ID found! Cannot navigate.");
             }

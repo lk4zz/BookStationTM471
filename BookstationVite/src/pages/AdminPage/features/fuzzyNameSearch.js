@@ -1,6 +1,3 @@
-/**
- * Client-side name search: substring match plus Levenshtein distance ≤ 2 for typos.
- */
 
 function norm(s) {
   return String(s ?? "")

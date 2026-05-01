@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
-import { getCurrentUserId, getUserById, updateUserProfile } from "../api/users";
+import { getCurrentUser, getUserById, updateUserProfile } from "../api/users";
 
 export const USER_QUERY_KEY = (userId) => ["user", String(userId)];
 
@@ -19,21 +19,23 @@ export const useUser = (userId) => {
 };
 
 
-export const useCurrentUserId = () => {
+export const useCurrentUser = () => {
     const hasToken =
         typeof window !== "undefined" && !!localStorage.getItem("token");
 
-    const { data: currentUserId, isLoading, error } = useQuery({
+    const { data: currentUser, isLoading: isCurrentUserLoading, currentUserError } = useQuery({
         queryKey: CURRENT_USER_ID_QUERY_KEY,
-        queryFn: () => getCurrentUserId(),
+        queryFn: () => getCurrentUser(),
         enabled: hasToken,
+        staleTime: 0, // Data is instantly considered old, forcing a background refetch
+        refetchOnWindowFocus: true,
     });
 
     return {
-        currentUserId: currentUserId ?? null,
-        isAuthenticated: !!currentUserId,
-        isLoading,
-        error,
+        currentUser: currentUser ?? null,
+        isAuthenticated: !!currentUser,
+        isCurrentUserLoading,
+        currentUserError,
     };
 };
 

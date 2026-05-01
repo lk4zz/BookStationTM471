@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { useEditBookDetails } from "../../../hooks/useBooks";
+import { useEditBookDetails } from "../../../hooks/bookHooks/useBookForms";
 import { resolveImageUrl } from "../../../utils/ImageUrl";
 import styles from "./EditBookModal.module.css";
 

@@ -1,0 +1,46 @@
+.modaloverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: var(--z-overlay);
+}
+
+.modalcontent {
+  background: var(--color-bg-card);
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  color: var(--color-text-primary);
+}
+
+.modalactions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: var(--space-5);
+}
+
+.btncancel {
+  background: var(--color-cancel-bg);
+  padding: 10px var(--space-5);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btnunlock {
+  background: var(--color-accent);
+  color: var(--color-text-primary);
+  padding: 10px var(--space-5);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

@@ -16,7 +16,6 @@ function LandingPage() {
     genresError,
     trendingBooks,
     genres,
-    viewsByBookId,
     ratingsByBookId,
     randomGenre,
     genreSpotlightBooks,
@@ -40,7 +39,6 @@ function LandingPage() {
         trendingBooks={trendingBooks}
         isTrendingLoading={isTrendingLoading}
         trendingError={trendingError}
-        viewsByBookId={viewsByBookId}
         ratingsByBookId={ratingsByBookId}
       />
 
@@ -48,7 +46,6 @@ function LandingPage() {
         randomGenre={randomGenre}
         genreSpotlightBooks={genreSpotlightBooks}
         isGenreSpotlightBooksLoading={isGenreSpotlightBooksLoading}
-        viewsByBookId={viewsByBookId}
         ratingsByBookId={ratingsByBookId}
       />
 
