@@ -1110,6 +1110,7 @@ async function wipeAppData() {
     await tx.transactionLedger.deleteMany();
     await tx.followers.deleteMany();
     await tx.user.deleteMany();
+    await tx.userRole.deleteMany();
   });
 }
 
@@ -1122,23 +1123,31 @@ async function ensureGenres() {
 
 async function ensureRoles() {
   await prisma.userRole.upsert({
-    where: { name: "USER" },
-    create: { name: "USER" },
-    update: {},
+    where: { id: 1 },
+    create: { id: 1, name: "USER" },
+    update: { name: "USER" },
   });
+
   await prisma.userRole.upsert({
-    where: { name: "ADMIN" },
-    create: { name: "ADMIN" },
-    update: {},
+    where: { id: 2 },
+    create: { id: 2, name: "AUTHOR" },
+    update: { name: "AUTHOR" },
+  });
+
+  await prisma.userRole.upsert({
+    where: { id: 3 },
+    create: { id: 3, name: "ADMIN" },
+    update: { name: "ADMIN" },
   });
 }
 
 async function seedUsers() {
-  const userRole = await prisma.userRole.findUnique({ where: { name: "USER" } });
-  const adminRole = await prisma.userRole.findUnique({ where: { name: "ADMIN" } });
+  const userRole = await prisma.userRole.findUnique({ where: { id: 1 } });
+  const authorRole = await prisma.userRole.findUnique({ where: { id: 2 } });
+  const adminRole = await prisma.userRole.findUnique({ where: { id: 3 } });
 
-  if (!userRole || !adminRole) {
-    throw new Error("USER and ADMIN roles must exist before seeding users.");
+  if (!userRole || !authorRole || !adminRole) {
+    throw new Error("USER, AUTHOR, and ADMIN roles must exist before seeding users.");
   }
 
   // ==========================================
@@ -1152,15 +1161,14 @@ async function seedUsers() {
   } else {
     const adminHash = await bcrypt.hash(adminPassword, 10);
 
-    // Using upsert prevents crashes if you run the seed script multiple times
     await prisma.user.upsert({
       where: { email: adminEmail },
-      update: {}, // If the admin already exists, do nothing
+      update: {}, 
       create: {
         name: "Super Admin",
         email: adminEmail,
         password: adminHash,
-        coinBalance: 0, // Added this since your schema requires it!
+        coinBalance: 0, 
         roleId: adminRole.id,
       },
     });
@@ -1174,10 +1182,14 @@ async function seedUsers() {
   const users = [];
 
   for (const bp of userBlueprints) {
-    const roleId = bp.role === "ADMIN" ? adminRole.id : userRole.id;
+    let roleId = userRole.id;
+    
+    if (bp.role === "AUTHOR") {
+      roleId = authorRole.id;
+    } else if (bp.role === "ADMIN") {
+      roleId = adminRole.id;
+    }
 
-    // Using upsert here as well is highly recommended for blueprints
-    // to prevent errors on multiple seed runs!
     const user = await prisma.user.upsert({
       where: { email: bp.email },
       update: {},
@@ -1186,7 +1198,7 @@ async function seedUsers() {
         email: bp.email,
         password: passwordHash,
         coinBalance: bp.coinBalance,
-        roleId,
+        roleId: roleId,
       },
     });
     users.push(user);

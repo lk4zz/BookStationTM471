@@ -56,9 +56,19 @@ const getAllUsers = catchAsync(async (req, res) => {
     });
 });
 
+const changeUserRole = catchAsync(async (req, res) => {
+    const { userId, roleId } = req.body;
+    await adminServices.changeUserRole(userId, roleId);
+    return res.status(200).json({
+      success: true,
+      message: "User role updated successfully!"
+    });
+    })
+
 module.exports = { 
     getUserRadar, 
     banUser, 
     deleteBook,
-    getAllUsers 
+    getAllUsers,
+    changeUserRole,
 };

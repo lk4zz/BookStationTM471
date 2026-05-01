@@ -1,74 +1,47 @@
 import { useState, useMemo } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getAllUsers, banUser, deleteBook } from "../../../api/admin";
-import { getAllBooks } from "../../../api/books";
-import { jwtDecode } from "jwt-decode";
 import { userMatchesSearch, bookMatchesSearch } from "./fuzzyNameSearch";
+import { useAllUsers, useAllBooks } from "../../../hooks/adminHooks/useAdminQueries";
+import { useBanUser, useDeleteBook, useChangeUserRole } from "../../../hooks/adminHooks/useAdminMutations";
 
-/** Avoid rendering huge DOM lists from a single fuzzy filter pass. */
 export const ADMIN_MAX_VISIBLE_ROWS = 2000;
 
 export const useAdminPage = () => {
-  const queryClient = useQueryClient();
+  //  raw data AND the query states
+  const { usersRaw, isLoading: isUsersLoading, error: usersError } = useAllUsers();
+  const { booksRaw, isLoading: isBooksLoading, error: booksError } = useAllBooks();
+  
+  //  mutation hooks
+  const banUserMutation = useBanUser();
+  const deleteBookMutation = useDeleteBook();
+  const changeUserRoleMutation = useChangeUserRole();
 
+
+  // STATES
   const [activeTab, setActiveTab] = useState("users");
   const [userSearch, setUserSearch] = useState("");
   const [bookSearch, setBookSearch] = useState("");
 
-  const token = localStorage.getItem("token");
-  const currentAdminId = token ? jwtDecode(token).userId : null;
-
-  const usersQuery = useQuery({
-    queryKey: ["admin", "users"],
-    queryFn: getAllUsers,
-  });
-
-  const booksQuery = useQuery({
-    queryKey: ["books"],
-    queryFn: getAllBooks,
-    retry: false,
-  });
-
-  const usersRaw = usersQuery.data?.users || [];
-  const booksRaw = booksQuery.data?.data ?? booksQuery.data ?? [];
-
+  // FUZZY SEARCH OF USERS
   const filteredUsers = useMemo(() => {
     const list = usersRaw.filter((u) => userMatchesSearch(u, userSearch));
     if (list.length <= ADMIN_MAX_VISIBLE_ROWS) return list;
     return list.slice(0, ADMIN_MAX_VISIBLE_ROWS);
   }, [usersRaw, userSearch]);
 
+  // FUZZY SEARCH OF BOOKS
   const filteredBooks = useMemo(() => {
     const list = booksRaw.filter((b) => bookMatchesSearch(b, bookSearch));
     if (list.length <= ADMIN_MAX_VISIBLE_ROWS) return list;
     return list.slice(0, ADMIN_MAX_VISIBLE_ROWS);
   }, [booksRaw, bookSearch]);
 
-  const userListTruncated =
-    usersRaw.filter((u) => userMatchesSearch(u, userSearch)).length >
-    ADMIN_MAX_VISIBLE_ROWS;
-  const bookListTruncated =
-    booksRaw.filter((b) => bookMatchesSearch(b, bookSearch)).length >
-    ADMIN_MAX_VISIBLE_ROWS;
+  const userListTruncated = useMemo(() => {
+    return usersRaw.filter((u) => userMatchesSearch(u, userSearch)).length > ADMIN_MAX_VISIBLE_ROWS;
+  }, [usersRaw, userSearch]);
 
-  const banUserMutation = useMutation({
-    mutationFn: async (userId) => {
-      if (userId === currentAdminId) {
-        throw new Error("You cannot ban yourself.");
-      }
-      return banUser(userId);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin", "users"] });
-    },
-  });
-
-  const deleteBookMutation = useMutation({
-    mutationFn: deleteBook,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["books"] });
-    },
-  });
+  const bookListTruncated = useMemo(() => {
+    return booksRaw.filter((b) => bookMatchesSearch(b, bookSearch)).length > ADMIN_MAX_VISIBLE_ROWS;
+  }, [booksRaw, bookSearch]);
 
   return {
     usersData: usersRaw,
@@ -83,16 +56,19 @@ export const useAdminPage = () => {
     setBookSearch,
     bookListTruncated,
 
-    isUsersLoading: usersQuery.isLoading,
-    usersError: usersQuery.error,
+    isUsersLoading,
+    usersError,
 
-    isBooksLoading: booksQuery.isLoading,
-    booksError:
-      booksQuery.error?.response?.status === 404 ? null : booksQuery.error,
+    isBooksLoading,
+    booksError: booksError?.response?.status === 404 ? null : booksError,
 
     banUser: banUserMutation.mutate,
     isBanning: banUserMutation.isPending,
     banError: banUserMutation.error,
+
+    changeUserRole: changeUserRoleMutation.mutate,
+    isChangingUserRole: changeUserRoleMutation.isPending,
+    changeUserRoleError: changeUserRoleMutation.error,
 
     deleteBook: deleteBookMutation.mutate,
     isDeletingBook: deleteBookMutation.isPending,

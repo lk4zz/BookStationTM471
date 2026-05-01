@@ -1,4 +1,3 @@
-/* The wrapper that holds everything together */
 .inputWrapper {
     position: relative;
     display: flex;
@@ -9,72 +8,64 @@
 .inputField {
     flex: 1;
     background-color: transparent;
-    border: 1px solid #3f3f46;
+    border: 1px solid var(--color-border-medium);
     border-radius: 20px;
-    
-    /* 45px padding on the right creates a safe zone for the absolute button */
-    padding: 10px 45px 10px 16px; 
-    
-    color: white;
+    padding: 10px 45px 10px var(--space-4);
+    color: var(--color-text-primary);
     font-size: 0.95rem;
     outline: none;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    transition: border-color var(--duration-normal) var(--ease-standard),
+        box-shadow var(--duration-normal) var(--ease-standard);
 }
 
 .inputField:focus {
-    border-color: #3b82f6;
-    /* Adds a soft glowing aura when focused */
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); 
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-muted);
 }
 
-/* Base button styles */
 .submitBtn {
     position: absolute;
-    right: 6px; /* Pins it 6px away from the right edge of the input */
+    right: 6px;
     width: 30px;
     height: 30px;
-    border-radius: 50%;
+    border-radius: var(--radius-pill);
     border: none;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all var(--duration-normal) var(--ease-standard);
     padding: 0;
 }
 
-/* State: When input is empty */
 .disabledBtn {
-    background-color: #3f3f46;
-    color: #71717a;
+    background-color: var(--color-border-medium);
+    color: var(--color-text-muted);
     cursor: not-allowed;
-    transform: scale(0.90); /* Looks slightly deflated */
+    transform: scale(0.90);
 }
 
-/* State: When input has text */
 .activeBtn {
-    background-color: #3b82f6;
-    color: white;
+    background-color: var(--color-accent);
+    color: #ffffff;
     cursor: pointer;
-    transform: scale(1); /* Pops to full size */
+    transform: scale(1);
 }
 
 .activeBtn:hover {
-    background-color: #2563eb;
-    transform: scale(1.05); /* Expands slightly on hover */
+    background-color: var(--color-accent-hover);
+    transform: scale(1.05);
 }
 
 .activeBtn:active {
-    transform: scale(0.95); /* Squishes down when clicked */
+    transform: scale(0.95);
 }
 
-/* The Arrow Icon */
 .arrowIcon {
     width: 16px;
     height: 16px;
-    transition: transform 0.2s ease;
+    transition: transform var(--duration-fast) var(--ease-standard);
 }
 
-/* Nudges the arrow up when hovering the active button */
 .activeBtn:hover .arrowIcon {
-    transform: translateY(-2px); 
+    transform: translateY(-2px);
 }

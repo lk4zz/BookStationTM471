@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { useAllGenres } from "../../../hooks/useGenres";
-import { useBooksByGenre } from "../../../hooks/useBooks";
-import { useViewsByBookIds } from "../../../hooks/useViews";
+import { useBooksByGenre } from "../../../hooks/bookHooks/useBookQueries";
 import { useRatingsByBookIds } from "../../../hooks/useRatings";
 
 export function useGenresPage(currentGenreType) {
@@ -17,7 +16,6 @@ export function useGenresPage(currentGenreType) {
     () => (books ?? []).map((b) => b.id).filter((id) => Number.isFinite(Number(id))),
     [books]
   );
-  const { viewsByBookId } = useViewsByBookIds(bookIds);
   const { ratingsByBookId } = useRatingsByBookIds(bookIds);
 
   return {
@@ -28,7 +26,6 @@ export function useGenresPage(currentGenreType) {
     books,
     isBooksLoading,
     booksError,
-    viewsByBookId,
     ratingsByBookId,
   };
 }

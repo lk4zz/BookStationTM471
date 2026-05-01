@@ -1,7 +1,0 @@
-.error {
-  color: var(--color-warning);
-  text-align: center;
-  padding: var(--space-8);
-  font-size: 1rem;
-  font-family: var(--font-body);
-}

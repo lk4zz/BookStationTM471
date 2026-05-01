@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
 import styles from "./ReadingPage.module.css";
-import ReadingChaptersPanelSection from "./sections/ReadingChaptersPanelSection/ReadingChaptersPanelSection";
+import ReadingChaptersPanelSection from "./sections/ChaptersPanel/ReadingChaptersPanelSection";
 import ReadingCanvasSection from "./sections/ReadingCanvasSection/ReadingCanvasSection";
-import ReadingAiPanelSection from "./sections/ReadingAiPanelSection/ReadingAiPanelSection";
+import ReadingAiPanelSection from "./sections/AIPanel/ReadingAiPanelSection";
 import { useReadingPage } from "./features/useReadingPage";
 
 function ReadingPage() {
@@ -18,6 +18,7 @@ function ReadingPage() {
     isContentLoading,
     isPagesLoading,
     firstPage,
+    currentUser,
   } = useReadingPage(numericBookId, numericChapterId);
 
   return (
@@ -36,7 +37,10 @@ function ReadingPage() {
         isPagesLoading={isPagesLoading}
       />
 
-      <ReadingAiPanelSection chapterId={numericChapterId} />
+      <ReadingAiPanelSection
+        chapterId={numericChapterId}
+        currentUser={currentUser}
+      />
     </div>
   );
 }

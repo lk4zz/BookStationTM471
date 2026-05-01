@@ -68,20 +68,5 @@ const loginUser = async (email, password) => {
   }
 };
 
-const verifyAdmin = (req, res, next) => {
 
-    const ADMIN_ROLE_ID = 2; 
-
-    if (!req.user) {
-       throw new ForbiddenError({ error: "Access denied. Please log in." });
-    }
-
-    // Check if the user has the admin role
-    if (req.user.roleId !== ADMIN_ROLE_ID) {
-        throw new ForbiddenError({ error: "Forbidden. Admin access required." });
-    }
-
-    next();
-};
-
-module.exports = { signupUser, loginUser, verifyAdmin };
+module.exports = { signupUser, loginUser };

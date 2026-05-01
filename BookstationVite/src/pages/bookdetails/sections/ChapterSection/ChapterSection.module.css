@@ -1,68 +1,62 @@
 .chaptercolumn {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    height: 40vh;
-    min-height: 300px;
-    width: 100%;
-  }
-  
-  .column {
-    display: flex;
-    flex-direction: column;
-    flex: 2;
-    height: 40vh;
-    min-height: 300px;
-    width: 100%;
-  }
-  
-  .sectionTitle {
-  
-    font-family: var(--font-heading);
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin: 0 0 20px 0;
-    color: #ffffff;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 40vh;
+  min-height: 300px;
+  width: 100%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  flex: 2;
+  height: 40vh;
+  min-height: 300px;
+  width: 100%;
+}
+
+.sectionTitle {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: var(--weight-semibold);
+  margin: 0 0 20px 0;
+  color: #ffffff;
+}
+
+.scrollList {
+  padding-right: 5%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  overflow-y: auto;
+  flex: 1;
+}
+
+.scrollList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollList::-webkit-scrollbar-track {
+  background: var(--color-bg-elevated);
+  border-radius: 10px;
+}
+
+.scrollList::-webkit-scrollbar-thumb {
+  background: var(--color-border-medium);
+  border-radius: 10px;
+}
+
+.scrollList::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-dim);
+}
+
+@media (max-width: 1024px) {
   .scrollList {
-    padding-right: 5%;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    overflow-y: auto;
+    gap: var(--space-3);
+    overflow-y: visible;
     flex: 1;
   }
-  
-  /* custom Scrollbar */
-  .scrollList::-webkit-scrollbar {
-    width: 6px;
-  }
-  
-  .scrollList::-webkit-scrollbar-track {
-    background: #1e1e1e;
-    border-radius: 10px;
-  }
-  
-  .scrollList::-webkit-scrollbar-thumb {
-    background: #3f3f46;
-    border-radius: 10px;
-  }
-  
-  .scrollList::-webkit-scrollbar-thumb:hover {
-    background: #52525b;
-  }
-  
-  
-  @media (max-width: 1024px) {
-  
-    .scrollList {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      overflow-y: visible;
-      flex: 1;
-    }
-  
-  }
-  
+}

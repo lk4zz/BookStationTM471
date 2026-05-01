@@ -1,0 +1,31 @@
+.backRow {
+  width: 100%;
+  flex-shrink: 0;
+  margin-bottom: var(--space-1);
+}
+
+.backOnHero {
+  background: var(--glass-bg);
+  border-color: var(--color-border-medium);
+  backdrop-filter: var(--glass-blur);
+}
+
+.bookTitle {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  font-weight: var(--weight-bold);
+  margin: 0 0 5px 0;
+}
+
+.authorText {
+  font-family: var(--font-body);
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  margin: 0 0 var(--space-5) 0;
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.authorText:hover {
+  color: var(--color-text-primary);
+}

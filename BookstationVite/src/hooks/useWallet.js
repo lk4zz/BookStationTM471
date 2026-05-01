@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getWallet, getWalletByUser, buyCoins } from "../api/wallet";
+import { getWallet, getWalletByUser, buyCoins, purchaseAIPass } from "../api/wallet";
 
 export const useGetWallet = () => {
     const {
@@ -23,3 +23,15 @@ export const useBuyCoins = () => {
     },
     })
 }
+
+export const usePurchaseAIPass = () => {
+    const queryClient = useQueryClient();
+    
+    return useMutation({
+        mutationFn: purchaseAIPass,
+        onSuccess: () => {
+            queryClient.invalidateQueries(["wallet"]);
+            queryClient.invalidateQueries(["user"]); 
+        },
+    });
+};

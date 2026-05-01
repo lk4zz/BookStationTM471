@@ -1,7 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const ChunkingService = require("../services/AIServices/VectorServices/PageChunkingService");
 const EmbeddingService = require("../services/AIServices/VectorServices/EmbeddingService");
-const { calculateAverageVector } = require("../utils/vectorMath");
+const { calculateAverageVector } = require("../utils/AIUtils/vectorUtils/calculateAverageVector");
 
 const prisma = new PrismaClient();
 
@@ -12,7 +12,7 @@ async function seedEmbeddings() {
         include: { pages: true },
       },
     },
-  });
+  });                                                                                           
 
   console.log(`Found ${books.length} books to process.\n`);
 

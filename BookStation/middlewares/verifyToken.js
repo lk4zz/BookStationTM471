@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const ForbiddenError = require('../errors/ForbiddenError');
 
 const verifyToken = (req, res, next) => {
 
@@ -51,21 +52,41 @@ const verifyTokenOptional = (req, res, next) => {
 
 };
 
+const verifyAuthor = (req, res, next) => {
+
+    const AUTHOR_ROLE_ID = 2;
+
+    if (!req.user) {
+        return res.status(403).json({ error: "Forbidden. Author access required." });
+    }
+
+    if (req.user.roleId !== AUTHOR_ROLE_ID && req.user.roleId !== 3) {
+        return res.status(403).json({ error: "Forbidden. Author access required." });
+    }
+
+    next();
+};
+
 const verifyAdmin = (req, res, next) => {
+
+    const ADMIN_ROLE_ID = 3;
 
     if (!req.user) {
         return res.status(401).json({ error: "Access denied. Please log in." });
     }
 
-    if (req.user.roleId !== 2) {
+    if (req.user.roleId !== ADMIN_ROLE_ID) {
         return res.status(403).json({ error: "Forbidden. Admin access required." });
     }
 
     next();
 };
 
+
+
 module.exports = {
     verifyToken,
     verifyTokenOptional,
-    verifyAdmin 
+    verifyAdmin,
+    verifyAuthor,
 };

@@ -11,7 +11,7 @@ function formatAvg(ratingAverage, book) {
   return typeof v === "number" ? v.toFixed(1) : String(v);
 }
 
-function BookCoverCard({ book, totalViews, ratingAverage }) {
+function BookCoverCard({ book, ratingAverage }) {
   const location = useLocation();
   const coverSrc = book.coverImage?.startsWith("http")
     ? book.coverImage
@@ -24,21 +24,19 @@ function BookCoverCard({ book, totalViews, ratingAverage }) {
       to={`/book/${book.id}`}
       state={linkStateFromHere(location)}
     >
-      <div className={styles.card}>
+      <article className={styles.card}>
         <img src={coverSrc} alt={book.name} className={styles.cover} />
 
         <div className={styles.overlay}>
-          <div>
-          <span className={styles.title}>{book.name}</span>
-          <br />
-          <span className={styles.author}>{book.author?.name}</span>
+          <div className={styles.header}>
+            <h3 className={styles.title}>{book.name}</h3>
+            <p className={styles.author}>{book.author?.name}</p>
           </div>
-
 
           <div className={styles.stats}>
             <span className={styles.stat}>
               <EyeIcon className={styles.eye} />
-              {totalViews ?? "—"}
+              {book._count?.views ?? "—"}
             </span>
             <span className={styles.stat}>
               <StarIcon className={styles.star} />
@@ -46,7 +44,7 @@ function BookCoverCard({ book, totalViews, ratingAverage }) {
             </span>
           </div>
         </div>
-      </div>
+      </article>
     </Link>
   );
 }

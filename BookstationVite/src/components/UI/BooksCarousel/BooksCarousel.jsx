@@ -4,7 +4,6 @@ import BookCoverCard from "../BookCoverCard/BookCoverCard";
 
 function BooksCarousel({
   books = {},
-  viewsByBookId = {},
   ratingsByBookId = {},
 }) {
     if (!books.length) return null;
@@ -17,7 +16,7 @@ function BooksCarousel({
                 speed: 500,
 
                 // Layout
-                perPage: 7,
+                perPage: 8,
                 perMove: 1,
                 gap: "15px",
                 focus: "center",
@@ -49,8 +48,8 @@ function BooksCarousel({
                 <SplideSlide key={book.id}>
                     <BookCoverCard
                         book={book}
-                        totalViews={viewsByBookId[book.id]}
                         ratingAverage={ratingsByBookId[book.id]?.ratingAverage}
+                        
                     />
                 </SplideSlide>
             ))}

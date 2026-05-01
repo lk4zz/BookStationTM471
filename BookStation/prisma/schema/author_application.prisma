@@ -1,0 +1,17 @@
+model AuthorApplication {
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  user            User     @relation(fields: [userId], references: [id])
+  
+  // New structured fields
+  penName         String   // The name they want to publish under
+  writingIntent   String   @db.Text // What kind of books they want to write
+  agreedToPolicy  Boolean  @default(false) // Must be true to submit
+  
+  // The document is now optional, only needed if they claim expertise
+  documentUrl     String?  
+  
+  status          String   @default("PENDING") 
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}

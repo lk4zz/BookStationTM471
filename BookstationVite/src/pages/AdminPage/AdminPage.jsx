@@ -5,6 +5,7 @@ import { AdminSearchField } from "./sections/AdminSearchField/AdminSearchField";
 import { AdminUsersSection } from "./sections/AdminUsersSection/AdminUsersSection";
 import { AdminBooksSection } from "./sections/AdminBooksSection/AdminBooksSection";
 import { AdminRadarSection } from "./sections/AdminRadarSection/AdminRadarSection";
+import { AdminApplicationsSection } from "./sections/AdminApplicationsSection/AdminApplicationsSection"; // NEW IMPORT
 
 import styles from "./AdminPage.module.css";
 
@@ -22,6 +23,9 @@ const AdminPage = () => {
     isBooksLoading,
     usersError,
     booksError,
+    changeUserRole,
+    isChangingRole,
+    changeRoleError,
     banUser,
     isBanning,
     deleteBook,
@@ -67,9 +71,7 @@ const AdminPage = () => {
             type="button"
             className={styles.tabBtn}
             role="tab"
-            id="tab-users"
             aria-selected={activeTab === "users"}
-            aria-controls="admin-panel-users"
             onClick={() => setActiveTab("users")}
           >
             Users
@@ -78,9 +80,7 @@ const AdminPage = () => {
             type="button"
             className={styles.tabBtn}
             role="tab"
-            id="tab-books"
             aria-selected={activeTab === "books"}
-            aria-controls="admin-panel-books"
             onClick={() => setActiveTab("books")}
           >
             Books
@@ -89,23 +89,27 @@ const AdminPage = () => {
             type="button"
             className={styles.tabBtn}
             role="tab"
-            id="tab-radar"
             aria-selected={activeTab === "radar"}
-            aria-controls="admin-panel-radar"
             onClick={() => setActiveTab("radar")}
           >
             Taste radar
+          </button>
+          {/* NEW TAB BUTTON */}
+          <button
+            type="button"
+            className={styles.tabBtn}
+            role="tab"
+            aria-selected={activeTab === "applications"}
+            onClick={() => setActiveTab("applications")}
+          >
+            Author Requests
           </button>
         </div>
 
         <div className={styles.tabPanels}>
           {activeTab === "users" && (
-            <div
-              id="admin-panel-users"
-              role="tabpanel"
-              aria-labelledby="tab-users"
-              className={styles.tabPanel}
-            >
+            <div role="tabpanel" className={styles.tabPanel}>
+              {/* Existing Users Code */}
               <AdminSearchField
                 id="admin-user-search"
                 label="Search"
@@ -126,17 +130,15 @@ const AdminPage = () => {
                 showHeading
                 platformHasNoUsers={regularUserCount === 0}
                 searchQuery={userSearch}
+                onChangeRole={changeUserRole}
+                isChangingRole={isChangingRole}
               />
             </div>
           )}
 
           {activeTab === "books" && (
-            <div
-              id="admin-panel-books"
-              role="tabpanel"
-              aria-labelledby="tab-books"
-              className={styles.tabPanel}
-            >
+            <div role="tabpanel" className={styles.tabPanel}>
+               {/* Existing Books Code */}
               <AdminSearchField
                 id="admin-book-search"
                 label="Search"
@@ -162,15 +164,18 @@ const AdminPage = () => {
           )}
 
           {activeTab === "radar" && (
-            <div
-              id="admin-panel-radar"
-              role="tabpanel"
-              aria-labelledby="tab-radar"
-              className={styles.tabPanel}
-            >
+            <div role="tabpanel" className={styles.tabPanel}>
               <AdminRadarSection />
             </div>
           )}
+
+          {/* NEW TAB PANEL */}
+          {activeTab === "applications" && (
+            <div role="tabpanel" className={styles.tabPanel}>
+              <AdminApplicationsSection />
+            </div>
+          )}
+
         </div>
       </main>
     </div>

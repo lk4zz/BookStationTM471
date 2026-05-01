@@ -1,6 +1,25 @@
+/* 1. Base State for Everyone (Including Guests) */
 .secondaryBtn {
   background: transparent;
   border: 1px solid #3f3f46 !important;
-  color: white;
+  color: var(--color-text-primary);
+  transition: all 0.2s ease;  
+  /* Give everyone the hand pointer so guests know to click */
+  cursor: pointer; 
 }
-.secondaryBtn:hover { background: rgba(255,255,255,0.1); }
+
+/* 2. Hover State for Active Buttons ONLY */
+/* The :not(:disabled) part means: "Only apply this background if the HTML 'disabled' attribute is MISSING" */
+.secondaryBtn:hover:not(:disabled) { 
+  background: rgba(255, 255, 255, 0.1); 
+  /* Notice we DO NOT change the cursor here. Let the base state handle it. */
+}
+
+/* 3. True Disabled State (Only when database is loading) */
+.secondaryBtn:disabled {
+  opacity: 0.5;
+  cursor: wait; 
+  /* This kills the hover effect automatically */
+  pointer-events: none; 
+  border-color: #27272a !important;
+}

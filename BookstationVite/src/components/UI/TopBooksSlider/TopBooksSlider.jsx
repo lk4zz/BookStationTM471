@@ -8,7 +8,7 @@ import { EyeIcon, StarIcon } from "../Icons/IconLibrary";
 import { addView } from "../../../api/views";
 import { formatBookData } from "../../../utils/bookUtils";
 
-function SlideContent({ book, totalViews, ratingAverage }) {
+function SlideContent({ book, ratingAverage }) {
   const location = useLocation();
   const formattedBook = formatBookData(book);
   if (!formattedBook) return null;
@@ -42,7 +42,7 @@ function SlideContent({ book, totalViews, ratingAverage }) {
           </div>
           <div className={styles.statItem}>
             <EyeIcon className={styles.iconEye} />
-            {totalViews ?? "—"}
+            {book._count?.views ?? "—"}
           </div>
         </div>
 
@@ -56,7 +56,6 @@ function SlideContent({ book, totalViews, ratingAverage }) {
 
 function TopBooksSlider({
   books = [],
-  viewsByBookId = {},
   ratingsByBookId = {},
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -93,7 +92,6 @@ function TopBooksSlider({
             <SplideSlide key={book.id ?? book.name}>
               <SlideContent
                 book={book}
-                totalViews={viewsByBookId[book.id]}
                 ratingAverage={ratingsByBookId[book.id]?.ratingAverage}
               />
             </SplideSlide>

@@ -13,7 +13,9 @@ const getAllPublicBooks = async () => {
       author: { select: { name: true }, },
       bookGenres: { include: { bookGenre: true }, },
       _count: {
-        select: { chapters: true },
+        select: {
+          views: true,
+        },
       },
     },
   });
@@ -37,7 +39,10 @@ const getBookByGenre = async (genreId) => {
         include: { bookGenre: true },
       },
       _count: {
-        select: { chapters: true },
+        select: {
+          chapters: true,
+          views: true,
+        },
       },
     },
   });
@@ -59,7 +64,10 @@ const getBookById = async (id, currentUserId) => {
         include: { bookGenre: true },
       },
       _count: {
-        select: { chapters: true },
+        select: {
+          chapters: true,
+          views: true,
+        },
       },
     },
   });
@@ -97,19 +105,25 @@ const getBooksByAuthor = async (authorId, currentUserId) => {
         include: { bookGenre: true },
       },
       _count: {
-        select: { chapters: true },
+        select: {
+          chapters: true,
+          views: true,
+        },
       },
     },
   });
 
-  if (books.length === 0)
-    throw new NotFoundError("NO BOOKS FOUND FOR THIS AUTHOR");
   return books;
 };
 
-const getTrendingBooks = async (limit = 10) => {
+const getTrendingBooks = async (limit = 25) => {
   const books = await prisma.books.findMany({
     where: { NOT: { status: "DRAFT" } },
+    take: limit, 
+    orderBy: [
+      { views: { _count: 'desc' } },   
+      { ratings: { _count: 'desc' } }  
+    ],
     select: {
       id: true,
       name: true,
@@ -127,9 +141,9 @@ const getTrendingBooks = async (limit = 10) => {
     },
   });
 
-  const scored = books.map((book) => {
-    const views = book._count.views;
-    const ratingsCount = book._count.ratings;
+  return books.map((book) => {
+    const views = book._count.views || 0;
+    const ratingsCount = book._count.ratings || 0;
 
     const avg =
       ratingsCount > 0
@@ -141,16 +155,53 @@ const getTrendingBooks = async (limit = 10) => {
     const { ratings, ...rest } = book;
     return { ...rest, ratingAverage: avg, score };
   });
+};
 
-  return scored.sort((a, b) => b.score - a.score).slice(0, limit);
-}
+const getHighEngagementBooks = async (limit = 25) => {
+  const books = await prisma.books.findMany({
+    where: { NOT: { status: "DRAFT" } },
+    take: limit,
+    orderBy: [
+      { comments: { _count: 'desc' } }, 
+      { ratings: { _count: 'desc' } }   
+    ],
+    select: {
+      id: true,
+      name: true,
+      coverImage: true,
+      author: { select: { name: true } },
+      _count: {
+        select: {
+          comments: true,
+          ratings: true,
+          views: true,
+        },
+      },
+      ratings: {
+        select: { value: true },
+      },
+    },
+  });
 
+  return books.map((book) => {
+    const commentsCount = book._count.comments || 0;
+    const ratingsCount = book._count.ratings || 0;
+    
+    const score = commentsCount + ratingsCount;
 
+    const avg =
+      ratingsCount > 0
+        ? book.ratings.reduce((sum, r) => sum + r.value, 0) / ratingsCount
+        : 0;
+
+    const { ratings, ...rest } = book;
+    return { ...rest, ratingAverage: avg, score };
+  });
+};
 
 const booksByFollowedAuthors = async (currentUserId, limit) => {
   const parsedCurrentUserId = parseInt(currentUserId, 10);
 
-  // 1. Get followed author IDs
   const followedAuthors = await prisma.followers.findMany({
     where: {
       followerId: currentUserId,
@@ -160,26 +211,30 @@ const booksByFollowedAuthors = async (currentUserId, limit) => {
     },
   });
 
-  // Early exit if they don't follow anyone (saves database load!)
   if (followedAuthors.length === 0) {
     return [];
   }
 
-  // 2. Fetch the books
   const books = await prisma.books.findMany({
     where: {
       userId: {
         in: followedAuthors.map(author => author.followingId),
       },
+      NOT: { status: "DRAFT" },
     },
-    take: limit, // <-- Tells the database to only fetch 'limit' amount of books
+    take: limit,
     orderBy: {
-       createdAt: 'desc', // <-- Sorts so the newest books show up first
+      createdAt: 'desc',
     },
     include: {
       author: { select: { name: true } },
       bookGenres: {
         include: { bookGenre: true },
+      },
+      _count: {
+        select: {
+          views: true,
+        },
       },
     }
   });
@@ -194,4 +249,5 @@ module.exports = {
   getBookByGenre,
   getTrendingBooks,
   booksByFollowedAuthors,
+  getHighEngagementBooks,
 };

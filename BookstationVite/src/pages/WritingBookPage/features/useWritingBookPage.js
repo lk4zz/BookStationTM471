@@ -4,14 +4,16 @@
  */
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { useBookById } from "../../../hooks/useBooks";
-import { useChaptersByBook } from "../../../hooks/useChapters";
+import { useBookById } from "../../../hooks/bookHooks/useBookQueries";
+import { useChaptersByBook } from "../../../hooks/useChapters/useChaptersForUser";
 import { useAuthorPages } from "../../../hooks/useWritingPages";
 import { checkIfGuest } from "../../../utils/checkIfGuest";
-import { useWritingCanvas } from "../sections/WritingBookEditorSection/components/WritingCanvas/useWritingCanvas";
+import { useWritingCanvas } from "../sections/EditorCanvas/components/WritingCanvas/useWritingCanvas";
 import { EMPTY_DOC_HTML } from "./writingMetrics";
 import { useWritingChapterFromUrl } from "./useWritingChapterFromUrl";
 import { useWritingBookMutations } from "./useWritingBookMutations";
+import { useCurrentUser } from "../../../hooks/useUser";
+
 
 export function useWritingBookPage(numericBookId) {
   const navigate = useNavigate();
@@ -20,6 +22,7 @@ export function useWritingBookPage(numericBookId) {
   const [showLaunch, setShowLaunch] = useState(false);
   const [compWarning, setCompWarning] = useState(false);
 
+  const { currentUser } = useCurrentUser();
   const { book, isBookLoading: bookLoading, bookError } = useBookById(
     numericBookId,
     true,
@@ -122,5 +125,6 @@ export function useWritingBookPage(numericBookId) {
     compWarning,
     setCompWarning,
     confirmCompletedStatus,
+    currentUser,
   };
 }

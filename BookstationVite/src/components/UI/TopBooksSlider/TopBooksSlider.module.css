@@ -18,17 +18,19 @@
   filter: blur(6px);
   transform: scale(1.1);
   z-index: 0;
+  opacity: 0.5;
   transition: background-image 0.4s ease;
 }
 
 .overlay {
   position: absolute;
   inset: 0;
+  opacity: 0.2;
   background: linear-gradient(
     90deg,
-    rgba(0, 0, 0, 0.95) 0%,
+    rgba(161, 161, 161, 0.95) 0%,
     rgba(0, 0, 0, 0.75) 50%,
-    rgba(0, 0, 0, 0.35) 100%
+    rgba(149, 141, 255, 0.35) 100%
   );
   z-index: 1;
 }

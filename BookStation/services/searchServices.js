@@ -1,7 +1,7 @@
 const { BadRequestError } = require("openai/error.js");
 const prisma = require("../db");
 const EmbeddingService = require("./AIServices/VectorServices/EmbeddingService");
-const recommendationServices = require("./algorithmServices/recommendationServices");
+const recommendationServices = require("./booksServices/recommendationServices");
 const {searchTasteBlender} = require("../utils/AlgorithmTasteBlenders/searchTasteBlender")
 
 const getSearch = async (searchQuery, limit, currentUserId) => {

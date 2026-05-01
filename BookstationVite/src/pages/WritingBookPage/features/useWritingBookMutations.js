@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
-import { useUpdateBookStatus, useLaunchBook } from "../../../hooks/useBooks";
+import { useUpdateBookStatus, useLaunchBook } from "../../../hooks/bookHooks/useBookMutations";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   useCreateChapter,
   useUpdateChapter,
   useDeleteChapter,
   usePublishChapter,
-} from "../../../hooks/useChapters";
+} from "../../../hooks/useChapters/useChaptersForAuthor";
 
 function runMutation(mutation, variables, setError, { errorMessage, onSuccess }) {
   setError(null);
@@ -29,15 +30,15 @@ export function useWritingBookMutations({
   chapterData,
 }) {
   const [error, setError] = useState(null);
-  
 
+  const queryClient = useQueryClient();
   const createChapter = useCreateChapter();
   const updateChapter = useUpdateChapter();
   const deleteChapter = useDeleteChapter();
   const publishChapter = usePublishChapter();
   const updateBookStatus = useUpdateBookStatus();
   const launchBookMutation = useLaunchBook();
-  
+
 
   const applyBookStatus = useCallback(
     (requestedStatus) => {
@@ -76,6 +77,11 @@ export function useWritingBookMutations({
     (inBook) => {
       runMutation(createChapter, inBook, setError, {
         errorMessage: "Could not create chapter.",
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: ["chapters", inBook],
+          });
+        }
       });
     },
     [createChapter],

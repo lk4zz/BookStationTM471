@@ -1,128 +1,119 @@
-/* might need to remove this later since ihave global css plus clean this file */
 .navBar {
-    --border-color: #27272a;
-    --accent-color: #ffffff;
-    --hover-bg: rgba(255, 255, 255, 0.08);
-    --transition-speed: 0.25s;
-
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background-color: var(--color-bg-panel);
-    border-bottom: 1px solid var(--border-color);
-    color: var(--color-text-primary);
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 72px;
-    padding: 0 4%;
+  font-family: var(--font-body);
+  background-color: var(--color-bg-panel);
+  border-bottom: 1px solid var(--color-border-soft);
+  color: var(--color-text-primary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 72px;
+  padding: 0 4%;
 }
 
-/* logo Section */
 .logoContainer {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  cursor: pointer;
+  flex: 1;
 }
 
 .logoIcon {
-    color: var(--color-text-primary);
+  color: var(--color-text-primary);
 }
 
 .logoContainer h1 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin: 0;
-    letter-spacing: -0.3px;
+  font-size: 1.25rem;
+  font-weight: var(--weight-semibold);
+  margin: 0;
+  letter-spacing: -0.3px;
 }
 
-/* navigation Links */
 .navLinks {
-    display: flex;
-    align-items: center;
-    gap: 40px;
-    height: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  height: 100%;
 }
 
 .navItem {
-    background: transparent;
-    border: none;
-    color: var(--color-text-secondary);
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    height: 100%;
-    position: relative;
-    padding: 0;
-    transition: color var(--transition-speed) ease;
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  height: 100%;
+  position: relative;
+  padding: 0;
+  transition: color var(--duration-fast) var(--ease-standard);
 }
 
 .navItem:hover {
-    color: var(--color-text-primary);
+  color: var(--color-text-primary);
 }
 
 .navItem.active {
-    color: var(--color-text-primary);
+  color: var(--color-text-primary);
 }
 
 .navItem.active::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background-color: var(--accent-color);
-    border-radius: 2px 2px 0 0;
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-text-primary);
+  border-radius: 2px 2px 0 0;
 }
 
 .controls {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    flex: 1;
-    justify-content: flex-end;
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  flex: 1;
+  justify-content: flex-end;
 }
 
 .iconButton {
-    background: transparent;
-    border: none;
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all var(--transition-speed) ease;
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: var(--space-2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--duration-fast) var(--ease-standard);
 }
 
 .iconButton:hover {
-    color: var(--color-text-primary);
-    background-color: var(--hover-bg);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-hover);
 }
 
 @media (max-width: 900px) {
-    .navLinks {
-        gap: 20px;
-    }
+  .navLinks {
+    gap: var(--space-5);
+  }
 }
 
 @media (max-width: 768px) {
-    .navBar {
-        padding: 0 5%;
-    }
+  .navBar {
+    padding: 0 5%;
+  }
 
-    .navLinks {
-        display: none;
-    }
+  .navLinks {
+    display: none;
+  }
 
-    .logoContainer h1 {
-        display: none;
-    }
+  .logoContainer h1 {
+    display: none;
+  }
 
-    .logoContainer {
-        flex: none;
-    }
+  .logoContainer {
+    flex: none;
+  }
 }

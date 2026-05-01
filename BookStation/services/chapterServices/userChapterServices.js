@@ -124,6 +124,10 @@ const unlockChapter = async (userId, chapterId) => {
         prisma.chapterUnlocks.create({
             data: { userId: user.id, chapterId: accessData.chapter.id },
         }),
+        prisma.user.update({
+            where: { id: accessData.chapter.book.userId },
+            data: { coinBalance: { increment: accessData.chapter.price }}
+        }),  
     ]);
 
     return { updatedUserWallet, receipt };

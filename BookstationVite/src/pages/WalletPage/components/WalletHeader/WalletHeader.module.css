@@ -1,0 +1,72 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 5%;
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  background-color: var(--color-bg-app);
+  padding-top: var(--space-4);
+  border-bottom: 1px solid var(--color-border-soft);
+  margin-bottom: var(--space-4);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.balanceBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  background-color: var(--color-bg-elevated);
+  padding: 0.15em 0.7em;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border-medium);
+  font-family: var(--font-mono);
+  font-weight: var(--weight-bold);
+}
+
+.coinIcon {
+  width: 16px;
+  height: 16px;
+  color: var(--color-warning);
+}
+
+@media(max-width: 708px) {
+
+  .title {
+    font-size: 1rem;
+  }
+
+  .coinIcon {
+    width: 13px;
+    height: 13px;
+  }
+
+  .balanceBadge {
+    font-size: 0.9rem;
+  }
+}
+
+@media(max-width: 370px) {
+
+  .title {
+    font-size: 0.9rem;
+  }
+
+  .coinIcon {
+    width: 13px;
+    height: 13px;
+  }
+
+}

@@ -32,7 +32,6 @@ function GenreSection({
   genre,
   books = [],
   isBooksLoading,
-  viewsByBookId = {},
   ratingsByBookId = {},
 }) {
   const genreTitlePhrases = {
@@ -108,7 +107,6 @@ function GenreSection({
       <div className={styles.carouselWrap}>
         <BooksCarousel
           books={books}
-          viewsByBookId={viewsByBookId}
           ratingsByBookId={ratingsByBookId}
         />
       </div>

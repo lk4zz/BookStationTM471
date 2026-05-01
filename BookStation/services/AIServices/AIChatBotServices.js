@@ -5,6 +5,7 @@ const BadRequestError = require("../../errors/BadRequestError");
 const AppError = require("../../errors/AppError");
 const { buildSystemPrompt } = require("../../utils/AIUtils/RAGPrompt"); // ✅ Correct import
 const { cosineSimilarity } = require("../../utils/AIUtils/vectorUtils/cosineSimilarity");
+const checkAIAccess = require("../../middlewares/checkAIAccess");
 
 const API_KEY = process.env.GROQ_API_KEY;
 

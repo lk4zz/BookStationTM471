@@ -1,7 +1,7 @@
 import styles from "./BookDescription.module.css";
 import { formatBookData } from "../../../../utils/bookUtils";
 import { useGetProgress } from "../../../../hooks/useProgress";
-import { useChaptersByBook } from "../../../../hooks/useChapters";
+import { useChaptersByBook } from "../../../../hooks/useChapters/useChaptersForUser";
 import { readingProgressSummary } from "../../../../utils/readingProgressPercent";
 
 function BookDescription({ book }) {

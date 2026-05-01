@@ -1,0 +1,19 @@
+.chaptersPanelContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 clamp(200px, 22vw, 280px);
+  min-width: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  background: #111318;
+  overflow: hidden;
+  max-width: 20%;
+}
+
+.panelPad {
+  padding: 16px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

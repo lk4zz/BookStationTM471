@@ -1,2 +1,52 @@
-.walletHeader {
+.mainContent{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+    margin: 3% 5%;
+}
+
+.transitionSection{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 25px 0 10px 0;
+    
+}
+
+.transitionTitle{
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+}
+
+.transitionDesc{
+    font-family: var(--font-body);
+    font-size: 1rem;
+    margin: 0 ;
+    margin-bottom: 30px;
+}
+
+@media(max-width: 708px) {
+
+.transitionTitle{
+    font-size: 1.3rem;
+}
+
+.transitionDesc{
+    font-size: 0.85rem;
+}
+}
+
+@media(max-width: 370px) {
+
+.transitionTitle{
+    font-size: 1.2rem;
+}
+
+.transitionDesc{
+    font-size: 0.7rem;
+}
+
 }

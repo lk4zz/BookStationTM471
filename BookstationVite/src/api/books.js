@@ -57,6 +57,12 @@ export const getTrendingBooks = async (limit) => {
     return res.data;
 };
 
+export const getHighEngagementBooks = async (limit) => {
+    const res = await publicApi.get(`/books/high-engagement`, { params: { limit } });
+    return res.data;
+};
+
+
 export const updateBook = async (bookId, { title, description }) => {
     const res = await privateApi.put(`/books/${bookId}`, { title, description });
     return res.data;

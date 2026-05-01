@@ -1,7 +1,6 @@
-import { useBookById } from "../../../hooks/useBooks";
-import { useChaptersByBook } from "../../../hooks/useChapters";
+import { useBookById } from "../../../hooks/bookHooks/useBookQueries";
+import { useChaptersByBook } from "../../../hooks/useChapters/useChaptersForUser";
 import { useCommentsByBook } from "../../../hooks/useComments";
-import { useViews } from "../../../hooks/useViews";
 import { useState } from "react";
 import { useAddComment } from "../../../hooks/useComments";
 import { useRatings } from "../../../hooks/useRatings";
@@ -29,7 +28,6 @@ export function useBookDetails(numericId) {
   const { chapters, isChapterLoading } = useChaptersByBook(numericId);
   const { comments, isCommentsLoading } = useCommentsByBook(numericId);
   const { ratingAverage, ratingCount } = useRatings(numericId);
-  const { totalViews } = useViews(numericId);
   const publishedChapters = (Array.isArray(chapters) ? chapters : []).filter(
     (chapter) => chapter.isPublished
   );
@@ -42,7 +40,6 @@ export function useBookDetails(numericId) {
     isChapterLoading,
     comments,
     isCommentsLoading,
-    totalViews,
     commentInput,
     setCommentInput,
     handleAddComment,

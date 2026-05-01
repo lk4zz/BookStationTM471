@@ -4,7 +4,6 @@ import { linkStateFromHere } from "../../../utils/navigation";
 import { readingProgressPercent } from "../../../utils/readingProgressPercent";
 import { LibraryRemoveTrashIcon } from "../Icons/IconLibrary";
 import { addView } from "../../../api/views";
-
 const BASE_URL = import.meta.env.VITE_API_URL || "";
 
 function BookCard({ book, progress = null, onRemoveFromLibrary, isRemoving }) {

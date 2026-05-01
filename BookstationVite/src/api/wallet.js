@@ -14,3 +14,8 @@ export const getWalletByUser = async (userId) => {
     const res = await privateApi.get(`/wallet/${userId}`)
     return res.data;
 }
+
+export const purchaseAIPass = async () => {
+    const res = await privateApi.post(`/wallet/buy-ai-pass`);
+    return res.data;
+}
