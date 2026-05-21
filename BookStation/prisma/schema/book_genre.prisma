@@ -3,7 +3,7 @@ model BookGenre {
     bookId Int
     genreId Int
     bookGenre Genre @relation(fields: [genreId], references: [id])
-    labeledBook Books @relation(fields: [bookId], references: [id])
+    labeledBook Books @relation(fields: [bookId], references: [id], onDelete: Cascade)
     
 @@map("book_genres")
 }

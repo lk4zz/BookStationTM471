@@ -3,6 +3,9 @@ const prisma = new PrismaClient();
 const NotFoundError = require('../../errors/NotFoundError');
 
 const getUserProfileById = async (userId) => {
+
+    //fetch the data about the user needed for profile
+    //can be used through a public function for fetch author or something but for now keep it
     const user = await prisma.user.findUnique({
         where: { id: parseInt(userId, 10) },
         select: {
@@ -16,6 +19,7 @@ const getUserProfileById = async (userId) => {
     if (!user) throw new NotFoundError("Author not found");
     return user;
 };
+
 
 const updateUserProfile = async (profileImage, bio, currentUserId, name) => {
     const existingUser = await prisma.user.findUnique({
@@ -50,5 +54,32 @@ const updateUserProfile = async (profileImage, bio, currentUserId, name) => {
     return updatedUser;
 };
 
+//can be set with restrictions and used for admin dashboard instead of the service made for admins
+const getAllUsers = async () => {
+    const users = await prisma.user.findMany({
+        select: {
+            id: true,
+            name: true,
+            bio: true,
+            profileImage: true,
+            roleId: true,
+        },
+    });
+    return users;
+};
 
-module.exports = { getUserProfileById, updateUserProfile };
+//fuzzy search for admin dashboard and explore page
+const searchUsers = async (rawQuery, rawLimit) => {
+    const q = (rawQuery || "").trim();
+    if (q.length < 2) return [];
+    const take = Math.max(1, Math.min(parseInt(rawLimit, 10) || 10, 25));
+    return prisma.user.findMany({
+        where: {
+            name: { contains: q },
+        },
+        take,
+        select: { id: true, name: true, profileImage: true, bio: true },
+    });
+};
+
+module.exports = { getUserProfileById, updateUserProfile, getAllUsers, searchUsers };

@@ -1,20 +1,37 @@
+// time complexity O(n * d) n is vectors d is dimensions
+// space complexity O(d) for the sum array
 function calculateAverageVector(vectors) {
+  if (!vectors || vectors.length === 0) return null
+  
+  const vectorLength = vectors[0].length
+  const sumVector = new Array(vectorLength).fill(0)
 
-    if (!vectors || vectors.length === 0) return null;
-
-    const vectorLength = vectors[0].length; //should be 384
-    const sumVector = new Array(vectorLength).fill(0);
-
-    for (const vector of vectors) {
-        for (let i = 0; i < vectorLength; i++) {
-
-            //sum vector is the new vector array with all the values and indexes inside all vectors summed
-            sumVector[i] += vector[i];
-
-        }
+  for (const vector of vectors) {
+    for (let i = 0; i < vectorLength; i++) {
+      sumVector[i] += vector[i]
     }
-    // divide by the number of books to get the average
-    return sumVector.map(val => val / vectors.length);
+  }
+  
+  return sumVector.map(val => val / vectors.length)
 }
 
-module.exports = { calculateAverageVector };
+// time complexity O(d) d is vector length
+// space complexity O(d) for returning the new blended array
+function calculateWeightedBlend(vectorA, weightA, vectorB, weightB) {
+  const vectorLength = vectorA.length
+  const blendedVector = new Array(vectorLength).fill(0)
+  let magnitudeSquared = 0
+
+  for (let i = 0; i < vectorLength; i++) {
+    blendedVector[i] = (vectorA[i] * weightA) + (vectorB[i] * weightB)
+    magnitudeSquared += blendedVector[i] * blendedVector[i]
+  }
+
+  // l2 normalization to ensure vector length is exactly 1 for cosine math later
+  const magnitude = Math.sqrt(magnitudeSquared)
+  if (magnitude === 0) return blendedVector
+  
+  return blendedVector.map(val => val / magnitude)
+}
+
+module.exports = { calculateAverageVector, calculateWeightedBlend };

@@ -3,9 +3,10 @@ const { pipeline } = require("@xenova/transformers");
 class EmbeddingService {
     static extractor = null;
 
+    //check if the model is already loaded if no load (prevents overload)
     static async getExtractor() {
         if (!this.extractor) {
-            // 'all-MiniLM-L6-v2', a highly efficient, standard model for semantic search
+            // 'all-MiniLM-L6-v2' standard model for semantic search
             this.extractor = await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2");
         }
         return this.extractor;
@@ -16,14 +17,16 @@ class EmbeddingService {
      * @param {string} text - The text chunk to embed.
      * @returns {Promise<Array<number>>} - The vector array.
      */
+
     static async generateEmbedding(text) {
         try {
             const extractor = await this.getExtractor();
             
             // Generate the vector (pooling: "mean" averages the tokens into a single vector)
+            //give the model the text tells it to average the tokens into a single vector and get result
             const result = await extractor(text, { pooling: "mean", normalize: true });
             
-            // Convert the Float32Array into a standard JavaScript Array for Prisma
+            // Convert the Float32Array into a standard JavaScript Array for Prisma to understand
             return Array.from(result.data); 
         } catch (error) {
             console.error("Local Embedding Error:", error);

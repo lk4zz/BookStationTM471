@@ -28,7 +28,8 @@ const getPagesByChapter = catchAsync(async (req, res) => {
    
     const ChapterId = req.params.chapterId;
     const currentUserId = req.user? req.user.userId : null;
-    const pages = await pageServices.getPagesByChapter(ChapterId, currentUserId);
+    const currentUserRoleId = req.user ? req.user.roleId ?? null : null;
+    const pages = await pageServices.getPagesByChapter(ChapterId, currentUserId, currentUserRoleId);
     res.status(200).json({
         success: true,
         count: pages.pages.length,

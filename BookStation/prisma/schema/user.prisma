@@ -10,6 +10,7 @@ model User {
     
     roleId          Int 
     role            UserRole @relation(fields: [roleId], references: [id])
+    isBanned        Boolean  @default(false)
     
     aiAccessExpires DateTime?
     
@@ -28,4 +29,8 @@ model User {
     readingProgress ReadingProgress[]
     pageChunks      PageChunk[]
     applications AuthorApplication[]
+    reports Reports[]
+    notifications Notifications[]
+    moderationLogsCreated ModerationLog[] @relation("ModerationCreatedBy")
+    moderationLogsResolved ModerationLog[] @relation("ModerationResolvedBy")
 }

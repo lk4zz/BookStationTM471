@@ -1,0 +1,32 @@
+enum ModerationStatus {
+  AWAITING_AUTHOR
+  UNDER_REVIEW
+  CLOSED
+}
+
+enum ModerationSource {
+  SYSTEM
+  ADMIN
+}
+
+model ModerationLog {
+  id                   Int              @id @default(autoincrement())
+  bookId               Int
+  adminId              Int?
+  reason               String           @db.Text
+  status               ModerationStatus @default(AWAITING_AUTHOR)
+  source               ModerationSource
+  authorSubmissionNote String?          @db.Text
+  history              String?          @db.LongText
+  resolvedByAdminId    Int?
+  resolvedAt           DateTime?
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+
+  book             Books @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  admin            User? @relation("ModerationCreatedBy", fields: [adminId], references: [id], onDelete: SetNull)
+  resolvedByAdmin  User? @relation("ModerationResolvedBy", fields: [resolvedByAdminId], references: [id], onDelete: SetNull)
+
+  @@index([bookId, status])
+  @@index([status, createdAt])
+}

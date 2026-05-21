@@ -7,10 +7,14 @@ const errorHandler = (err, req, res, next) => {
         err.message = 'A record with this value already exists.';
     }
 
-    res.status(err.statusCode).json({
+    const payload = {
         success: false,
-        message: err.message
-    });
+        message: err.message,
+    };
+    if (err.banned) {
+        payload.banned = true;
+    }
+    res.status(err.statusCode).json(payload);
 };
 
 module.exports = errorHandler;

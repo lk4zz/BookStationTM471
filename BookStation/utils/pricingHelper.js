@@ -8,7 +8,7 @@ const stripHtml = (html) =>
     .trim();
 
 const validateChapterPricing = (pages, requestedPrice, chapterNum) => {
-    // calculate the word count from the pages array
+    // calculate the word count from the pages array (now it is only one page)
     const fullText = pages.map((page) => stripHtml(page.text)).join(" ");
     const wordCount = fullText.split(/\s+/).filter((word) => word.length > 0).length;
 

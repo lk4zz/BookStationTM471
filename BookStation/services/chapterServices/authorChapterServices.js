@@ -1,25 +1,32 @@
 const prisma = require("../../db");
 const { validateChapterPricing } = require("../../utils/pricingHelper");
-const accessDetector = require("../../utils/accessDetector");
 const { getOwnedBook } = require("../../utils/BookOwnership");
 const NotFoundError = require("../../errors/NotFoundError");
 const BadRequestError = require("../../errors/BadRequestError");
-const ForbiddenError = require("../../errors/ForbiddenError");
-const PaymentRequiredError = require("../../errors/PaymentRequiredError");
 const { checkChapterRreceipt } = require("../../utils/checkReceipt");
-const { checkEditAccess, checkChapterEditAccess } = require("../../utils/checkEditAccess");
+const {
+    checkEditAccess,
+    checkChapterEditAccess,
+    isPublishedBook,
+} = require("../../utils/accessDetectors/checkEditAccess");
 const { updateBookMasterEmbedding } = require("../../utils/AIUtils/vectorUtils/BookDataEmbedder");
 
 
 const createChapter = async (bookId, title, currentUserId) => {
+
+    //check ownership and fetch book
     const { book } = await getOwnedBook(bookId, currentUserId);
+
+    //check edit access of book if adding chapters is allowed
     await checkEditAccess(book);
 
+    //fetch last chapter from db 
     const lastChapter = await prisma.chapters.findFirst({
         where: { bookId: parseInt(bookId, 10) },
         orderBy: { chapterNum: "desc" },
     });
 
+    //make sure the chapter numbering is correct
     const chapterNumber = lastChapter ? lastChapter.chapterNum + 1 : 1;
 
     const newChapter = await prisma.chapters.create({
@@ -40,7 +47,7 @@ const updateChapter = async (
     requestedPrice,
 ) => {
 
-    // fetch the chapter include book (for ownership), include pages (for the function to calculate)
+    //fetch the chapter to update
     const chapter = await prisma.chapters.findUnique({
         where: { id: parseInt(chapterId, 10) },
         select: {
@@ -58,22 +65,27 @@ const updateChapter = async (
     if (!chapter) throw new NotFoundError("CHAPTER NOT FOUND");
     const { book } = await getOwnedBook(chapter.bookId, currentUserId);
 
-    // default values in case they only want to update the title
+    //check book edit access
+    await checkEditAccess(book);
+
+    //check chapter edit access
+    await checkChapterEditAccess(chapter);
+
+    //initiliaze data incase something wasnt update fall back to original value
     let finalIsLocked = chapter.isLocked;
     let finalWordCount = chapter.wordCount;
     let finalPrice = chapter.price;
 
     if (chapter.isPublished) {
-        // if user is trying to change price
+        
+        // published chapters can only be set to free 
         if (requestedPrice !== undefined && requestedPrice !== chapter.price) {
             if (requestedPrice !== 0) {
-                throw new BadRequestError(
-                    "PUBLISHED CHAPTERS CAN ONLY BE SET TO FREE.",
-                );
-
+                throw new BadRequestError("PUBLISHED CHAPTERS CAN ONLY BE SET TO FREE.");
             }
         }
         try {
+            //validate the new price (word count to coin price ratio)
             const pricingData = validateChapterPricing(
                 chapter.pages,
                 requestedPrice,
@@ -81,12 +93,7 @@ const updateChapter = async (
             );
             finalPrice = pricingData.finalPrice;
             finalIsLocked = pricingData.isLocked;
-            finalWordCount = pricingData.wordCount; // update word count just incase user edits texts
-            if (title) {
-                throw new BadRequestError(
-                    "PUBLISHED CHAPTERS CAN ONLY BE SET TO FREE.",
-                );
-            }
+            finalWordCount = pricingData.wordCount;
         } catch (err) {
             if (err.code === "INVALID_PRICING_TO_WORDCOUNT_RATIO") {
                 throw new BadRequestError(
@@ -95,14 +102,17 @@ const updateChapter = async (
             }
             throw err;
         }
+        // Title updates are allowed during AWAITING_AUTHOR )review cases).
+        title = title !== undefined ? title : chapter.title;
     } else {
-        // It's a draft. Just save the intended price for now, it will be validated on publish.
+        // Draft chapter save any price. validation happens on publish.
         finalPrice = parseInt(requestedPrice, 10);
         title = title !== undefined ? title : chapter.title;
         if (chapter.chapterNum === 1) finalPrice = 0;
         finalIsLocked = finalPrice > 0;
     }
 
+    //apply the update in db
     const updatedChapter = await prisma.chapters.update({
         where: { id: parseInt(chapterId, 10) },
         data: {
@@ -117,29 +127,35 @@ const updateChapter = async (
 };
 
 const publishChapter = async (chapterId, currentUserId, requestedPrice) => {
+    //fetch the chapter to publish
     const chapter = await prisma.chapters.findUnique({
         where: { id: parseInt(chapterId, 10) },
-        include: { pages: true, book: { select: { status: true } } },
+        include: {
+            pages: true,
+            book: { select: { id: true, status: true, isUnderReview: true } },
+        },
     });
 
     if (!chapter) throw new NotFoundError("Chapter not found");
 
+    //check book ownership
     await getOwnedBook(chapter.bookId, currentUserId);
 
+    // check book edit access
+    await checkEditAccess(chapter.book);
+
+    //logic checkers
     if (chapter.isPublished)
         throw new BadRequestError("Chapter is already published");
     if (chapter.book.status === "DRAFT")
         throw new BadRequestError("Chapters cannot be published while the book is in DRAFT. Use Launch Book.");
 
-    
-
-    // if no price is requested, fall back to drafted price
     const priceToValidate = requestedPrice ?? chapter.price;
 
-    // check
     let finalPrice, isLocked, wordCount;
     try {
-        const result = validateChapterPricing(
+        //validate pricing 
+        const result =  await validateChapterPricing(
             chapter.pages,
             priceToValidate,
             chapter.chapterNum,
@@ -153,9 +169,10 @@ const publishChapter = async (chapterId, currentUserId, requestedPrice) => {
                 `Your chapter is ${err.wordCount} word(s), maximum price is ${err.maxAllowedPrice}`,
             );
         }
-        throw err; // Throws the negative price error or any other errors
+        throw err;
     }
 
+    //publish query request to db
     const publishedChapter = await prisma.chapters.update({
         where: { id: parseInt(chapterId, 10) },
         data: {
@@ -166,36 +183,58 @@ const publishChapter = async (chapterId, currentUserId, requestedPrice) => {
         },
     });
 
+    //update the book embeddings using the new published chapter page chunks
     updateBookMasterEmbedding(chapter.bookId).catch(console.error);
 
     return publishedChapter;
 };
 
+
 const deleteChapter = async (chapterId, currentUserId) => {
+    //fetch the chapter to delete
     const chapter = await prisma.chapters.findUnique({
         where: { id: parseInt(chapterId, 10) },
     });
     if (!chapter) throw new NotFoundError("CHAPTER NOT FOUND");
+
+    //check book ownership
     const { book } = await getOwnedBook(chapter.bookId, currentUserId);
-    // await checkEditAccess(book);
+
+    //check the number of chapters to ensure a minimum of 3 chapters for published books
+    const chapterCount = await prisma.chapters.count({
+        where: { bookId: chapter.bookId },
+    });
+
+    //check for minimum chapter count here..
+    if (isPublishedBook(book) && chapterCount <= 3) {
+        throw new BadRequestError(
+            "Published books must keep at least 3 chapters. You cannot delete a chapter while the book only has three.",
+        );
+    }
+
+    // Regardless of moderation state, chapters with purchase receipts cannot be deleted.
     await checkChapterRreceipt(chapterId);
 
+    //apply the deletion query
     await prisma.chapters.delete({
         where: { id: parseInt(chapterId, 10) },
     });
 
+    //fetch the remaining chapters
     const remainingChapters = await prisma.chapters.findMany({
         where: { bookId: chapter.bookId },
         orderBy: { chapterNum: "asc" },
     });
 
-    const updates = remainingChapters.map((ch, index) => {
-        return prisma.chapters.update({
+    //update the chapters numbering
+    const updates = remainingChapters.map((ch, index) =>
+        prisma.chapters.update({
             where: { id: ch.id },
             data: { chapterNum: index + 1 },
-        });
-    });
+        }),
+    );
 
+    //transaction to make sure all chapters update (if one fails all fail)
     await prisma.$transaction(updates);
 
     return true;
@@ -207,4 +246,4 @@ module.exports = {
     updateChapter,
     publishChapter,
     deleteChapter,
-}
+};

@@ -4,11 +4,11 @@ const prisma = require("../../db");
 const {getTrendingBooks} = require("../../services/booksServices/userBookServices");
 const libraryServices = require("../../services/libraryServices");
 
+//get recommendations using user taste profile
 const getForYouRecommendations = catchAsync(async (req, res) => {
     
     const userId = req.user?.userId; 
-    
-    const limit = 10;
+    const limit = 25;
 
     // fetch the user specific taste profile from the database
     const user = userId
@@ -34,8 +34,7 @@ const getForYouRecommendations = catchAsync(async (req, res) => {
     // when user has profiletaste:
     const userTasteVector = JSON.parse(user.tasteProfile);
 
-    const libraryBooks = await libraryServices.getLibraryBooks(userId);
-    const libraryBookIds = libraryBooks.map((lb) => lb.bookId);
+    const libraryBookIds = await libraryServices.getLibraryBookIds(userId);
     const personalizedBooks = await recommendationService.findRecommendations(
         userTasteVector,
         libraryBookIds,
@@ -50,4 +49,15 @@ const getForYouRecommendations = catchAsync(async (req, res) => {
     });
 });
 
-module.exports = { getForYouRecommendations };
+// this is not being used in front end only in testing
+// can be added to book details page to show recommendations based on the currently viewed book
+const getRecommendationsByBookId = catchAsync(async (req, res) => {
+    const { bookId } = req.params;
+    const recommendations = await recommendationService.getRecommendationsByBookId(bookId);
+    res.status(200).json({
+        success: true,
+        data: recommendations,
+    });
+});
+
+module.exports = { getForYouRecommendations, getRecommendationsByBookId };

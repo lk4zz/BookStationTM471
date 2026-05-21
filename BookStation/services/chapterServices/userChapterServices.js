@@ -1,61 +1,68 @@
 const prisma = require("../../db");
-const { validateChapterPricing } = require("../../utils/pricingHelper");
-const accessDetector = require("../../utils/accessDetector");
+const accessDetector = require("../../utils/accessDetectors/chapterAccessDetector");
 const { getOwnedBook } = require("../../utils/BookOwnership");
 const NotFoundError = require("../../errors/NotFoundError");
 const BadRequestError = require("../../errors/BadRequestError");
 const ForbiddenError = require("../../errors/ForbiddenError");
 const PaymentRequiredError = require("../../errors/PaymentRequiredError");
-const { checkChapterRreceipt } = require("../../utils/checkReceipt");
-const { checkEditAccess, checkChapterEditAccess } = require("../../utils/checkEditAccess");
-const { updateBookMasterEmbedding } = require("../../utils/AIUtils/vectorUtils/BookDataEmbedder");
 
-
-
-const getChaptersByBook = async (bookId, currentUserId) => {
-    //fetch book
+const getChaptersByBook = async (bookId, currentUserId, currentUserRoleId = null) => {
+    // Fetch book
     const book = await prisma.books.findUnique({
         where: { id: parseInt(bookId, 10) },
     });
 
     if (!book) throw new NotFoundError("Book not found");
-    if (book.status === "DRAFT") {
-        if (!currentUserId) throw new NotFoundError("This book is not public.");
-        try {
-            await getOwnedBook(bookId, currentUserId);
-        } catch {
-            throw new NotFoundError("This book is not public.");
-        }
+
+    // Determine if the requester is the author
+    const isAuthor = currentUserId && book.userId === parseInt(currentUserId, 10);
+
+    // if it is the author they have access even if it the book is drafted
+    if (book.status === "DRAFT" && !isAuthor) {
+        throw new NotFoundError("This book is not public.");
     }
 
-    // fetch all published chapters for this book
+    // fetch chapters conditionally
     const chapters = await prisma.chapters.findMany({
         where: {
             bookId: parseInt(bookId, 10),
+            // If the user is the author, apply no filter (fetch all).
+            // If they are a standard reader, restrict to published only.
+            ...(isAuthor ? {} : { isPublished: true })
         },
         orderBy: { chapterNum: "asc" },
     });
 
-    if (chapters.length === 0)
-        throw new NotFoundError("No published chapters found for this book.");
+    //should not show in UI because published books cant have less than 3 chapters (backend security)
+    if (chapters.length === 0) {
+        if (!isAuthor) {
+            throw new NotFoundError(
+                isAuthor ? "No chapters found for this book." : "No published chapters found for this book."
+            );
+        }
+        else{
+            return [];
+        }
 
-    if (book.status === "DRAFT") {
+    }
+
+    // Authors implicitly have access to all chapters skip the accessDetector entirely.
+    if (isAuthor) {
         return chapters.map((chapter) => ({
             ...chapter,
             hasAccess: true,
         }));
     }
 
-    // promise.all allows javaScript to send all the queries at the same time to the DB this way you save a lot of time instead of waiting for each check sequentially
+    // evaluate Access for Readers
     const decoratedChapters = await Promise.all(
         chapters.map(async (chapter) => {
-            // send each chapter to the function at the same time
             const accessData = await accessDetector.checkAccess(
                 chapter.id,
                 currentUserId,
+                currentUserRoleId,
             );
 
-            // return each chapter with access state
             return {
                 ...chapter,
                 hasAccess: accessData.hasAccess,
@@ -66,11 +73,13 @@ const getChaptersByBook = async (bookId, currentUserId) => {
     return decoratedChapters;
 };
 
-const getChapterById = async (chapterId, userId) => {
+const getChapterById = async (chapterId, userId, currentUserRoleId) => {
+
     // fetch the chapter through access function
     const accessData = await accessDetector.checkAccess(
         parseInt(chapterId, 10),
         userId,
+        currentUserRoleId,
     );
 
     if (!accessData || !accessData.chapter) {
@@ -108,7 +117,7 @@ const unlockChapter = async (userId, chapterId) => {
 
     if (!user) throw new NotFoundError("User not found, please log in.");
 
-    // check wallet
+    // check wallet balance
     if (user.coinBalance < accessData.chapter.price) {
         throw new PaymentRequiredError(
             "You do not have enough coins to unlock this chapter.",
@@ -126,8 +135,8 @@ const unlockChapter = async (userId, chapterId) => {
         }),
         prisma.user.update({
             where: { id: accessData.chapter.book.userId },
-            data: { coinBalance: { increment: accessData.chapter.price }}
-        }),  
+            data: { coinBalance: { increment: accessData.chapter.price } }
+        }),
     ]);
 
     return { updatedUserWallet, receipt };

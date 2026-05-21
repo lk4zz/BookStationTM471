@@ -7,7 +7,11 @@ class ChunkingServices {
 @param { number } overlapWords
 @returns { Array < string >}
   */
+
+    //max words of chunk to limit chunk sizes for performance and overlap is grabbing the context around
     static chunkTipTapContent(htmlContent, maxWords = 200, overlapWords = 20) {
+
+        //ignore images and links
         const plainText = convert(htmlContent, {
             wordwrap: false,
             selectors: [
@@ -16,9 +20,11 @@ class ChunkingServices {
             ]
         });
 
+        //regex to get clean words without spaces
         const words = plainText.replace(/\s+/g, ' ').trim().split(' ');
         const chunks = [];
 
+        //skip the work if there are no words
         if (words.length === 0 || words[0] === "") return chunks;
 
         let i = 0

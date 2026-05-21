@@ -13,6 +13,7 @@ const signup = catchAsync(async (req, res) => {
                 id: newUser.id,
                 name: newUser.name,
                 email: newUser.email,
+                roleId: newUser.roleId
             },
             token: token
         });

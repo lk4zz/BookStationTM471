@@ -9,7 +9,7 @@ const submitApplication = catchAsync(async (req, res) => {
 
     let documentUrl = null;
     if (req.file) {
-        documentUrl = req.file.path;
+        documentUrl = `uploads/cover/${req.file.filename}`;
     }
 
     const application = await applicationService.submitApplication(

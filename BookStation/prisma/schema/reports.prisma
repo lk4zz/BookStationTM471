@@ -1,0 +1,22 @@
+// schema.prisma
+
+enum ReportReason {
+  SPAM
+  OFFENSIVE
+  COPYRIGHT
+  OTHER
+}
+
+model Reports {
+  id        Int          @id @default(autoincrement())
+  userId    Int
+  bookId    Int
+  reason    ReportReason
+  comment   String?      @db.Text
+  createdAt DateTime     @default(now())
+
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  book      Books        @relation(fields: [bookId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, bookId]) 
+}

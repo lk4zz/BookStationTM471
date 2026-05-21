@@ -88,6 +88,37 @@ const updateBookCover = catchAsync(async (req, res) => {
   });
 });
 
+const submitForReview = catchAsync(async (req, res) => {
+    const { bookId } = req.params;
+    const userId = req.user.userId;
+    const { submissionNote } = req.body;
+
+    await bookService.submitBookForReview(userId, bookId, submissionNote);
+
+    return res.status(200).json({
+        success: true,
+        message: "Book submitted for admin review successfully."
+    });
+});
+
+const tagBook = catchAsync(async (req, res) => {
+
+        const { bookId } = req.params;
+        const currentUserId = req.user.userId; 
+        
+        // expects an array of genre IDs from the React frontend
+        const { genreIds } = req.body; 
+
+        if (!Array.isArray(genreIds) || genreIds.length === 0) {
+            return res.status(400).json({ error: "Please provide an array of genre IDs." });
+        }
+
+        await bookService.tagBookWithGenres(bookId, genreIds, currentUserId);
+
+        res.status(200).json({ message: "Book successfully tagged with genres!" });
+
+});
+
 module.exports = {
   createBook,
   updateBook,
@@ -95,4 +126,6 @@ module.exports = {
   updateBookStatus,
   updateBookCover,
   launchBook,
+  submitForReview,
+  tagBook,
 }

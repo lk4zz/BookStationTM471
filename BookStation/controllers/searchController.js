@@ -1,10 +1,7 @@
-const prisma = require("../db");
 const searchServices = require("../services/searchServices");
+const catchAsync = require("../middlewares/catchAsync");
 
-
-
-const getSearch = async (req, res) => {
-
+const getSearch = catchAsync(async (req, res) => {
     const searchQuery = req.query.q;
     const currentUserId = req.user?.userId;
     const limit = parseInt(req.query.limit) || 10;
@@ -16,7 +13,6 @@ const getSearch = async (req, res) => {
         count: searchResults.length,
         data: searchResults,
     });
-
-}
+});
 
 module.exports = { getSearch };

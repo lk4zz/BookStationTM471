@@ -2,13 +2,16 @@ const prisma = require("../../db");
 const { blendTasteProfile } = require("./blendTasteProfile");
 
 const searchTasteBlender = async (userId, queryVector) => {
+    const parsedUserId = parseInt(userId, 10);
+    // early exit
+    if (!queryVector || !Number.isFinite(parsedUserId)) return;
 
-    if (!queryVector) return;
-
+    // weight (low for search)
     const SEARCHQUERY_WEIGHT = 0.08;
 
-    blendTasteProfile(userId, queryVector, SEARCHQUERY_WEIGHT)
-        .catch(error => console.error(`[TasteBlender] Background vector math failed for user ${userId}:`, error));
+    // global function with weight query vector and the user to blend their profile
+    blendTasteProfile(parsedUserId, queryVector, SEARCHQUERY_WEIGHT)
+        .catch(error => console.error(`[TasteBlender] Background vector math failed for user ${parsedUserId}:`, error));
 };
 
 module.exports = { searchTasteBlender };

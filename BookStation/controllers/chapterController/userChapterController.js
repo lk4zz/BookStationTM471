@@ -4,8 +4,9 @@ const catchAsync = require('../../middlewares/catchAsync');
 const getChaptersByBook = catchAsync(async (req, res) => {
     const bookId = parseInt(req.params.bookId, 10);
     const currentUserId = req.user ? req.user.userId : null;
+    const currentUserRoleId = req.user ? req.user.roleId ?? null : null;
 
-    const chapters = await chapterServices.getChaptersByBook(bookId, currentUserId);
+    const chapters = await chapterServices.getChaptersByBook(bookId, currentUserId, currentUserRoleId);
 
     res.status(200).json({
         success: true,
@@ -17,8 +18,9 @@ const getChaptersByBook = catchAsync(async (req, res) => {
 const getChapterById = catchAsync(async (req, res) => {
     const { chapterId } = req.params;
     const userId = req.user ? req.user.userId : null;
+    const currentUserRoleId = req.user ? req.user.roleId ?? null : null;
 
-    const chapter = await chapterServices.getChapterById(chapterId, userId);
+    const chapter = await chapterServices.getChapterById(chapterId, userId, currentUserRoleId);
 
     res.status(200).json({
         success: true,
@@ -29,6 +31,7 @@ const getChapterById = catchAsync(async (req, res) => {
 const unlockChapter = catchAsync(async (req, res) => {
     const chapterId = req.params.id;
     const currentUserId = req.user.userId;
+    const currentUserRoleId = req.user.roleId;
 
     const { updatedUserWallet } = await chapterServices.unlockChapter(currentUserId, chapterId);
 

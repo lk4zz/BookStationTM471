@@ -1,5 +1,6 @@
 const ratingServices = require('../../services/interactionServices/ratingServices');
 const catchAsync = require('../../middlewares/catchAsync');
+const BadRequestError = require('../../errors/BadRequestError');
 
 const addOrUpdateRating = catchAsync(async (req, res) => {
   const { bookId } = req.params;
@@ -49,9 +50,19 @@ const deleteRating = catchAsync(async (req, res) => {
   });
 });
 
+const getBatchRatingStats = catchAsync(async (req, res) => {
+  const ids = Array.isArray(req.body?.bookIds) ? req.body.bookIds : [];
+  if (ids.length > 200) {
+    throw new BadRequestError("TOO_MANY_BOOK_IDS");
+  }
+  const data = await ratingServices.getBatchRatingStats(ids);
+  res.status(200).json({ success: true, data });
+});
+
 module.exports = {
   addOrUpdateRating,
   getRatingStats,
   getUserRating,
   deleteRating,
+  getBatchRatingStats,
 };

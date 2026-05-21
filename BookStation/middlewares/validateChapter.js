@@ -25,8 +25,6 @@ const validateChapter = async (req, res, next) => {
         }
     }
 
-    req.body.title = title.trim().toLowerCase().replace(/\s+/g, '');
-
     next();
 };
 

@@ -1,55 +1,74 @@
-const prisma = require("../../../db");
-const { calculateAverageVector } = require("./calculateAverageVector");
-const EmbeddingService = require("../../../services/AIServices/VectorServices/EmbeddingService");
+const prisma = require("../../../db")
+const EmbeddingService = require("../../../services/AIServices/VectorServices/EmbeddingService")
+const { calculateAverageVector, calculateWeightedBlend } = require("./calculateAverageVector")
 
 const updateBookMasterEmbedding = async (bookId) => {
   try {
-    const parsedBookId = parseInt(bookId, 10);
+    const parsedBookId = parseInt(bookId, 10)
 
+    // db query time complexity O(1) for lookup but O(c) for joining chunks where c is chunk count
     const bookDetails = await prisma.books.findUnique({
       where: { id: parsedBookId },
       select: {
         name: true,
         description: true,
-        pageChunks: { select: { embedding: true } }
+        pageChunks: { 
+          select: { 
+            embedding: true,
+            chapterId: true 
+          } 
+        }
       }
-    });
+    })
 
-    if (!bookDetails) return;
+    if (!bookDetails) return
 
-    const textToEmbed = `${bookDetails.name}. ${bookDetails.description || ""}`.trim();
+    const textToEmbed = `${bookDetails.name}. ${bookDetails.description || ""}`.trim()
+    if (textToEmbed.length <= 3) return
+    
+    // api call latency bottleneck
+    const metadataVector = await EmbeddingService.generateEmbedding(textToEmbed)
 
-    if (textToEmbed.length <= 3) return;
-
-    const metadataVector = await EmbeddingService.generateEmbedding(textToEmbed);
-
-    // No chunks yet — save metadata-only vector (covers book creation & detail updates)
+    // db write O(1)
     if (!bookDetails.pageChunks || bookDetails.pageChunks.length === 0) {
       await prisma.books.update({
         where: { id: parsedBookId },
         data: { embedding: JSON.stringify(metadataVector) }
-      });
-      console.log(`[AI Engine] Initialized metadata embedding for empty Book ID: ${parsedBookId}`);
-      return;
+      })
+      return
     }
 
-    // Chunks exist — blend content vectors with metadata vector
-    const chunkVectors = bookDetails.pageChunks.map(chunk => {
-      return typeof chunk.embedding === 'string' ? JSON.parse(chunk.embedding) : chunk.embedding;
-    });
+    // group chunks by chapter id
+    // time complexity O(n) where n is total chunks
+    // space complexity O(n) to store the grouped arrays in memory
+    const chaptersMap = {}
+    for (const chunk of bookDetails.pageChunks) {
+      // json parse is O(d) where d is vector dimensions 384 so O(1) ucz it is constant
+      const vector = typeof chunk.embedding === 'string' ? JSON.parse(chunk.embedding) : chunk.embedding
+      if (!chaptersMap[chunk.chapterId]) {
+        chaptersMap[chunk.chapterId] = []
+      }
+      chaptersMap[chunk.chapterId].push(vector)
+    }
 
-    const contentVector = calculateAverageVector(chunkVectors);
-    const masterBookVector = calculateAverageVector([contentVector, metadataVector]);
+    // calculate chapter averages then book average
+    // time complexity O(n * d) iterating all chunks across 384 dimensions
+    // space complexity O(k * d) where k is number of chapters
+    const chapterVectors = Object.values(chaptersMap).map(chunks => calculateAverageVector(chunks))
+    const finalContentVector = calculateAverageVector(chapterVectors)
 
+    // blend vectors time complexity O(d) iterating 384 dimensions once
+    const masterBookVector = calculateWeightedBlend(finalContentVector, 0.70, metadataVector, 0.30)
+
+    // final db write O(1)
     await prisma.books.update({
       where: { id: parsedBookId },
       data: { embedding: JSON.stringify(masterBookVector) }
-    });
+    })
 
-    console.log(`[AI Engine] Successfully blended and updated master embedding for Book ID: ${parsedBookId}`);
   } catch (err) {
-    console.error(`[AI Engine Error] Failed to update master embedding for Book ${bookId}:`, err);
+    console.error(`[AI Engine Error] Failed to update master embedding for Book ${bookId}:`, err)
   }
-};
+}
 
-module.exports = { updateBookMasterEmbedding };
+module.exports = { updateBookMasterEmbedding }

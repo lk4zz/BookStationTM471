@@ -24,7 +24,8 @@ const getAllPublicBooks = catchAsync(async (req, res) => {
 
 const getBookById = catchAsync(async (req, res) => {
   const currentUserId = req.user?.userId;
-  const book = await bookService.getBookById(req.params.bookId, currentUserId);
+  const currentUserRoleId = req.user?.roleId ?? null;
+  const book = await bookService.getBookById(req.params.bookId, currentUserId, currentUserRoleId);
 
   res.status(200).json({
     success: true,
@@ -34,7 +35,8 @@ const getBookById = catchAsync(async (req, res) => {
 
 const getBooksByAuthor = catchAsync(async (req, res) => {
   const currentUserId = req.user?.userId;
-  const books = await bookService.getBooksByAuthor(req.params.authorId, currentUserId);
+  const currentUserRoleId = req.user?.roleId ?? null;
+  const books = await bookService.getBooksByAuthor(req.params.authorId, currentUserId, currentUserRoleId);
 
   res.status(200).json({
     success: true,
@@ -80,6 +82,26 @@ const getFollowedAuthorsBooks = catchAsync(async (req, res) => {
   });
 });
 
+const getDiscoverBooks = catchAsync(async (req, res) => {
+  const { limit, cursor } = req.query;
+  const books = await bookService.getDiscoverBooks({ limit, cursor });
+  res.status(200).json({
+    success: true,
+    count: books.length,
+    data: books,
+  });
+});
+
+const getCompletedBooks = catchAsync(async (req, res) => {
+  const { limit } = req.query;
+  const books = await bookService.getCompletedBooks({ limit });
+  res.status(200).json({
+    success: true,
+    count: books.length,
+    data: books,
+  });
+});
+
 module.exports = {
   getAllPublicBooks,
   getBookById,
@@ -88,4 +110,6 @@ module.exports = {
   getTrendingBooks,
   getFollowedAuthorsBooks,
   getHighEngagementBooks,
+  getDiscoverBooks,
+  getCompletedBooks,
 };

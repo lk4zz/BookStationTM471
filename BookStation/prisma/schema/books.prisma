@@ -7,12 +7,27 @@ model Books {
     coverImage  String?
     status String  @default("DRAFT") // 'DRAFT', 'ONGOING', 'COMPLETED'
 
+    isFlagged Boolean @default(false)
+    isUnderReview Boolean @default(false)
+
     embedding String? @db.LongText
+
+    gutenbergAuthor String?
+    releaseYear     Int?
+    language        String?
+    downloadCount   Int? @default(0)
+    subjects        String? @db.Text
+    tags            String? @db.Text
+    themes          String? @db.Text
+    era             String?
+    tone            String?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @default(now()) @updatedAt
     
     @@unique([userId, name])
+    @@index([status, isFlagged, createdAt])
+    @@index([userId, status, isFlagged])
     views BookViews[]
     ratings Rating[]
     chapters Chapters[]
@@ -21,5 +36,9 @@ model Books {
     libraryBooks LibraryBook[]
     readingProgress ReadingProgress[]
     pageChunks  PageChunk[]
+    reports Reports[]
+    moderationLogs ModerationLog[]
+
+
 
 }

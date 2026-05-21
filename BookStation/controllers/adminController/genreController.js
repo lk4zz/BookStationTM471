@@ -1,6 +1,7 @@
 const genreService = require('../../services/adminServices/genreServices');
 const catchAsync = require('../../middlewares/catchAsync');
 
+//NOTE : THIS FILE IS USELESS IF YOU DONT ADD THE OPTION TO ADD OR REMOVE GENRES FROM ADMIN CONTROLL
 const createGenre = catchAsync(async (req, res) => {
     try {
         const { type } = req.body;

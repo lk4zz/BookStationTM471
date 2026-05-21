@@ -8,6 +8,7 @@ const commentOnBook = async (bookId, currentUserId, comment) => {
     throw new BadRequestError("COMMENT CANNOT BE EMPTY STRING");
   }
 
+  //create query 
   const newComment = await prisma.comments.create({
     data: {
       bookId: parseInt(bookId),
@@ -19,6 +20,7 @@ const commentOnBook = async (bookId, currentUserId, comment) => {
 };
 
 const getCommentsByBook = async (bookId) => {
+  //fetch comments
   const comments = await prisma.comments.findMany({
     where: {
       bookId: parseInt(bookId),
@@ -33,6 +35,8 @@ const getCommentsByBook = async (bookId) => {
   return comments;
 };
 
+//this function is not being used yet must be added for admin control
+// it also doesnt have admin permission bypass take this into consideration
 const deleteComment = async (commentId, currentUserId) => {
   const comment = await prisma.comments.findUnique({
     where: {

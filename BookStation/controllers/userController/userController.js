@@ -40,4 +40,15 @@ const getCurrentUser = catchAsync(async (req, res) => {
     res.status(200).json(currentUser);
 });
 
-module.exports = { getUserProfileById, updateUserProfile, getCurrentUser };
+const getAllUsers = catchAsync(async (req, res) => {
+    const users = await userService.getAllUsers();
+    res.status(200).json(users);
+});
+
+const searchUsersController = catchAsync(async (req, res) => {
+    const { q, limit } = req.query;
+    const results = await userService.searchUsers(q, limit);
+    res.status(200).json({ success: true, data: results });
+});
+
+module.exports = { getUserProfileById, updateUserProfile, getCurrentUser, getAllUsers, searchUsers: searchUsersController };

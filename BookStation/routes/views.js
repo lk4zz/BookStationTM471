@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { verifyTokenOptional, verifyToken } = require('../middlewares/verifyToken');
+const { verifyToken, optionalAuthWithBanCheck, checkIfBanned } = require('../middlewares/verifyToken');
 const viewsController = require('../controllers/interactionController/viewsController');
 
-router.post('/:bookId', verifyToken, viewsController.addView);
-router.get('/:bookId', verifyTokenOptional, viewsController.getViews);
-router.get('/books/mostviewed', verifyTokenOptional, viewsController.getMostViewedBook);
+router.post('/:bookId', verifyToken, checkIfBanned, viewsController.addView);
+router.get('/:bookId', ...optionalAuthWithBanCheck, viewsController.getViews);
+router.get('/books/mostviewed', ...optionalAuthWithBanCheck, viewsController.getMostViewedBook);
 
 module.exports = router;
