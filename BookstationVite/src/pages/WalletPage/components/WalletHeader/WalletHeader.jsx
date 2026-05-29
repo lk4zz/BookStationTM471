@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./WalletHeader.module.css";
-import OnBackButton from "../../../../components/UI/Buttons/OnBackButtons";
-import { WalletIcon, CoinsIcon } from "../../../../components/UI/Icons/IconLibrary";
+import OnBackButton from "../../../../GlobalComponents/Buttons/OnBackButtons";
+import { WalletIcon, CoinsIcon } from "../../../../GlobalComponents/Icons/IconLibrary";
 
 function WalletHeader({ balance, navigate }) {
   return (

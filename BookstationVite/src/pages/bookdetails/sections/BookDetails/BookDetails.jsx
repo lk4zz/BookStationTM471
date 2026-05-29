@@ -1,31 +1,44 @@
+// sections/BookDetails/BookDetails.jsx
 import { useLocation } from "react-router-dom";
 import styles from "./BookDetails.module.css";
 import { formatBookData } from "../../../../utils/bookUtils";
 import { linkStateFromHere } from "../../../../utils/navigation";
-import { useLibraryBooks } from "../../../../hooks/useLibrary";
+
+// Context
+import { useBookDetailsContext } from "../../context/BookDetailsContext"; // Adjust path based on your folder structure
 
 // Components
 import BookDetailsHeader from "./components/BookDetailsHeader/BookDetailsHeader";
 import BookDetailsStats from "./components/BookDetailsStats/BookDetailsStats";
-import ContinueReadingBtn from "../../../../components/UI/Buttons/ContinueReadingBtn";
-import AddToLibraryBtn from "../../../../components/UI/Buttons/AddToLibraryBtn";
+import ContinueReadingBtn from "../../../../GlobalComponents/Buttons/ContinueReadingBtn";
+import AddToLibraryBtn from "../../../../GlobalComponents/Buttons/AddToLibraryBtn";
+import BookReportModal from "./components/BookReportModal/BookReportModal";
 
-function BookDetails({
-  book,
-  ratingModal,
-  OpenRatinModal,
-  closeRatinModal,
-  ratingAverage,
-  ratingCount,
-}) {
+function BookDetails() {
   const location = useLocation();
+  
+  // 1. Consume the context instead of taking props!
+  const {
+    book,
+    ratingModal,
+    OpenRatinModal,
+    closeRatinModal,
+    ratingAverage,
+    ratingCount,
+    reportModal,
+    handleReportBtn,
+    closeReportModal,
+    createReportMutation,
+    isBookInLibrary,
+    handleReportComment,
+    handleReportReason,
+    handleSubmitReport,
+  } = useBookDetailsContext();
 
   const formattedBook = formatBookData(book);
   if (!formattedBook) return null;
 
   const { name, bookId, coverUrl, authorName, userId } = formattedBook;
-  const { data: libraryBooks } = useLibraryBooks();
-  const isBookInLibrary = libraryBooks?.some((b) => b.bookId === bookId);
   const readState = linkStateFromHere(location);
 
   return (
@@ -40,7 +53,6 @@ function BookDetails({
       {/* Main Content Layout */}
       <div className={styles.contentWrapper}>
         <div className={styles.bookInfo}>
-          
           <BookDetailsHeader
             name={name}
             authorName={authorName}
@@ -59,16 +71,12 @@ function BookDetails({
           />
 
           <div className={styles.buttons}>
-            <ContinueReadingBtn 
-              bookId={bookId} 
-              readState={readState} 
-            />
-            <AddToLibraryBtn 
-              bookId={bookId} 
-              isBookInLibrary={isBookInLibrary} 
-            />
+            <ContinueReadingBtn bookId={bookId} readState={readState} />
+            <AddToLibraryBtn bookId={bookId} isBookInLibrary={isBookInLibrary} />
+            <button className={styles.reportBtn} onClick={handleReportBtn}>
+              Report Book
+            </button>
           </div>
-          
         </div>
 
         {/* Cover Art */}
@@ -81,6 +89,16 @@ function BookDetails({
           />
         </div>
       </div>
+
+      <BookReportModal
+        isOpen={reportModal}
+        onClose={closeReportModal}
+        bookId={bookId}
+        createReportMutation={createReportMutation}
+        handleReportComment={handleReportComment}
+        handleReportReason={handleReportReason}
+        handleSubmitReport={handleSubmitReport}
+      />
     </div>
   );
 }

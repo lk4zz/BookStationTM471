@@ -1,2 +1,7 @@
 .topPicks {
 }
+
+.sectionMessage {
+  color: var(--color-text-muted);
+  padding: 0 5%;
+}

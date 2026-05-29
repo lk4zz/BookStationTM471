@@ -10,10 +10,10 @@ import {
   ThrillerGenreBg,
   HistoricalGenreBg,
   ScifiAdvancedGenreBg,
-} from "../../../../../../components/UI/Icons/IconLibrary";
+} from "../../../../../../GlobalComponents/Icons/IconLibrary";
 import styles from "./GenreSection.module.css";
-import BooksCarousel from "../../../../../../components/UI/BooksCarousel/BooksCarousel";
-import { Loading } from "../../../../../../components/UI/Loading/Loading";
+import BooksCarousel from "../../../../../../GlobalComponents/Books/BookGrids/BooksCarousel/BooksCarousel";
+import { Loading } from "../../../../../../GlobalComponents/Feedback/Loading/Loading";
 
 const buildSvgBackgroundImage = (BackgroundComponent) => {
   if (!BackgroundComponent) return undefined;

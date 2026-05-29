@@ -1,4 +1,4 @@
-import { InputField } from "../../../components/UI/InputFields/InputField";
+import { InputField } from "../../../GlobalComponents/Forms/InputFields/InputField";
 import styles from "../Auth.module.css";
 
 function LoginForm({

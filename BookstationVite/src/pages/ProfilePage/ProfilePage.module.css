@@ -3,4 +3,22 @@
   color: var(--color-text-primary);
   display: flex;
   flex-direction: column;
+  justify-content: center;
+}
+
+.errorPage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-error);
+  height: 100vh;
+}
+
+.backButton {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 9999;
 }

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getUserRadar } from "../../../../../api/admin";
-import { Loading } from "../../../../../components/UI/Loading/Loading";
+import { useUserRadar } from "../../../../../hooks/adminHooks/useAdminQueries"; // Adjust path if needed
+import { Loading } from "../../../../../GlobalComponents/Feedback/Loading/Loading";
 import RadarMap from "./RadarMap";
+import { Search, Target, AlertTriangle } from "lucide-react";
 import styles from "./RadarContainer.module.css";
 
 export default function RadarContainer() {
@@ -10,72 +10,88 @@ export default function RadarContainer() {
   const [appliedId, setAppliedId] = useState(null);
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
+  // Validate the ID
   const enabled =
     appliedId != null &&
     Number.isFinite(Number(appliedId)) &&
     Number(appliedId) > 0;
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["radar", appliedId],
-    queryFn: () => getUserRadar(Number(appliedId)),
-    enabled,
-  });
+  // Utilize the custom hook
+  const { 
+    books, 
+    isPersonalized, 
+    isLoading, 
+    isFetching, 
+    error, 
+    refetch 
+  } = useUserRadar(appliedId, enabled);
 
-  const generate = () => {
+  // Handle generating/refreshing the radar
+  const generate = (e) => {
+    e?.preventDefault();
     setHasSubmitted(true);
     const n = parseInt(String(input).trim(), 10);
-    setAppliedId(Number.isFinite(n) && n > 0 ? n : null);
+    const newId = Number.isFinite(n) && n > 0 ? n : null;
+
+    if (newId === appliedId && newId !== null) {
+      // If the ID is the exact same, bypass the cache and force a fresh scan
+      refetch();
+    } else {
+      // Otherwise, set the new ID (React Query fetches automatically)
+      setAppliedId(newId);
+    }
   };
 
-  const books = data?.books ?? [];
-  const isPersonalized = data?.isPersonalized ?? false;
+  // We show the loading state on initial load (isLoading) AND manual refetches (isFetching)
+  const showLoading = enabled && (isLoading || isFetching);
 
   return (
-    <div className={styles.card}>
-      <h3 className={styles.cardTitle}>Taste radar</h3>
-      <p className={styles.cardHint}>
-        Enter a user ID to plot cosine-similarity matches against the catalog (admin
-        only).
-      </p>
-
-      <label className={styles.label} htmlFor="radar-user-id">
-        User ID
-      </label>
-      <textarea
-        id="radar-user-id"
-        className={styles.textarea}
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        rows={2}
-        placeholder="e.g. 1"
-        autoComplete="off"
-      />
-      <div className={styles.actions}>
-        <button type="button" className={styles.button} onClick={generate}>
-          Generate radar
+    <div className={styles.container}>
+      <form className={styles.controls} onSubmit={generate}>
+        <div className={styles.inputGroup}>
+          <Search size={18} className={styles.inputIcon} />
+          <input
+            id="radar-user-id"
+            className={styles.input}
+            type="number"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Enter User ID (e.g. 1)"
+            autoComplete="off"
+            min="1"
+          />
+        </div>
+        <button type="submit" className={styles.button} disabled={showLoading}>
+          <Target size={16} /> Scan Grid
         </button>
-      </div>
+      </form>
 
+      {/* Invalid Input State */}
       {hasSubmitted && appliedId == null && (
-        <p className={styles.invalid} role="status">
-          Enter a whole number greater than zero.
-        </p>
-      )}
-
-      {enabled && isLoading && (
-        <div className={styles.inlineState}>
-          <Loading variant="inline" />
-          <p className={styles.inlineText}>Scanning catalog… calibrating radar…</p>
+        <div className={styles.statusMessage} role="status">
+          <AlertTriangle size={16} className={styles.warningIcon} />
+          Please enter a valid User ID greater than zero.
         </div>
       )}
 
-      {enabled && error && (
-        <p className={styles.error} role="alert">
-          {error.message || "Failed to fetch radar data"}
-        </p>
+      {/* Loading & Scanning State */}
+      {showLoading && (
+        <div className={styles.loadingState}>
+          <Loading variant="inline" />
+          <p className={styles.loadingText}>Calibrating radar and mapping taste vectors...</p>
+        </div>
       )}
 
-      {enabled && !isLoading && !error && (
+      {/* Error State (Only triggers on actual API failures, not empty taste) */}
+      {enabled && error && !showLoading && (
+        <div className={styles.errorState} role="alert">
+          <AlertTriangle size={24} className={styles.errorIcon} />
+          <p>{error.message || "Failed to fetch radar data from the mainframe."}</p>
+        </div>
+      )}
+
+      {/* Success State */}
+      {enabled && !showLoading && !error && (
         <div className={styles.radarBody}>
           <RadarMap books={books} isPersonalized={isPersonalized} />
         </div>

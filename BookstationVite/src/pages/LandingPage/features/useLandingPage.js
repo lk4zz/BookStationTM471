@@ -1,7 +1,7 @@
 import { useMemo, useRef } from "react";
 import { useAllBooks, useTrendingBooks, useBooksByGenre } from "../../../hooks/bookHooks/useBookQueries";
 import { useAllGenres } from "../../../hooks/useGenres";
-import { useRatingsByBookIds } from "../../../hooks/useRatings";
+import { useRatingsByBookIds } from "../../../hooks/interactionHooks/useRatings";
 
 export function useLandingPage() {
   const { books, isBooksLoading, booksError } = useAllBooks();

@@ -1,4 +1,9 @@
-import { privateApi } from "./axios";
+import { publicApi, privateApi } from "./axios";
+
+export const getAllUsers = async () => {
+    const res = await publicApi.get("/users");
+    return res.data;
+};
 
 export const getUserById = async (userId) => {
     const res = await privateApi.get(`/users/${userId}`);
@@ -40,3 +45,8 @@ export const followStatus = async (userId) => {
     const res = await privateApi.get(`/following/${userId}`);
     return res.data;
 }
+
+export const searchUsers = async (q, limit = 10) => {
+    const res = await publicApi.get(`/users/search`, { params: { q, limit } });
+    return res.data;
+};

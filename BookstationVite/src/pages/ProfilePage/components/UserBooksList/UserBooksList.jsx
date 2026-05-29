@@ -1,6 +1,6 @@
 import listStyles from "./UserBooksList.module.css";
-import BookCoverCard from "../../../../components/UI/BookCoverCard/BookCoverCard";
-import { Loading } from "../../../../components/UI/Loading/Loading";
+import BookCoverCard from "../../../../GlobalComponents/Books/BookCards/BookCoverCard/BookCoverCard";
+import { Loading } from "../../../../GlobalComponents/Feedback/Loading/Loading";
 
 export function UserBooksList({
   books,
@@ -8,6 +8,7 @@ export function UserBooksList({
   isLoading,
   ratingsByBookId = {},
 }) {
+
   return (
     <div className={listStyles.listContainer}>
       <h3 className={listStyles.sectionTitle}>Published Works</h3>

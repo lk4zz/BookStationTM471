@@ -1,4 +1,4 @@
-import BookCoverCard from "../../components/UI/BookCoverCard/BookCoverCard";
+import BookCoverCard from "../../GlobalComponents/Books/BookCards/BookCoverCard/BookCoverCard";
 
 function GenresGrid({
   books,

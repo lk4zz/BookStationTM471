@@ -1,4 +1,4 @@
-import OnBackButton from "../../../../../../components/UI/Buttons/OnBackButtons";
+import OnBackButton from "../../../../../../GlobalComponents/Buttons/OnBackButtons";
 import WritingChaptersPanel from "../WritingChaptersPanel/WritingChaptersPanel";
 import styles from "./WritingPageSidePanel.module.css";
 
@@ -23,6 +23,7 @@ function WritingPageSidePanel({
   navigate,
 }) {
   const isDraft = book.status === "DRAFT";
+  const authorModerationAllowsEditing = book?.authorModerationAllowsEditing ?? false;
 
   return (
     <aside className={styles.panel}>
@@ -61,6 +62,23 @@ function WritingPageSidePanel({
 
       {error && <p className={styles.statusErr}>{error}</p>}
 
+      {authorModerationAllowsEditing && (
+        <div className={styles.moderationBanner} role="alert">
+          <span className={styles.moderationBannerIcon}>⚠</span>
+          <span>
+            Admin feedback received — fix the issues, then resubmit. Keep at least 3 published
+            chapters. Chapters with purchases cannot be deleted.
+          </span>
+        </div>
+      )}
+
+      {book?.isUnderReview && !authorModerationAllowsEditing && (
+        <div className={styles.reviewBanner} role="status">
+          <span className={styles.moderationBannerIcon}>⏳</span>
+          <span>Under admin review — editing is disabled until feedback is received.</span>
+        </div>
+      )}
+
       <div className={styles.chaptersWrap}>
         <WritingChaptersPanel
           bookId={numericBookId}
@@ -73,6 +91,7 @@ function WritingPageSidePanel({
           onPublishChapter={onPublishChapter}
           bookStatus={bookStatus}
           isBusy={isBusy}
+          authorModerationAllowsEditing={authorModerationAllowsEditing}
         />
       </div>
     </aside>

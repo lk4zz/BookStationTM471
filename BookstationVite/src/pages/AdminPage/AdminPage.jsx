@@ -1,11 +1,15 @@
-import { Loading } from "../../components/UI/Loading/Loading";
+import { Loading } from "../../GlobalComponents/Feedback/Loading/Loading";
 
 import { useAdminPage, ADMIN_MAX_VISIBLE_ROWS } from "./features/useAdminPage";
 import { AdminSearchField } from "./sections/AdminSearchField/AdminSearchField";
 import { AdminUsersSection } from "./sections/AdminUsersSection/AdminUsersSection";
 import { AdminBooksSection } from "./sections/AdminBooksSection/AdminBooksSection";
 import { AdminRadarSection } from "./sections/AdminRadarSection/AdminRadarSection";
-import { AdminApplicationsSection } from "./sections/AdminApplicationsSection/AdminApplicationsSection"; // NEW IMPORT
+import { AdminApplicationsSection } from "./sections/AdminApplicationsSection/AdminApplicationsSection"; 
+import { AdminReviewQueueSection } from "./sections/AdminReviewQueueSection/AdminReviewQueueSection"; // NEW IMPORT
+import { AdminTabs } from "./components/AdminTabs/AdminTabs";
+import Navbar from "../../GlobalComponents/Layout/NavBar/NavBar";
+
 
 import styles from "./AdminPage.module.css";
 
@@ -36,29 +40,35 @@ const AdminPage = () => {
     setActiveTab,
     catalogBookCount,
     regularUserCount,
+    currentUserRoleId,
+    isCurrentUserLoading,
+
+    // Moderation Queue Props
+    reviewQueue,
+    isReviewQueueLoading,
+    flagBook,
+    isFlaggingBook,
+    unflagBook,
+    isUnflaggingBooks,
+    sendFeedbackAgain,
+    isSendingFeedback,
   } = useAdminPage();
 
-  if (isUsersLoading || isBooksLoading) return <Loading />;
+  if (isUsersLoading || isBooksLoading || isReviewQueueLoading || isCurrentUserLoading) return <Loading />;
 
-  if (usersError) {
+  if (usersError || booksError) {
     return (
       <div className={styles.pageContainer}>
-        <div className={styles.error}>Error loading users: {usersError.message}</div>
-      </div>
-    );
-  }
-  if (booksError) {
-    return (
-      <div className={styles.pageContainer}>
-        <div className={styles.error}>Error loading books: {booksError.message}</div>
+        <div className={styles.error}>Error loading admin data.</div>
       </div>
     );
   }
 
   return (
     <div className={styles.pageContainer}>
+      <Navbar />
       <main className={styles.mainContent}>
-        <h1 className={styles.pageTitle}>Admin</h1>
+        <h1 className={styles.pageTitle}>Admin Dashboard</h1>
 
         {(banError || deleteBookError) && (
           <div className={styles.alertError}>
@@ -66,50 +76,16 @@ const AdminPage = () => {
           </div>
         )}
 
-        <div className={styles.tabRow} role="tablist" aria-label="Admin areas">
-          <button
-            type="button"
-            className={styles.tabBtn}
-            role="tab"
-            aria-selected={activeTab === "users"}
-            onClick={() => setActiveTab("users")}
-          >
-            Users
-          </button>
-          <button
-            type="button"
-            className={styles.tabBtn}
-            role="tab"
-            aria-selected={activeTab === "books"}
-            onClick={() => setActiveTab("books")}
-          >
-            Books
-          </button>
-          <button
-            type="button"
-            className={styles.tabBtn}
-            role="tab"
-            aria-selected={activeTab === "radar"}
-            onClick={() => setActiveTab("radar")}
-          >
-            Taste radar
-          </button>
-          {/* NEW TAB BUTTON */}
-          <button
-            type="button"
-            className={styles.tabBtn}
-            role="tab"
-            aria-selected={activeTab === "applications"}
-            onClick={() => setActiveTab("applications")}
-          >
-            Author Requests
-          </button>
-        </div>
+        <AdminTabs 
+          activeTab={activeTab} 
+          setActiveTab={setActiveTab} 
+          reviewQueue={reviewQueue} 
+        />
 
         <div className={styles.tabPanels}>
+          
           {activeTab === "users" && (
             <div role="tabpanel" className={styles.tabPanel}>
-              {/* Existing Users Code */}
               <AdminSearchField
                 id="admin-user-search"
                 label="Search"
@@ -119,8 +95,7 @@ const AdminPage = () => {
               />
               {userListTruncated && (
                 <p className={styles.meta}>
-                  Showing first {ADMIN_MAX_VISIBLE_ROWS} matches — narrow your search for
-                  the rest.
+                  Showing first {ADMIN_MAX_VISIBLE_ROWS} matches — narrow your search for the rest.
                 </p>
               )}
               <AdminUsersSection
@@ -132,13 +107,13 @@ const AdminPage = () => {
                 searchQuery={userSearch}
                 onChangeRole={changeUserRole}
                 isChangingRole={isChangingRole}
+                currentUserRoleId={currentUserRoleId}
               />
             </div>
           )}
 
           {activeTab === "books" && (
             <div role="tabpanel" className={styles.tabPanel}>
-               {/* Existing Books Code */}
               <AdminSearchField
                 id="admin-book-search"
                 label="Search"
@@ -148,14 +123,15 @@ const AdminPage = () => {
               />
               {bookListTruncated && (
                 <p className={styles.meta}>
-                  Showing first {ADMIN_MAX_VISIBLE_ROWS} matches — narrow your search for
-                  the rest.
+                  Showing first {ADMIN_MAX_VISIBLE_ROWS} matches.
                 </p>
               )}
               <AdminBooksSection
                 books={filteredBooks}
                 onDeleteBook={deleteBook}
                 isDeleting={isDeletingBook}
+                flagBook={flagBook}
+                isFlaggingBook={isFlaggingBook}
                 showHeading
                 catalogEmpty={catalogBookCount === 0}
                 searchQuery={bookSearch}
@@ -163,16 +139,31 @@ const AdminPage = () => {
             </div>
           )}
 
-          {activeTab === "radar" && (
+          {activeTab === "reviews" && (
             <div role="tabpanel" className={styles.tabPanel}>
-              <AdminRadarSection />
+               <AdminReviewQueueSection 
+                 queue={reviewQueue} 
+                 onUnflag={unflagBook} 
+                 isUnflagging={isUnflaggingBooks} 
+                 onDeleteBook={deleteBook} 
+                 isDeleting={isDeletingBook}
+                 onBanUser={banUser}
+                 isBanning={isBanning}
+                 onSendFeedback={sendFeedbackAgain}
+                 isSendingFeedback={isSendingFeedback}
+               />
             </div>
           )}
 
-          {/* NEW TAB PANEL */}
           {activeTab === "applications" && (
             <div role="tabpanel" className={styles.tabPanel}>
               <AdminApplicationsSection />
+            </div>
+          )}
+
+          {activeTab === "radar" && (
+            <div role="tabpanel" className={styles.tabPanel}>
+              <AdminRadarSection />
             </div>
           )}
 

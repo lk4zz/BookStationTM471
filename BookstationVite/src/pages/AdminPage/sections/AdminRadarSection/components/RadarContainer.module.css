@@ -1,134 +1,121 @@
-/* Same theme tokens as RadarMap.wrapEmbedded so the map inherits colors */
-.card {
-  --rm-bg-surface: #0f172a;
-  --rm-bg-radar: #020617;
-  --rm-text-primary: #f8fafc;
-  --rm-text-muted: #94a3b8;
-  --rm-border: rgba(255, 255, 255, 0.1);
-  --rm-ring: rgba(255, 255, 255, 0.08);
-  --rm-crosshair: rgba(255, 255, 255, 0.04);
-  --rm-accent-user: #f97316;
-  --rm-accent-book: #38bdf8;
-  --rm-accent-top: #a855f7;
-
-  text-align: left;
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 1.5rem;
-  background: var(--rm-bg-surface);
-  border: 1px solid var(--rm-border);
-  border-radius: 16px;
-  color: var(--rm-text-primary);
-  font-family: system-ui, -apple-system, sans-serif;
-  box-sizing: border-box;
-}
-
-.cardTitle {
-  font-size: 1.35rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  margin: 0 0 0.35rem;
-}
-
-.cardHint {
-  font-size: 0.88rem;
-  color: var(--rm-text-muted);
-  margin: 0 0 1rem;
-  line-height: 1.45;
-  max-width: 40rem;
-}
-
-.label {
-  display: block;
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--rm-text-muted);
-  margin-bottom: 0.4rem;
-}
-
-.textarea {
+.container {
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  max-width: 280px;
-  padding: 0.55rem 0.65rem;
-  font-family: ui-monospace, monospace;
+}
+
+/* Premium Input Group */
+.controls {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.inputGroup {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 250px;
+  max-width: 400px;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 14px;
+  color: var(--color-text-muted);
+}
+
+.input {
+  width: 100%;
+  padding: 12px 16px 12px 42px;
+  font-family: var(--font-mono);
   font-size: 0.95rem;
-  border-radius: 10px;
-  border: 1px solid var(--rm-border);
-  background: rgba(0, 0, 0, 0.25);
-  color: var(--rm-text-primary);
-  resize: vertical;
-  box-sizing: border-box;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-medium);
+  background: var(--color-bg-app);
+  color: var(--color-text-primary);
+  transition: all var(--duration-fast) var(--ease-standard);
 }
 
-.textarea::placeholder {
-  color: var(--rm-text-muted);
-  opacity: 0.7;
+.input::placeholder {
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
 }
 
-.textarea:focus {
+.input:focus {
   outline: none;
-  border-color: rgba(56, 189, 248, 0.45);
-  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.15);
-}
-
-.actions {
-  margin-top: 0.75rem;
+  border-color: var(--color-accent);
+  box-shadow: var(--focus-ring);
 }
 
 .button {
-  padding: 0.5rem 1.1rem;
-  border-radius: 10px;
-  border: 1px solid rgba(56, 189, 248, 0.35);
-  background: rgba(56, 189, 248, 0.12);
-  color: var(--rm-text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  background: var(--color-accent);
+  color: #ffffff;
+  border: none;
+  font-family: var(--font-body);
   font-size: 0.95rem;
-  font-weight: 500;
+  font-weight: var(--weight-semibold);
   cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-standard);
+  box-shadow: 0 4px 14px var(--color-accent-muted);
 }
 
 .button:hover {
-  background: rgba(56, 189, 248, 0.2);
+  background: var(--color-accent-hover);
+  transform: translateY(-1px);
 }
 
-.button:focus-visible {
-  outline: 2px solid var(--rm-accent-book);
-  outline-offset: 2px;
-}
-
-.invalid {
-  margin: 0.85rem 0 0;
-  font-size: 0.88rem;
-  color: #fca5a5;
-}
-
-.inlineState {
+/* States */
+.statusMessage, .loadingState, .errorState {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.6rem;
-  margin-top: 1.25rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--rm-border);
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg-elevated);
+  border: 1px dashed var(--color-border-medium);
 }
 
-.inlineText {
-  margin: 0;
-  font-size: 0.88rem;
-  color: var(--rm-text-muted);
+.statusMessage {
+  color: var(--color-warning);
+  border-color: rgba(216, 155, 77, 0.3);
 }
 
-.error {
-  margin: 1.25rem 0 0;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--rm-border);
+.warningIcon {
+  color: var(--color-warning);
+}
+
+.errorState {
+  color: var(--color-error);
+  border-color: var(--color-error-border);
+  background-color: var(--color-error-bg);
+}
+
+.errorIcon {
+  color: var(--color-error);
+}
+
+.loadingState {
+  justify-content: center;
+  border-color: transparent;
+  background-color: transparent;
+}
+
+.loadingText {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
   font-size: 0.9rem;
-  color: #fca5a5;
 }
 
 .radarBody {
-  margin-top: 1.25rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--rm-border);
+  margin-top: var(--space-6);
+  animation: pulse var(--duration-normal) var(--ease-standard);
 }

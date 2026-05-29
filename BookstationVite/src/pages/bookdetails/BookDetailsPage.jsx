@@ -1,87 +1,64 @@
+// BookDetailsPage.jsx
+import { useParams } from "react-router-dom";
+import { BookDetailsProvider, useBookDetailsContext } from "./context/BookDetailsContext"; // adjust path as needed
 import BookDetails from "./sections/BookDetails/BookDetails";
 import BookDescription from "./sections/BookDescription/BookDescription";
-import styles from "./BookDetailsPage.module.css";
-import Loading from "../../components/UI/Loading/Loading";
 import CommentSection from "./sections/CommentSection/CommentSection";
-import { useBookDetails } from "./features/useBookDetails";
-import { useParams } from "react-router-dom";
 import ChapterSection from "./sections/ChapterSection/ChapterSection";
+import Loading from "../../GlobalComponents/Feedback/Loading/Loading";
+import styles from "./BookDetailsPage.module.css";
 
-function BookDetailsPage() {
-  const { id } = useParams();
-  const bookId = Number(id);
-
-  const {
-    book,
-    isBookLoading,
-    bookError,
-    comments,
-    isCommentsLoading,
-    commentInput,
-    setCommentInput,
-    handleAddComment,
-    submitCommentMutation,
-    chapters,
-    isChapterLoading,
-    publishedChapters,
-    ratingModal,
-    OpenRatinModal,
-    closeRatinModal,
-    ratingAverage,
-    ratingCount,
-  } = useBookDetails(bookId);
-  
-  if (!Number.isFinite(bookId)) {
-    return <p className={styles.error}>Invalid book link.</p>;
-  }
+// We separate the inner content so it can access the Context (which is provided by the wrapper below)
+function BookDetailsPageContent() {
+  // We only pull the loading and error states here for the page-level layout
+  const { isBookLoading, bookError } = useBookDetailsContext();
 
   if (isBookLoading) return <Loading />;
   if (bookError) return <p className={styles.error}>{bookError.message || "Error loading data."}</p>;
 
   return (
     <div className={styles.page}>
-
       <div className={styles.upperContainer}>
-
         <section>
-          <BookDetails
-            book={book}
-            ratingModal={ratingModal}
-            OpenRatinModal={OpenRatinModal}
-            closeRatinModal={closeRatinModal}
-            ratingAverage={ratingAverage}
-            ratingCount={ratingCount}
-          />
+          {/* Props are gone! The component will grab what it needs from Context */}
+          <BookDetails />
         </section>
-
       </div>
 
       <div className={styles.lowerContainer}>
-
         <section className={styles.bookDescriptionColumn}>
           <h3 className={styles.sectionTitle}>Book Description</h3>
-          <BookDescription book={book} />
+          {/* Props are gone! */}
+          <BookDescription />
         </section>
 
         <section className={styles.commentSectionColumn}>
-          <CommentSection comments={comments}
-            isCommentsLoading={isCommentsLoading}
-            commentInput={commentInput}
-            setCommentInput={setCommentInput}
-            handleAddComment={handleAddComment}
-            submitCommentMutation={submitCommentMutation} />
+          {/* Props are gone! */}
+          <CommentSection />
         </section>
 
         <section className={styles.chapterSectionColumn}>
-          <ChapterSection
-            chapters={chapters}
-            isChapterLoading={isChapterLoading}
-            publishedChapters={publishedChapters}
-          />
+          {/* Props are gone! */}
+          <ChapterSection />
         </section>
-
       </div>
     </div>
+  );
+}
+
+// The main page component acts as the Context Wrapper
+function BookDetailsPage() {
+  const { id } = useParams();
+  const bookId = Number(id);
+
+  if (!Number.isFinite(bookId)) {
+    return <p className={styles.error}>Invalid book link.</p>;
+  }
+
+  return (
+    <BookDetailsProvider bookId={bookId}>
+      <BookDetailsPageContent />
+    </BookDetailsProvider>
   );
 }
 

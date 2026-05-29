@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useChapterById, useChaptersByBook } from "../../../hooks/useChapters/useChaptersForUser";
 import { usePagesByChatper } from "../../../hooks/usePages";
 import { useUpdateProgress } from "../../../hooks/useProgress";
-import { useCurrentUser } from "../../../hooks/useUser";
+import { useCurrentUser } from "../../../hooks/UserHooks/UseUser";
 
 
 export function useReadingPage(numericBookId, numericChapterId) {

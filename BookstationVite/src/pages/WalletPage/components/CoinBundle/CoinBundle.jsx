@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./CoinBundle.module.css";
-import { CoinsIcon, SparklesIcon } from "../../../../components/UI/Icons/IconLibrary";
+import { CoinsIcon, SparklesIcon } from "../../../../GlobalComponents/Icons/IconLibrary";
 import { useBuyCoins } from "../../../../hooks/useWallet";
 
 function CoinBundle({ amount }) {

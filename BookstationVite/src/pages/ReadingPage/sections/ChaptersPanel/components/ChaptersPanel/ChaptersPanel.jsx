@@ -1,12 +1,13 @@
-import ChapterCards from "../../../../../../components/UI/ChapterCards/ChapterCards";
+import ChapterCards from "../../../../../../GlobalComponents/Books/ChapterCards/ChapterCards";
 import styles from "./ChaptersPanel.module.css";
-import OnBackButton from "../../../../../../components/UI/Buttons/OnBackButtons";
+import OnBackButton from "../../../../../../GlobalComponents/Buttons/OnBackButtons";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
-import ModelUnlock from "../ModelUnlock/ModelUnlock";
+import UnlockModal from "../../../../../../GlobalComponents/Modals/UnlockModal/UnlockModal";
 import { useUnlockChapter } from "../../../../../../hooks/useChapters/useChaptersForAuthor";
-import LoginModel from "../../../../../../components/UI/LoginWindowModel/LoginModel";
+import LoginModel from "../../../../../../GlobalComponents/Modals/LoginWindowModel/LoginModel";
 import { checkIfGuest } from "../../../../../../utils/checkIfGuest";
+import toast from "react-hot-toast";
 
 
 function ChaptersPanel({ chapter, chapters, isChapterLoading }) {
@@ -23,6 +24,25 @@ function ChaptersPanel({ chapter, chapters, isChapterLoading }) {
     setSelectedChapter(null);
   }
 
+  const handleChapterPurchase = (chapterId) => {
+    onUnlock(chapterId, {
+      onSuccess: () => {
+        //toast success result
+        toast.success(`${selectedChapter.title} unlocked!`);
+        onClose()
+      },
+      onError: (error) => {
+        const errMsg =
+          error.message || w
+        error.response?.data?.message ||
+          error.response?.data?.error ||
+          "Not enough coins.";
+        //toast error message
+        toast.error(errMsg);
+      }
+    });
+  };
+
   const handleOnClick = (clickedChapter) => {
     if (clickedChapter.hasAccess) {
       navigate(`/book/reading/${clickedChapter.bookId}/${clickedChapter.id}`, {
@@ -31,7 +51,7 @@ function ChaptersPanel({ chapter, chapters, isChapterLoading }) {
       });
     }
     else if (isGuest) {
-      
+
       setOpenLogIn(true)
       setSelectedChapter(clickedChapter);
     }
@@ -68,15 +88,23 @@ function ChaptersPanel({ chapter, chapters, isChapterLoading }) {
               <p className={styles.emptyState}>No chapters available.</p>
             )}
             {selectedChapter && (
-              <ModelUnlock
-                OpenUnlock={OpenUnlock}
+              <UnlockModal
+                isOpen={OpenUnlock}
                 onClose={onClose}
-                chapterPrice={selectedChapter.price}
-                chapterTitle={selectedChapter.title}
+                title="Chapter is Locked"
+                message={
+                  <>
+                    Unlock {selectedChapter.title}
+                    <br />
+                    <br />
+                    And discover what happens next
+                  </>
+                }
+                unlockText={`Unlock ${selectedChapter.price}`}
                 onUnlock={() => {
-                  onUnlock(selectedChapter.id)
-                  onClose()
+                  handleChapterPurchase(selectedChapter.id)
                 }}
+                isPending={isPending}
               />
             )}
             {selectedChapter && (

@@ -1,0 +1,34 @@
+.searchContentSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: 10px 5%;
+}
+
+.sectionHeader {
+  color: var(--color-text-primary);
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.resultsGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.groupTitle {
+  color: var(--color-text-secondary);
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  margin: 0;
+  border-bottom: 1px solid var(--color-border-soft);
+  padding-bottom: var(--space-2);
+}
+
+.noResults {
+  color: var(--color-text-muted);
+  font-style: italic;
+}

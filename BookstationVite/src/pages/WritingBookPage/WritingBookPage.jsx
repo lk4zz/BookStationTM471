@@ -70,6 +70,19 @@ function WritingBookPage() {
     );
   }
 
+  if (currentUser?.id !== book.userId) {
+    return (
+      <div className={styles.fullScreenState}>
+        <p className={styles.centerMsg}>
+          NOT AUTHORIZED
+          <Link to="/writing" className={styles.backLink}>
+            Back to writing
+          </Link>
+        </p>
+      </div>
+    )
+  }
+
   return (
     <div className={styles.writingPageViewport}>
       <div className={styles.writingPage}>
@@ -103,9 +116,9 @@ function WritingBookPage() {
           cannotEdit={cannotEdit}
         />
 
-        <WritingBookAiPanelSection 
-        currentUser={currentUser}
-        chapterId={selectedChapterId} />
+        <WritingBookAiPanelSection
+          currentUser={currentUser}
+          chapterId={selectedChapterId} />
       </div>
 
       <WritingBookModalsSection

@@ -145,3 +145,10 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+.deleteHint {
+  margin: var(--space-1) 0 0;
+  font-size: 0.7rem;
+  color: var(--color-error);
+  font-family: var(--font-body);
+}

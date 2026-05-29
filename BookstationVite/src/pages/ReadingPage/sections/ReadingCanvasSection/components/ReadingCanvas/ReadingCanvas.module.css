@@ -13,20 +13,20 @@
   background: black;
 }
 
-/* One sheet — dimensions pair with readingCanvas.dimensions.js */
+/* One sheet — continuous flow */
 .pageSheet {
   box-sizing: border-box;
   width: min(100%, 750px);
-  aspect-ratio: 210 / 297;
   max-width: 100%;
   padding: 48px 56px;
   background: rgb(34, 34, 34);
   border-radius: 10px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
   font-family: Georgia, serif;
-  font-size: 1rem;
-  line-height: 1.55;
+  font-size: 1.1rem;
+  line-height: 1.6;
   color: rgb(255, 255, 255);
+  margin-bottom: 2rem;
 }
 
 .pageContent {

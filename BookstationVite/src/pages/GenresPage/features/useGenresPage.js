@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useAllGenres } from "../../../hooks/useGenres";
 import { useBooksByGenre } from "../../../hooks/bookHooks/useBookQueries";
-import { useRatingsByBookIds } from "../../../hooks/useRatings";
+import { useRatingsByBookIds } from "../../../hooks/interactionHooks/useRatings";
 
 export function useGenresPage(currentGenreType) {
   const { genres, isGenresLoading, genresError } = useAllGenres();

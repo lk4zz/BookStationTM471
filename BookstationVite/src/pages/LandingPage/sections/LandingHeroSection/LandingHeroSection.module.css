@@ -1,49 +1,104 @@
 .hero {
+  position: relative;
   text-align: center;
-  padding: 100px var(--space-5) 80px;
-  max-width: 800px;
+  padding: 40px var(--space-5) 50px;
+  max-width: 900px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-6);
+  z-index: var(--z-base);
+}
+
+/* Adds a subtle, glowing orb effect strictly behind the hero content */
+.heroGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 600px;
+  height: 400px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, var(--color-future-muted) 0%, transparent 70%);
+  z-index: -1;
+  pointer-events: none;
+  filter: blur(50px);
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-pill);
+  color: var(--color-future-text);
+  font-size: 0.85rem;
+  font-weight: var(--weight-bold);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: var(--shadow-sm);
+}
+
+.badgeIcon {
+  width: 16px;
+  height: 16px;
+  color: var(--color-future-accent);
 }
 
 .heroTitle {
   font-family: var(--font-heading);
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  line-height: 1.1;
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  line-height: var(--line-height-tight);
+  color: var(--color-text-primary);
   margin: 0;
+  letter-spacing: -0.03em;
 }
 
-.heroTitle span {
-  color: var(--color-accent);
-  background: linear-gradient(to right, var(--color-accent), #60a5fa);
+.highlight {
+  background: linear-gradient(135deg, var(--color-future-accent), var(--color-accent-hover));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .heroSubtitle {
-  font-size: 1.125rem;
-  color: var(--color-text-muted);
-  line-height: 1.6;
-  max-width: 600px;
+  font-family: var(--font-body);
+  font-size: 1.25rem;
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  max-width: 650px;
   margin: 0;
 }
 
+.ctaGroup {
+  display: flex;
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 .primaryCta {
-  background: var(--color-accent);
-  color: #fff;
+  background: var(--color-future);
+  color: #ffffff;
   border: none;
   padding: var(--space-4) var(--space-8);
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 1.125rem;
+  font-weight: var(--weight-bold);
   border-radius: var(--radius-pill);
   cursor: pointer;
-  transition: background var(--duration-fast) var(--ease-standard);
-  margin-top: var(--space-2);
+  transition: transform var(--duration-normal) var(--ease-standard),
+              background var(--duration-normal) var(--ease-standard),
+              box-shadow var(--duration-normal) var(--ease-standard);
+  /* Uses a custom shadow based on your future color for a neon-like glow */
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
 }
 
 .primaryCta:hover {
-  background: var(--color-accent-hover);
+  background: var(--color-future-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(139, 92, 246, 0.5);
 }

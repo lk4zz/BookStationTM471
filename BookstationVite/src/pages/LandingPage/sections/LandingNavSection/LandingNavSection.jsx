@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { SparklesIcon } from "../../../../components/UI/Icons/IconLibrary";
+import { SparklesIcon } from "../../../../GlobalComponents/Icons/IconLibrary";
 import styles from "./LandingNavSection.module.css";
 
 function LandingNavSection() {

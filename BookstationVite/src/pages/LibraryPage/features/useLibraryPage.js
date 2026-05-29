@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useLibraryBooks, useRemoveFromLibrary } from "../../../hooks/useLibrary";
 import { useProgressForBookIds } from "../../../hooks/useProgress";
 import { useAllGenres } from "../../../hooks/useGenres";
+import { bookMatchesSearch } from "../../../utils/fuzzyNameSearch";
 
 function bookGenreIds(book) {
   return (book?.bookGenres ?? [])
@@ -17,6 +18,7 @@ export function useLibraryPage() {
 
   const [genreFilter, setGenreFilter] = useState("all");
   const [sortBy, setSortBy] = useState("title");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const bookIds = useMemo(
     () => (libraryItems ?? []).map((item) => item.book?.id).filter(Boolean),
@@ -27,6 +29,10 @@ export function useLibraryPage() {
   const filteredSorted = useMemo(() => {
     const items = libraryItems ?? [];
     let next = [...items];
+
+    if (searchQuery) {
+      next = next.filter((item) => bookMatchesSearch(item.book, searchQuery));
+    }
 
     if (genreFilter !== "all") {
       const gid = Number(genreFilter);
@@ -54,7 +60,7 @@ export function useLibraryPage() {
     });
 
     return next;
-  }, [libraryItems, genreFilter, sortBy, progressByBookId]);
+  }, [libraryItems, genreFilter, sortBy, progressByBookId, searchQuery]);
 
   return {
     isGuest,
@@ -68,6 +74,8 @@ export function useLibraryPage() {
     setGenreFilter,
     sortBy,
     setSortBy,
+    searchQuery,
+    setSearchQuery,
     filteredSorted,
     progressByBookId,
     isProgressLoading,

@@ -1,33 +1,36 @@
-import NavBar from "../../components/UI/NavBar/NavBar";
-import EditBookModal from "../../components/UI/EditBookModal/EditBookModal";
+import NavBar from "../../GlobalComponents/Layout/NavBar/NavBar";
+import EditBookModal from "../../GlobalComponents/Modals/EditBookModal/EditBookModal";
 import styles from "./WritingDashboardPage.module.css";
 import PageHeader from "./PageComponents/PageHeader/PageHeader";
 import BookTabs from "./PageComponents/BookTabPanel/BookTabs";
-import DashboardBooksSection from "./sections/DashboardBooksSection/DashboardBooksSection";
+import DashboardBooksSection from "./PageComponents/DashboardBooksSection/DashboardBooksSection";
 import { useWritingDashboardPage } from "./features/useWritingDashboardPage";
-import Loading from "../../components/UI/Loading/Loading";
-import AuthorApplicationView from "./PageComponents/AuthorApplicationView/AuthorApplicationView";
+import Loading from "../../GlobalComponents/Feedback/Loading/Loading";
+import AuthorLandingPage from "./PageComponents/AuthorLanding/AuthorLandingPage";
 
 function WritingDashboardPage() {
   const {
     isGuest, activeTab, handleActiveTab, isNewBookModalOpen,
     setNewBookModalOpen, booksByAuthor, isBooksByAuthorLoading,
     booksByAuthorError, handleDelete, currentUser, isCurrentUserLoading,
+    setSearchQuery,
   } = useWritingDashboardPage();
 
   if (isGuest) return null;
   if (isCurrentUserLoading) return <Loading />;
-  if (currentUser?.roleId !== 2 && currentUser?.roleId !== 3)  return (
+  if (currentUser?.roleId !== 2 && currentUser?.roleId !== 3 && currentUser?.roleId !== 4)  return (
     <>
     <NavBar/>
-    <AuthorApplicationView/>
+    <AuthorLandingPage
+    currentUser={currentUser}
+    />
     </>
     )
 
 
   return (
     <div className={styles.pageShell}>
-      <NavBar />
+      <NavBar onSearch={setSearchQuery} />
 
       <main className={styles.dashboardContainer}>
         {/* Section 1: Intro/Actions */}

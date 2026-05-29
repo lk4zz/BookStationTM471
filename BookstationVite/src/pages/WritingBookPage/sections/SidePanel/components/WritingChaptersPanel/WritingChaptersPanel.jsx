@@ -14,9 +14,12 @@ function WritingChaptersPanel({
   onPublishChapter,
   bookStatus,
   isBusy,
+  authorModerationAllowsEditing,
 }) {
   const [editingChapter, setEditingChapter] = useState(null);
   const [showModal, setShowModal] = useState(false);
+
+  const publishedChapterCount = (chapters ?? []).filter((c) => c.isPublished).length;
 
   const openCreate = () => {
     setEditingChapter(null);
@@ -73,6 +76,8 @@ function WritingChaptersPanel({
           onPublishChapter={onPublishChapter}
           onClose={closeModal}
           isBusy={isBusy}
+          authorModerationAllowsEditing={authorModerationAllowsEditing}
+          publishedChapterCount={publishedChapterCount}
         />
       )}
     </aside>

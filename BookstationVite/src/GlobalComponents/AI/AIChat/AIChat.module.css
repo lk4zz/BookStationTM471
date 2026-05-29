@@ -1,0 +1,75 @@
+/* AIChat.module.css */
+
+.chatWindow {
+  height: 100%;
+  width: 100%; /* Fixed from 110% to prevent layout breakage */
+  overflow-y: auto;
+  
+  /* Custom thin scrollbar for modern aesthetics */
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: var(--color-border-soft) transparent;
+}
+
+/* Webkit Scrollbar Styling */
+.chatWindow::-webkit-scrollbar {
+  width: 6px;
+}
+.chatWindow::-webkit-scrollbar-track {
+  background: transparent;
+}
+.chatWindow::-webkit-scrollbar-thumb {
+  background-color: var(--color-border-soft);
+  border-radius: var(--radius-pill);
+}
+
+.chatBubbleContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+
+/* Base structural properties for all bubbles */
+.bubble {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  line-height: var(--line-height-base);
+  padding: var(--space-3) var(--space-4);
+  max-width: 85%;
+  word-wrap: break-word;
+  color: var(--color-text-primary);
+  /* Animation for new messages entering the DOM */
+  animation: slideUp var(--duration-fast) var(--ease-standard) forwards;
+}
+
+/* AI Bubble (System/Assistant) - Left aligned, elevated panel style */
+.chatBubbleAI {
+  align-self: flex-start;
+  background-color: var(--color-accent);
+  border: 1px solid var(--color-border-soft);
+  /* Asymmetric radius: sharp bottom-left corner */
+  border-radius: var(--radius-lg) var(--radius-lg) var(--radius-lg) 2px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* User Bubble - Right aligned, primary accent style */
+.chatBubbleUser {
+  align-self: flex-end;
+  background: var(--gradient-accent);
+  color: #ffffff; /* Force pure white for high contrast against the gradient */
+  border: none;
+  /* Asymmetric radius: sharp bottom-right corner */
+  border-radius: var(--radius-lg) var(--radius-lg) 2px var(--radius-lg);
+  box-shadow: var(--shadow-glow);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

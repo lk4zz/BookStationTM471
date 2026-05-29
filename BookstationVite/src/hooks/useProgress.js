@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient, useQueries } from "@tanstack/react-query";
 import { getReadingProgress, updateReadingProgress } from "../api/progress";
+import { qk } from "./queryKeys";
 
 // use this on the Book Details page to know which chapter to route the user to
 export const useGetProgress = (bookId) => {
@@ -8,7 +9,7 @@ export const useGetProgress = (bookId) => {
     isLoading: isProgressLoading,
     error: progressError,
   } = useQuery({
-    queryKey: ["progress", bookId],
+    queryKey: qk.progress.byBook(bookId),
     queryFn: () => getReadingProgress(bookId),
     enabled: Number.isFinite(bookId), // Only run if bookId is a valid number
   });
@@ -26,7 +27,7 @@ export const useUpdateProgress = () => {
     mutationFn: updateReadingProgress,
     onSuccess: (data, variables) => {
       // Instantly invalidate the GET query so the book page "Continue" button is fresh
-      queryClient.invalidateQueries(["progress", variables.bookId]);
+      queryClient.invalidateQueries({ queryKey: qk.progress.byBook(variables.bookId) });
       console.log("stored progress")
     }
   });
@@ -40,7 +41,7 @@ export const useProgressForBookIds = (bookIds = []) => {
 
   const results = useQueries({
     queries: ids.map((bookId) => ({
-      queryKey: ["progress", bookId],
+      queryKey: qk.progress.byBook(bookId),
       queryFn: () => getReadingProgress(bookId),
       enabled: ids.length > 0,
     })),

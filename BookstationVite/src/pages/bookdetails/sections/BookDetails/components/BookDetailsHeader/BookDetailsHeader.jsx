@@ -1,5 +1,6 @@
+// sections/BookDetails/components/BookDetailsHeader/BookDetailsHeader.jsx
 import { useNavigate } from "react-router-dom";
-import OnBackButton from "../../../../../../components/UI/Buttons/OnBackButtons";
+import OnBackButton from "../../../../../../GlobalComponents/Buttons/OnBackButtons";
 import styles from "./BookDetailsHeader.module.css";
 
 export default function BookDetailsHeader({ name, authorName, userId, readState }) {

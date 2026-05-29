@@ -1,4 +1,4 @@
-import BookCard from "../../../../components/UI/BookCard/BookCard";
+import LibraryBookCard from "./LibraryBookCard/LibraryBookCard";
 import styles from "./LibraryGrid.module.css";
 
 function LibraryGrid({ books, progressByBookId, onRemoveBook, isRemoving }) {
@@ -9,7 +9,7 @@ function LibraryGrid({ books, progressByBookId, onRemoveBook, isRemoving }) {
   return (
     <div className={styles.grid}>
       {books.map((item) => (
-        <BookCard
+        <LibraryBookCard
           key={item.id}
           book={item.book}
           progress={progressByBookId?.[item.book.id]}

@@ -1,6 +1,6 @@
-import EditBookModal from "../../../../components/UI/EditBookModal/EditBookModal";
+import EditBookModal from "../../../../GlobalComponents/Modals/EditBookModal/EditBookModal";
 import LaunchModal from "./components/LaunchModal/LaunchModal";
-import CompletedWarningModal from "./components/CompletedWarningModal/CompletedWarningModal";
+import WarningModal from "../../../../GlobalComponents/Modals/WarningModal/WarningModal";
 
 function WritingBookModalsSection({
   showEditBook,
@@ -42,10 +42,14 @@ function WritingBookModalsSection({
       )}
 
       {compWarning && (
-        <CompletedWarningModal
+        <WarningModal
+          heading="Mark book as completed?"
+          message="Completed books cannot be edited again. Chapters, the editor, and book metadata will stay as they are now. This cannot be undone from the writing dashboard."
           onConfirm={confirmCompletedStatus}
           onClose={() => setCompWarning(false)}
           isPending={isStatusPending}
+          confirmText="Mark completed"
+          pendingText="Updating…"
         />
       )}
     </>

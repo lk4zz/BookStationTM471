@@ -1,41 +1,93 @@
 .infoContainer {
-  padding: var(--space-4) 5%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-12);
+
+
 }
 
 .headerRow {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: var(--space-4);
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.textGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
 }
 
 .name {
   margin: 0;
-  font-size: 1.5rem;
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
   color: var(--color-text-primary);
   font-weight: var(--weight-bold);
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.02em;
 }
 
 .tag {
-  font-size: 0.875rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
   color: var(--color-text-muted);
+  font-weight: var(--weight-medium);
 }
 
 .bio {
-  color: var(--color-text-secondary);
-  line-height: 1.6;
-  max-width: 600px;
   margin: 0;
+  font-family: var(--font-body);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  font-size: 1rem;
+  max-width: 680px;
 }
 
-.editButton, .followButton {
-  padding: var(--space-2) var(--space-4);
+/* =========================================
+   Actions & Buttons
+   ========================================= */
+
+.actionsWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.actionButtons {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* Base button styling shared across all profile actions */
+.editButton,
+.followButton,
+.unfollowButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-5);
+  height: 38px; /* Fixed height to prevent layout shifts */
   border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
   font-weight: var(--weight-semibold);
   cursor: pointer;
+  outline: none;
   transition: all var(--duration-fast) var(--ease-standard);
 }
 
+.editButton:focus-visible,
+.followButton:focus-visible,
+.unfollowButton:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+/* Edit Button */
 .editButton {
   background-color: transparent;
   color: var(--color-text-primary);
@@ -44,14 +96,39 @@
 
 .editButton:hover {
   background-color: var(--color-bg-hover);
+  border-color: var(--color-border-soft);
 }
 
+/* Primary Follow Button */
 .followButton {
   background-color: var(--color-accent);
   color: #ffffff;
-  border: none;
+  border: 1px solid transparent;
+  box-shadow: 0 4px 12px rgba(124, 140, 255, 0.15); /* Subtle brand glow */
 }
 
 .followButton:hover {
   background-color: var(--color-accent-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-glow);
+}
+
+/* Unfollow Button - Differentiated state */
+.unfollowButton {
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border-medium);
+}
+
+.unfollowButton:hover {
+  color: var(--color-danger);
+  border-color: var(--color-danger-hover);
+  background-color: rgba(202, 87, 87, 0.08); /* Matches var(--color-danger) w/ opacity */
+}
+
+/* Skeleton Loading Wrapper */
+.skeletonWrapper {
+  display: flex;
+  align-items: center;
+  min-width: 110px; /* Prevents layout jump when loading resolves to follow button */
 }

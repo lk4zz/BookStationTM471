@@ -1,0 +1,138 @@
+/* WritingChapterItem.module.css */
+
+.itemWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  border-radius: var(--radius-md);
+  background-color: transparent;
+  transition: background-color var(--duration-fast) var(--ease-standard);
+  position: relative;
+  width: 100%;
+}
+
+
+
+.chapterBtn {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: space-between;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  /* Crucial for allowing the title to truncate */
+  background: transparent;
+  border: none;
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--duration-fast) var(--ease-standard);
+}
+
+/* Active State: Indigo glow and left-border accent */
+.chapterBtn.active {
+  background-color: var(--color-accent-muted);
+  box-shadow: inset 3px 0 0 var(--color-accent);
+}
+
+/* Chapter Numbering */
+.chapterNum {
+  font-family: var(--font-mono);
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: var(--weight-medium);
+  min-width: 24px;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.chapterBtn:hover .chapterNum,
+.chapterBtn.active .chapterNum {
+  color: var(--color-accent);
+}
+
+/* Chapter Title */
+.chapterTitle {
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: 1rem;
+  flex: 1;
+
+  /* Intelligent Truncation for long Wattpad-style titles */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Shared Badge Styles */
+.badge,
+.draft {
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  /* Monospace looks highly technical and crisp for statuses */
+  font-weight: var(--weight-bold);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  backdrop-filter: var(--glass-blur);
+  /* Premium glassmorphism touch */
+}
+
+/* Published / Priced (Vibrant Success/Premium look) */
+.badge {
+  background-color: var(--color-success-muted);
+  color: var(--color-success);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+/* Drafts (Muted, stealthy look) */
+.draft {
+  background-color: var(--color-bg-elevated);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border-soft);
+}
+
+/* Actions Row container */
+.row {
+  display: flex;
+  align-items: center;
+  padding-right: var(--space-2);
+
+  /* Hide the edit button by default for a cleaner UI, reveal on hover */
+  opacity: 0;
+  transform: translateX(10px);
+  transition: all var(--duration-fast) var(--ease-standard);
+}
+
+/* Reveal actions when hovering the list item or tabbing to it */
+.itemWrap:hover .row,
+.chapterBtn:focus-visible+.row,
+.row:focus-within {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+
+/* Edit Button */
+.linkBtn {
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  transition: all var(--duration-fast) var(--ease-standard);
+
+}
+
+.linkBtn:hover {
+  color: var(--color-accent);
+}

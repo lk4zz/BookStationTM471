@@ -11,6 +11,8 @@ function ChapterModal({
   onPublishChapter,
   onClose,
   isBusy,
+  authorModerationAllowsEditing,
+  publishedChapterCount,
 }) {
   const isEditMode = !!chapter;
   const [title, setTitle] = useState(chapter?.title ?? "");
@@ -18,6 +20,10 @@ function ChapterModal({
 
   const canSetPrice = bookStatus !== "DRAFT";
   const canPublish = isEditMode && !chapter.isPublished && bookStatus !== "DRAFT";
+
+  // During moderation, prevent deletion if it would drop published chapters below 3.
+  const deleteBlockedByModerationFloor =
+    authorModerationAllowsEditing && publishedChapterCount <= 3;
 
   const handleCreate = () => {
     if (!title.trim()) return;
@@ -85,9 +91,20 @@ function ChapterModal({
               Cancel
             </button>
             {isEditMode && (
-              <button type="button" className={styles.deleteBtn} onClick={handleDelete} disabled={isBusy}>
-                Delete
-              </button>
+              <div>
+                <button
+                  type="button"
+                  className={styles.deleteBtn}
+                  onClick={handleDelete}
+                  disabled={isBusy || deleteBlockedByModerationFloor}
+                  title={deleteBlockedByModerationFloor ? "Must keep at least 3 published chapters during moderation review." : undefined}
+                >
+                  Delete
+                </button>
+                {deleteBlockedByModerationFloor && (
+                  <p className={styles.deleteHint}>Need ≥ 3 published chapters</p>
+                )}
+              </div>
             )}
           </div>
 

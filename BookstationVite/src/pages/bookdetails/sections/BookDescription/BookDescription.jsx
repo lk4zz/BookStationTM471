@@ -1,17 +1,24 @@
+// sections/BookDescription/BookDescription.jsx
 import styles from "./BookDescription.module.css";
 import { formatBookData } from "../../../../utils/bookUtils";
 import { useGetProgress } from "../../../../hooks/useProgress";
-import { useChaptersByBook } from "../../../../hooks/useChapters/useChaptersForUser";
 import { readingProgressSummary } from "../../../../utils/readingProgressPercent";
 
-function BookDescription({ book }) {
+// Context
+import { useBookDetailsContext } from "../../context/BookDetailsContext"; // Adjust path as needed
+
+function BookDescription() {
+  // 1. Consume book and chapter data from context instead of props and duplicate hooks
+  const { book, chapters, isChapterLoading } = useBookDetailsContext();
+
   const formattedBook = formatBookData(book);
   if (!formattedBook) return null;
 
   const { description, bookId } = formattedBook;
 
+  // We keep useGetProgress here because it relies on the formatted bookId 
+  // and is highly specific to this component's UI
   const { progress, isProgressLoading } = useGetProgress(bookId);
-  const { chapters, isChapterLoading } = useChaptersByBook(bookId);
 
   const summary = readingProgressSummary({ chapters }, progress);
   const { percent, ordinal, total, started } = summary;

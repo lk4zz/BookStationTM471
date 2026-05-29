@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { SparklesIcon } from "../../../components/UI/Icons/IconLibrary";
+import { SparklesIcon } from "../../../GlobalComponents/Icons/IconLibrary";
 import { signup } from "../../../api/auth";
 import { useAuthForm } from "../../../hooks/useAuthForm";
 import authStyles from "../Auth.module.css";
@@ -19,7 +19,13 @@ function SingupPage() {
   return (
     <div className={authStyles.pageWrapper}>
       <div className={authStyles.authCard}>
-        
+
+        <div className={authStyles.cardTopActions}>
+          <Link to="/" className={authStyles.backLink}>
+            &larr; Back to Home
+          </Link>
+        </div>
+
         {/* Inline Header */}
         <div className={authStyles.header}>
           <Link to="/" className={authStyles.logo}>

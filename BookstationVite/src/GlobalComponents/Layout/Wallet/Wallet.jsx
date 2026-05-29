@@ -1,0 +1,19 @@
+import styles from './Wallet.module.css'
+import { WalletIcon } from '../../Icons/IconLibrary';
+import { useNavigate } from 'react-router-dom';
+
+//the wallet component
+function Wallet({ balance }) {
+const navigate = useNavigate();
+    return (
+
+        <div 
+        onClick={() => navigate('/wallet/buy')}
+         className={styles.wallet}>
+            <WalletIcon className={styles.walletIcon}/>
+            <p> {balance}</p>
+        </div>
+    )
+}
+
+export default Wallet;

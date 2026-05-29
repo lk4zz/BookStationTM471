@@ -1,20 +1,22 @@
+// sections/CommentSection/components/Comments/Comments.jsx
 import styles from "./Comments.module.css";
-import { resolveImageUrl } from "../../../../../../utils/ImageUrl";
-
+import { resolveDocumentUrl } from "../../../../../../utils/ImageUrl";
+import UserAvatar from "@/GlobalComponents/Layout/UserAvatar/UserAvatar";
+import { useNavigate } from "react-router-dom";
 
 function Comments({ comment }) {
-  //implement later on actual profile photo (not included in data base yet)
-  const displayImage = resolveImageUrl(comment.commenter?.profileImage);
+  // Implement later on actual profile photo (not included in database yet)
+  const displayImage = resolveDocumentUrl(comment.commenter?.profileImage);
+  const navigate = useNavigate();
+
 
   return (
     <div className={styles.commentCard}>
-      <div className={styles.avatarPlaceholder}>
-        <img 
-          src={displayImage}
-          alt={comment.commenter?.name.charAt(0).toUpperCase() || "U"}
-          className="avatarImage"
+        <UserAvatar
+          profileUrl={displayImage}
+          onClick={() => {navigate(`/author/${comment.commenter?.id}`)}}
         />
-      </div>
+
       
       <div className={styles.commentContent}>
         <div className={styles.header}>

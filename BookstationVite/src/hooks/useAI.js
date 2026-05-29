@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query"
 import { sendPrompt } from "../api/AI"
 
+//send prompt to AI
 export const useAIPrompt = () => {
     return useMutation({
         mutationFn: (prompt) => sendPrompt(prompt),

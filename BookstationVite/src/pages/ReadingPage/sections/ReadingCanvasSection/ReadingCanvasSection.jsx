@@ -1,5 +1,5 @@
 import ReadingCanvas from "./components/ReadingCanvas/ReadingCanvas";
-import { Loading } from "../../../../components/UI/Loading/Loading";
+import { Loading } from "../../../../GlobalComponents/Feedback/Loading/Loading";
 import styles from "./ReadingCanvasSection.module.css";
 
 function ReadingCanvasSection({

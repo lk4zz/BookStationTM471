@@ -1,13 +1,14 @@
 import { useParams } from "react-router-dom";
 import styles from "./ProfilePage.module.css";
-import NavBar from "../../components/UI/NavBar/NavBar";
-import { Loading } from "../../components/UI/Loading/Loading";
+import NavBar from "../../GlobalComponents/Layout/NavBar/NavBar";
+import { Loading } from "../../GlobalComponents/Feedback/Loading/Loading";
 import ProfileBanner from "./components/ProfileBanner/ProfileBanner";
 import ProfileAvatar from "./components/ProfileAvatar/ProfileAvatar";
 import ProfileInfo from "./components/ProfileInfo/ProfileInfo";
 import EditProfileForm from "./components/EditProfile/EditProfileForm";
 import UserBooksList from "./components/UserBooksList/UserBooksList";
 import { useProfilePage } from "./features/useProfilePage";
+import OnBackButton from "@/GlobalComponents/Buttons/OnBackButtons";
 
 function ProfilePage() {
   const { authorId } = useParams();
@@ -38,7 +39,6 @@ function ProfilePage() {
   if (isUserLoading) {
     return (
       <div className={styles.pageWrapper}>
-        <NavBar />
         <main className={styles.loadingMain}>
           <Loading variant="inline" />
         </main>
@@ -47,10 +47,11 @@ function ProfilePage() {
   }
 
   // --- Inline Error & Not Found States ---
-  if (userError || !user) {
+  if ( userError || !user) {
     return (
-      <div className={styles.pageWrapper}>
-        <NavBar />
+      <div className={styles.errorPage}>
+        <OnBackButton onClick={() => window.history.back()}
+          className={styles.backButton}/>
         <p className={styles.error}>
           {userError?.message || "User not found."}
         </p>
@@ -61,12 +62,16 @@ function ProfilePage() {
   // --- Main Profile Layout ---
   return (
     <div className={styles.pageWrapper}>
-      <NavBar />
+      
       
       <div className={styles.pageInner}>
+        <OnBackButton onClick={() => window.history.back()}
+          className={styles.backButton}/>
         <div className={styles.profileCard}>
+          
           <ProfileBanner imageUrl={displayImage} />
-
+          
+          
           <ProfileAvatar
             imageUrl={displayImage}
             name={user.name}

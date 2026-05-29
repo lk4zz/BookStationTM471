@@ -1,4 +1,7 @@
 .footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-top: auto;
   padding: var(--space-6);
   text-align: center;

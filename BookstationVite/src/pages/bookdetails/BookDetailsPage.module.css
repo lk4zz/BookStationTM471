@@ -23,7 +23,7 @@
   gap: 3%;
   padding: 2% 5%;
   max-height: 20%;
-  background-color: var(--color-bg-panel);
+  background-color: var(--color-bg-app);
 }
 
 .bookDescriptionColumn {

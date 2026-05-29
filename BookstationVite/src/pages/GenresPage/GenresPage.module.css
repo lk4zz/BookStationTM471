@@ -1,2 +1,176 @@
+/* =========================================
+   Layout Containers
+   ========================================= */
+
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--color-bg-app);
+  animation: fadeIn var(--duration-normal) var(--ease-standard);
+}
+
+.goBackBtn{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1;
+}
+
 .mainContent {
+  padding: var(--space-8) 5%;
+  flex: 1;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   Dynamic Hero Section
+   ========================================= */
+
+.heroSection {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-12) 5%;
+  border-bottom: 1px solid var(--color-border-subtle);
+  overflow: hidden;
+  background: var(--color-bg-panel);
+}
+
+/* Ambient glow effect behind the text */
+.heroGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40vw;
+  height: 40vw;
+  background: var(--gradient-future);
+  filter: blur(80px);
+  opacity: 0.15;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 600px;
+  gap: var(--space-3);
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  border: var(--glass-border);
+  color: var(--color-accent);
+  margin-bottom: var(--space-2);
+  box-shadow: var(--shadow-sm);
+  /* Gentle floating animation to make it feel alive */
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
+}
+
+.heroTitle {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-primary);
+  margin: 0;
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.03em;
+}
+
+.heroDesc {
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+}
+
+.statsBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  font-weight: var(--weight-medium);
+}
+
+/* =========================================
+   Skeleton states
+   ========================================= */
+
+.heroSkeleton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-12) 5%;
+  background: var(--color-bg-panel);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+/* =========================================
+   Feedback (Error / Empty) States
+   ========================================= */
+
+.feedbackState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  text-align: center;
+  padding: var(--space-8);
+  gap: var(--space-3);
+}
+
+.feedbackIcon {
+  color: var(--color-danger);
+  margin-bottom: var(--space-2);
+  opacity: 0.8;
+}
+
+.feedbackTitle {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.feedbackDesc {
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  color: var(--color-text-muted);
+  max-width: 400px;
+  margin: 0;
 }

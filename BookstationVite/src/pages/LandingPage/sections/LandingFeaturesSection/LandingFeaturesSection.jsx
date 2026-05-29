@@ -1,4 +1,4 @@
-import { SparklesIcon, CoinsIcon, BookOpenIcon } from "../../../../components/UI/Icons/IconLibrary";
+import { SparklesIcon, CoinsIcon, BookOpenIcon } from "../../../../GlobalComponents/Icons/IconLibrary";
 import FeaturesCard from "./components/FeaturesCard/FeaturesCard";
 import styles from "./LandingFeaturesSection.module.css";
 

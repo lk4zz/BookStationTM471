@@ -1,13 +1,21 @@
 import styles from "./ProfileAvatar.module.css";
+import { User } from "lucide-react";
 
 function ProfileAvatar({ imageUrl, name, isEditing, onImageChange }) {
     return (
         <div className={styles.avatarWrapper}>
-            <img
-                src={imageUrl}
-                alt={`${name}'s avatar`}
-                className="avatarImage"
-            />
+            {imageUrl ? (
+                <img
+                    src={imageUrl}
+                    alt={name || "User Profile"}
+                    className={styles.avatarImage}
+                />
+            ) : (
+                <div className={styles.avatarFallback}>
+                    <User size={40} />
+                </div>
+            )}
+            
             {isEditing && (
                 <label className={styles.editOverlay}>
                     <span>Change</span>

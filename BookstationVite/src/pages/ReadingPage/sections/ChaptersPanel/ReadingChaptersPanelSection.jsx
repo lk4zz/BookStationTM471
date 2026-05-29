@@ -1,5 +1,5 @@
 import ChaptersPanel from "./components/ChaptersPanel/ChaptersPanel";
-import { Loading } from "../../../../components/UI/Loading/Loading";
+import { Loading } from "../../../../GlobalComponents/Feedback/Loading/Loading";
 import styles from "./ReadingChaptersPanelSection.module.css";
 
 function ReadingChaptersPanelSection({

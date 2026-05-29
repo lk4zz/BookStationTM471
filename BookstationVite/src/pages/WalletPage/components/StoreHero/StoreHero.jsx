@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./StoreHero.module.css";
-import { BookOpenIcon } from "../../../../components/UI/Icons/IconLibrary";
+import { BookOpenIcon } from "../../../../GlobalComponents/Icons/IconLibrary";
 
 function StoreHero() {
   return (

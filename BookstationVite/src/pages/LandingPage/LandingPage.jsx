@@ -7,6 +7,7 @@ import LandingGenreSpotlightSection from "./sections/LandingGenreSpotlightSectio
 import LandingGenrePickSection from "./sections/LandingGenrePickSection/LandingGenrePickSection";
 import LandingFooterSection from "./sections/LandingFooterSection/LandingFooterSection";
 import { useLandingPage } from "./features/useLandingPage";
+import Loading from "@/GlobalComponents/Feedback/Loading/Loading";
 
 function LandingPage() {
   const {
@@ -22,7 +23,7 @@ function LandingPage() {
     isGenreSpotlightBooksLoading,
   } = useLandingPage();
 
-  if (isTrendingLoading) return <p className="loading"> Loading...</p>;
+  if (isTrendingLoading) return <Loading/>;
   if (trendingError) return <p className="loading"> {trendingError.message}</p>;
   if (isGenresLoading) return <p>loading..</p>;
   if (genresError) return <p>{genresError.message}</p>;

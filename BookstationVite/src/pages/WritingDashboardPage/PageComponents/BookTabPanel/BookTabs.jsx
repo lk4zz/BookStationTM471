@@ -4,6 +4,7 @@ const TABS = [
   { key: "DRAFTS",    label: "Drafts"    },
   { key: "ONGOING",   label: "On Going"  },
   { key: "COMPLETED", label: "Completed" },
+  { key: "FLAGGED", label: "Flagged" },
 ];
 
 function BookTabs({ handleActiveTab, activeTab }) {

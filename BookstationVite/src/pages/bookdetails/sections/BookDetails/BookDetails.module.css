@@ -132,3 +132,9 @@
   }
   .coverWrapper { width: 180px; }
 }
+
+.reportBtn {
+  background: var(--color-danger);
+  color: white;
+}
+.reportBtn:hover { background: var(--color-danger-hover); }

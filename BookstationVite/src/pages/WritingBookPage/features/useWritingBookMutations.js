@@ -7,6 +7,7 @@ import {
   useDeleteChapter,
   usePublishChapter,
 } from "../../../hooks/useChapters/useChaptersForAuthor";
+import { qk } from "../../../hooks/queryKeys";
 
 function runMutation(mutation, variables, setError, { errorMessage, onSuccess }) {
   setError(null);
@@ -28,6 +29,7 @@ export function useWritingBookMutations({
   selectedChapterId,
   clearChapterFromUrl,
   chapterData,
+  book,
 }) {
   const [error, setError] = useState(null);
 
@@ -79,7 +81,7 @@ export function useWritingBookMutations({
         errorMessage: "Could not create chapter.",
         onSuccess: () => {
           queryClient.invalidateQueries({
-            queryKey: ["chapters", inBook],
+            queryKey: qk.chapters.byBook(inBook.bookId),
           });
         }
       });
@@ -125,7 +127,9 @@ export function useWritingBookMutations({
 
   const chapter = chapterData?.chapter || null;
 
-  const cannotEdit = chapter?.isPublished || null;
+  // Canvas is read-only when the chapter is published, unless the author has an
+  // active AWAITING_AUTHOR moderation case that permits edits.
+  const cannotEdit = chapter?.isPublished && !book?.authorModerationAllowsEditing;
 
   const isBusy =
     createChapter.isPending ||

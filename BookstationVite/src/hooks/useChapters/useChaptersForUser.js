@@ -1,6 +1,8 @@
 import { getChaptersFromBook, getChaptersById } from "../../api/chapters";
 import { useQuery } from "@tanstack/react-query";
+import { qk } from "../queryKeys";
 
+//fetch chapters by book - query -
 export const useChaptersByBook = (numericId) => {
 
   const {
@@ -8,7 +10,7 @@ export const useChaptersByBook = (numericId) => {
     isLoading: isChapterLoading,
     error: chapterError,
   } = useQuery({
-    queryKey: ["chapters", numericId],
+    queryKey: qk.chapters.byBook(numericId),
     queryFn: () => getChaptersFromBook(numericId),
     enabled: Number.isFinite(numericId),
   });
@@ -19,13 +21,14 @@ export const useChaptersByBook = (numericId) => {
 
 }
 
+//fetch chapter by id - query -
 export const useChapterById = (chapterId) => {
   const {
     data: chapterDataOjects,
     isLoading: isChapterLoading,
     error: chapterError
   } = useQuery({
-    queryKey: ["chapter", chapterId],
+    queryKey: qk.chapters.detail(chapterId),
     queryFn: () => getChaptersById(chapterId),
     enabled: Number.isFinite(chapterId)
   });

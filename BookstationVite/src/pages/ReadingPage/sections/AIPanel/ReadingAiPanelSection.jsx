@@ -1,4 +1,4 @@
-import WritingAiPanel from "../../../../components/UI/WritingAiPanel/WritingAiPanel";
+import WritingAiPanel from "../../../../GlobalComponents/AI/AIPanel/AIPanel";
 import styles from "./ReadingAiPanelSection.module.css";
 
 function ReadingAiPanelSection({ chapterId, currentUser }) {

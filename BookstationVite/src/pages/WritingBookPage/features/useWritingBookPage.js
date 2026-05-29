@@ -12,7 +12,7 @@ import { useWritingCanvas } from "../sections/EditorCanvas/components/WritingCan
 import { EMPTY_DOC_HTML } from "./writingMetrics";
 import { useWritingChapterFromUrl } from "./useWritingChapterFromUrl";
 import { useWritingBookMutations } from "./useWritingBookMutations";
-import { useCurrentUser } from "../../../hooks/useUser";
+import { useCurrentUser } from "../../../hooks/UserHooks/UseUser";
 
 
 export function useWritingBookPage(numericBookId) {
@@ -54,6 +54,7 @@ export function useWritingBookPage(numericBookId) {
     selectedChapterId,
     clearChapterFromUrl,
     chapterData,
+    book,
     });
 
   useEffect(() => {

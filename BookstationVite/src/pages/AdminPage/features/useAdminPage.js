@@ -1,20 +1,35 @@
 import { useState, useMemo } from "react";
-import { userMatchesSearch, bookMatchesSearch } from "./fuzzyNameSearch";
-import { useAllUsers, useAllBooks } from "../../../hooks/adminHooks/useAdminQueries";
-import { useBanUser, useDeleteBook, useChangeUserRole } from "../../../hooks/adminHooks/useAdminMutations";
+import { userMatchesSearch, bookMatchesSearch } from "../../../utils/fuzzyNameSearch";
+import { useAllUsers, useAllBooks, useReviewQueue } from "../../../hooks/adminHooks/useAdminQueries";
+import { useCurrentUser } from "../../../hooks/UserHooks/UseUser";
+import {
+  useBanUser, 
+  useDeleteBook, 
+  useChangeUserRole,
+  useFlagBookAndNotify, 
+  useUnflagBook,
+  useSendFeedbackAgain,
+  useReviewApplication
+} from "../../../hooks/adminHooks/useAdminMutations";
 
 export const ADMIN_MAX_VISIBLE_ROWS = 2000;
 
 export const useAdminPage = () => {
-  //  raw data AND the query states
+  const { currentUser, isCurrentUserLoading } = useCurrentUser();
+
+  // raw data AND the query states
   const { usersRaw, isLoading: isUsersLoading, error: usersError } = useAllUsers();
   const { booksRaw, isLoading: isBooksLoading, error: booksError } = useAllBooks();
-  
-  //  mutation hooks
+  const { reviewQueue, isLoading: isReviewQueueLoading, error: reviewQueueError } = useReviewQueue();
+
+  // mutation hooks
   const banUserMutation = useBanUser();
   const deleteBookMutation = useDeleteBook();
   const changeUserRoleMutation = useChangeUserRole();
-
+  const flagBookAndNotify = useFlagBookAndNotify();
+  const unflagBook = useUnflagBook();
+  const sendFeedbackAgain = useSendFeedbackAgain();
+  const reviewApplication = useReviewApplication();
 
   // STATES
   const [activeTab, setActiveTab] = useState("users");
@@ -62,22 +77,43 @@ export const useAdminPage = () => {
     isBooksLoading,
     booksError: booksError?.response?.status === 404 ? null : booksError,
 
+    reviewQueue,
+    isReviewQueueLoading,
+    reviewQueueError,
+
     banUser: banUserMutation.mutate,
     isBanning: banUserMutation.isPending,
     banError: banUserMutation.error,
 
     changeUserRole: changeUserRoleMutation.mutate,
-    isChangingUserRole: changeUserRoleMutation.isPending,
-    changeUserRoleError: changeUserRoleMutation.error,
+    isChangingRole: changeUserRoleMutation.isPending,
+    changeRoleError: changeUserRoleMutation.error,
 
     deleteBook: deleteBookMutation.mutate,
     isDeletingBook: deleteBookMutation.isPending,
     deleteBookError: deleteBookMutation.error,
+
+    flagBook: flagBookAndNotify.mutate,
+    isFlaggingBook: flagBookAndNotify.isPending,
+    flagBookError: flagBookAndNotify.error,
+
+    unflagBook: unflagBook.mutate,
+    isUnflaggingBooks: unflagBook.isPending,
+    unflagBookError: unflagBook.error,
+
+    sendFeedbackAgain: sendFeedbackAgain.mutate,
+    isSendingFeedback: sendFeedbackAgain.isPending,
+
+    reviewApplication: reviewApplication.mutate,
+    isReviewingApplication: reviewApplication.isPending,
 
     activeTab,
     setActiveTab,
 
     catalogBookCount: booksRaw.length,
     regularUserCount: usersRaw.length,
+
+    currentUserRoleId: currentUser?.roleId,
+    isCurrentUserLoading,
   };
 };

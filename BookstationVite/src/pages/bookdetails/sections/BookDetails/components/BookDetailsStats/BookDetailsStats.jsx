@@ -1,22 +1,29 @@
+// BookDetailsStats.jsx
 import { Rating } from "react-simple-star-rating";
-import { EyeIcon } from "../../../../../../components/UI/Icons/IconLibrary";
-import RatingModal from "../../../../../../components/UI/RatingModal/RatingModal";
+import { EyeIcon } from "../../../../../../GlobalComponents/Icons/IconLibrary";
+import RatingModal from "../../../../../../GlobalComponents/Modals/RatingModal/RatingModal";
 import styles from "./BookDetailsStats.module.css";
+import { useBookDetailsContext } from "../../../../context/BookDetailsContext"; 
 
-export default function BookDetailsStats({
-  bookId,
-  views,
-  ratingAverage,
-  ratingCount,
-  ratingModal,
-  OpenRatinModal,
-  closeRatinModal,
-}) {
+export default function BookDetailsStats() {
+  // Grab everything directly from Context!
+  const { 
+    book, 
+    ratingAverage, 
+    ratingCount, 
+    ratingModal, 
+    OpenRatinModal, 
+    closeRatinModal 
+  } = useBookDetailsContext();
+
+  const views = book?._count?.views;
+  const bookId = book?.id; // Assuming book has an id property
+
   return (
     <div className={styles.statsRow}>
       <div className={styles.statItem}>
         <div onClick={OpenRatinModal} style={{ cursor: "pointer" }}>
-          <Rating
+          <Rating // Fixed typo: was Ratinag
             initialValue={ratingAverage}
             readonly
             allowFraction

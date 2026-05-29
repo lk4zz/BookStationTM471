@@ -1,0 +1,194 @@
+/* 1. Wrapper Link */
+.link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  width: 100%;
+  border-radius: var(--radius-md);
+  outline-offset: var(--space-1);
+}
+
+.disabledLink {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+/* Accessibility: Keyboard focus state */
+.link:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* 2. The Card Container */
+.card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  border-radius: var(--radius-md);
+  cursor: inherit;
+  overflow: hidden;
+  container-type: inline-size;
+  background-color: var(--color-bg-card);
+}
+/* 3. Book Cover Image & Status Covers */
+.cover,
+.statusCover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--radius-md);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    filter 0.4s ease;
+}
+
+/* Slight zoom and blur on the cover when hovered to make text pop */
+.link:not(.disabledLink):hover .cover,
+.link:not(.disabledLink):focus-visible .cover {
+  transform: scale(1.08);
+  filter: blur(2px);
+}
+
+/* Base styles for the draft/flagged fallback blocks */
+.statusCover {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.05em;
+}
+
+.draftCover {
+  background: var(--gradient-accent);
+  color: var(--color-text-dim);
+  border: 1px dashed var(--color-border-medium);
+}
+
+.flaggedCover {
+  background-color: var(--color-error-bg);
+  color: var(--color-danger);
+  border: 1px solid var(--color-error-border);
+}
+
+/* 4. Text & Stats Overlay (Hidden by Default) */
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-base);
+  padding: 10% 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+
+  /* Rich gradient to ensure text readability */
+  background: linear-gradient(to bottom,
+      rgba(0, 0, 0, 0.8) 0%,
+      rgba(0, 0, 0, 0.2) 40%,
+      rgba(0, 0, 0, 0.4) 60%,
+      rgba(0, 0, 0, 0.9) 100%);
+
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Reveal Overlay on Hover/Focus */
+.link:not(.disabledLink):hover .overlay,
+.link:not(.disabledLink):focus-visible .overlay {
+  opacity: 1;
+}
+
+/* 5. Typography */
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  /* Slide down effect for top text */
+  transform: translateY(-15px);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(0.9rem, 9cqw, 1.5rem);
+  font-weight: var(--weight-bold);
+  line-height: var(--line-height-tight);
+  color: #ffffff;
+  /* Forced white for contrast against gradient */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+
+  /* Truncates at 3 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.author {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: clamp(0.75rem, 5.5cqw, 0.9rem);
+  color: rgba(255, 255, 255, 0.85);
+  /* Slightly transparent white */
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 6. Stats Section */
+.stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-1);
+  width: 100%;
+
+  /* Slide up effect for bottom text */
+  transform: translateY(15px);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-family: var(--font-mono);
+  font-size: clamp(0.75rem, 5cqw, 0.9rem);
+  color: #ffffff;
+  /* Forced white */
+  font-weight: var(--weight-semibold);
+}
+
+/* Trigger sliding animations on hover */
+.link:not(.disabledLink):hover .header,
+.link:not(.disabledLink):focus-visible .header,
+.link:not(.disabledLink):hover .stats,
+.link:not(.disabledLink):focus-visible .stats {
+  transform: translateY(0);
+}
+
+/* 7. Icons */
+.star,
+.eye {
+  width: clamp(14px, 6cqw, 18px);
+  height: clamp(14px, 6cqw, 18px);
+  flex-shrink: 0;
+}
+
+.star {
+  color: #fbbf24;
+  /* Amber/Yellow for star */
+  fill: #fbbf24;
+}
+
+.eye {
+  color: rgba(255, 255, 255, 0.9);
+}

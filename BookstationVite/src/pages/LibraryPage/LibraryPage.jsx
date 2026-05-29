@@ -1,5 +1,5 @@
-import NavBar from "../../components/UI/NavBar/NavBar";
-import { Loading } from "../../components/UI/Loading/Loading";
+import NavBar from "../../GlobalComponents/Layout/NavBar/NavBar";
+import { Loading } from "../../GlobalComponents/Feedback/Loading/Loading";
 import EmptyLibrary from "./components/EmptyLibrary/EmptyLibrary";
 import LibraryToolbar from "./components/LibraryToolbar/LibraryToolbar";
 import LibraryGrid from "./components/LibraryGrid/LibraryGrid";
@@ -19,6 +19,8 @@ function LibraryPage() {
     setGenreFilter,
     sortBy,
     setSortBy,
+    searchQuery,
+    setSearchQuery,
     filteredSorted,
     progressByBookId,
     isProgressLoading,
@@ -68,7 +70,7 @@ function LibraryPage() {
   // --- Main Render ---
   return (
     <div className={styles.pageWrapper}>
-      <NavBar />
+      <NavBar onSearch={setSearchQuery} />
       
       <main className={styles.mainContent}>
       <section className={styles.libraryToolbar}>

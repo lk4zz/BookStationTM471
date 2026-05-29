@@ -7,12 +7,18 @@ import {
     getBooksByAuthor, 
     getTrendingBooks, 
     getHighEngagementBooks,
-    getBooksByFollowedAuthors
+    getBooksByFollowedAuthors,
+    getDiscoverBooks,
+    getCompletedBooks,
 } from "../../api/books"; 
+import { qk } from "../queryKeys";
 
+// --- queries ---
+
+//fetch book by id
 export const useBookById = (numericId, includeAuth = false) => {
     const { data: bookData, isLoading: isBookLoading, error: bookError } = useQuery({
-        queryKey: ["book", numericId, includeAuth],
+        queryKey: qk.books.detail(numericId),
         queryFn: () => getBookById(numericId, includeAuth),
         enabled: Number.isFinite(numericId),
     });
@@ -20,18 +26,20 @@ export const useBookById = (numericId, includeAuth = false) => {
     return { book, isBookLoading, bookError };
 }
 
+//fetch all books
 export const useAllBooks = () => {
     const { data: booksData, isLoading: isBooksLoading, error: booksError } = useQuery({
-        queryKey: ["books"],
+        queryKey: qk.books.all(),
         queryFn: getAllBooks,
     });
     const books = booksData?.data ?? booksData ?? [];
     return { books, isBooksLoading, booksError };
 }
 
+//fetch for you book recommendations
 export const useForYouBooks = () => {
     const { data: forYouData, isLoading: isForYouLoading, error: forYouError } = useQuery({
-        queryKey: ["books", "for-you"],
+        queryKey: qk.books.forYou(),
         queryFn: getForYouBooks,
     });
     const forYouBooks = forYouData?.data ?? [];
@@ -39,9 +47,10 @@ export const useForYouBooks = () => {
     return { forYouBooks, isForYouLoading, forYouError, isPersonalized };
 };
 
+//fetch books by genre
 export const useBooksByGenre = (genreId) => {
     const { data: booksData, isLoading: isBooksLoading, error: booksError } = useQuery({
-        queryKey: ["books", "genre", genreId],
+        queryKey: qk.books.byGenre(genreId),
         queryFn: () => getBooksByGenre(genreId),
         enabled: !!genreId
     });
@@ -49,9 +58,10 @@ export const useBooksByGenre = (genreId) => {
     return { books, isBooksLoading, booksError };
 }
 
+//fetch books by author
 export const useBooksByAuthor = (userId) => {
     const { data: booksByAuthorData, isLoading: isBooksByAuthorLoading, error: booksByAuthorError } = useQuery({
-        queryKey: ["books", "author", userId],
+        queryKey: qk.books.byAuthor(userId),
         queryFn: () => getBooksByAuthor(userId),
         enabled: !!userId
     });
@@ -59,29 +69,52 @@ export const useBooksByAuthor = (userId) => {
     return { booksByAuthor, isBooksByAuthorLoading, booksByAuthorError };
 }
 
+// fetch trending books
 export const useTrendingBooks = (limit) => {
     const { data: trendingData, isLoading: isTrendingLoading, error: trendingError } = useQuery({
-        queryKey: ["books", "trending", limit],
+        queryKey: qk.books.trending(limit),
         queryFn: () => getTrendingBooks(limit),
     });
     const trendingBooks = trendingData?.data ?? [];
     return { trendingBooks, isTrendingLoading, trendingError };
 };
 
+// fetch high engagement books
 export const useHighEngagementBooks = (limit) => {
     const { data: highEngagementData, isLoading: isHighEngagementLoading, error: highEngagementError } = useQuery({
-        queryKey: ["books", "high-engagement", limit],
+        queryKey: qk.books.highEngagement(limit),
         queryFn: () => getHighEngagementBooks(limit),
     });
     const highEngagementBooks = highEngagementData?.data ?? [];
     return { highEngagementBooks, isHighEngagementLoading, highEngagementError };
 };
 
+// fetch books by followed authors
 export const useBooksByFollowedAuthors = () => {
     const { data: booksByFollowedAuthorsData, isLoading: isBooksByFollowedAuthorsLoading, error: booksByFollowedAuthorsError } = useQuery({
-        queryKey: ["books", "followed-authors"],
+        queryKey: qk.books.followedAuthors(),
         queryFn: getBooksByFollowedAuthors,
     });
     const booksByFollowedAuthors = booksByFollowedAuthorsData?.books ?? booksByFollowedAuthorsData?.data ?? [];
     return { booksByFollowedAuthors, isBooksByFollowedAuthorsLoading, booksByFollowedAuthorsError };
 }
+
+// fetch discover books
+export const useDiscoverBooks = (limit = 24) => {
+    const { data, isLoading: isDiscoverLoading, error: discoverError } = useQuery({
+        queryKey: qk.books.discover(limit),
+        queryFn: () => getDiscoverBooks({ limit }),
+    });
+    const discoverBooks = data?.data ?? [];
+    return { discoverBooks, isDiscoverLoading, discoverError };
+};
+
+// fetch completed books
+export const useCompletedBooks = (limit = 20) => {
+    const { data, isLoading: isCompletedLoading, error: completedError } = useQuery({
+        queryKey: qk.books.completed(limit),
+        queryFn: () => getCompletedBooks({ limit }),
+    });
+    const completedBooks = data?.data ?? [];
+    return { completedBooks, isCompletedLoading, completedError };
+};
