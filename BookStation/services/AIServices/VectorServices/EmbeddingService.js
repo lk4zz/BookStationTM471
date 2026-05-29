@@ -25,6 +25,7 @@ class EmbeddingService {
             // Generate the vector (pooling: "mean" averages the tokens into a single vector)
             //give the model the text tells it to average the tokens into a single vector and get result
             const result = await extractor(text, { pooling: "mean", normalize: true });
+           
             
             // Convert the Float32Array into a standard JavaScript Array for Prisma to understand
             return Array.from(result.data); 

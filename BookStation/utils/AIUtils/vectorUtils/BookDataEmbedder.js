@@ -6,7 +6,6 @@ const updateBookMasterEmbedding = async (bookId) => {
   try {
     const parsedBookId = parseInt(bookId, 10)
 
-    // db query time complexity O(1) for lookup but O(c) for joining chunks where c is chunk count
     const bookDetails = await prisma.books.findUnique({
       where: { id: parsedBookId },
       select: {
@@ -43,7 +42,7 @@ const updateBookMasterEmbedding = async (bookId) => {
     // space complexity O(n) to store the grouped arrays in memory
     const chaptersMap = {}
     for (const chunk of bookDetails.pageChunks) {
-      // json parse is O(d) where d is vector dimensions 384 so O(1) ucz it is constant
+      // json parse is O(d) where d is vector dimensions 384 so O(1) because it is constant
       const vector = typeof chunk.embedding === 'string' ? JSON.parse(chunk.embedding) : chunk.embedding
       if (!chaptersMap[chunk.chapterId]) {
         chaptersMap[chunk.chapterId] = []
@@ -65,6 +64,8 @@ const updateBookMasterEmbedding = async (bookId) => {
       where: { id: parsedBookId },
       data: { embedding: JSON.stringify(masterBookVector) }
     })
+
+    console.log(`[AI Engine] Successfully updated master embedding for Book ${bookId}`)
 
   } catch (err) {
     console.error(`[AI Engine Error] Failed to update master embedding for Book ${bookId}:`, err)
