@@ -3,6 +3,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 17px;
+  margin: 0 5px;
   border-radius: var(--radius-sm);
   background-color: var(--color-bg-card);
   color: var(--color-text-primary);
@@ -15,7 +16,7 @@
 
 .chapterTitle {
   font-family: var(--font-heading);
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: var(--weight-medium);
 }
 
