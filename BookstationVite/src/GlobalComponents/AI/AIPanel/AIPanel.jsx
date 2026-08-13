@@ -6,8 +6,12 @@ import { useAIPrompting } from "../../../hooks/features/useAIPrompting";
 import AIChat from "../AIChat/AIChat";
 import { usePurchaseAIPass } from "../../../hooks/useWallet";
 import UnlockModal from "../../Modals/UnlockModal/UnlockModal";
+import { useNavigate } from "react-router-dom";
+
 
 function WritingAiPanel({ chapterId, currentUser }) {
+
+    const navigate = useNavigate();
 
     //unlock modal window for AI unlock
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,6 +43,7 @@ function WritingAiPanel({ chapterId, currentUser }) {
                     "Not enough coins.";
                 //toast error message
                 toast.error(errMsg);
+                navigate("/wallet/buy")
             }
         });
     };
