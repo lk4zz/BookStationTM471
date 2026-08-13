@@ -11,9 +11,9 @@ import styles from "./BookDetailsPage.module.css";
 // We separate the inner content so it can access the Context (which is provided by the wrapper below)
 function BookDetailsPageContent() {
   // We only pull the loading and error states here for the page-level layout
-  const { isBookLoading, bookError } = useBookDetailsContext();
+  const { isBookLoading, bookError, isCurrentUserLoading } = useBookDetailsContext();
 
-  if (isBookLoading) return <Loading />;
+  if (isBookLoading || isCurrentUserLoading) return <Loading />;
   if (bookError) return <p className={styles.error}>{bookError.message || "Error loading data."}</p>;
 
   return (

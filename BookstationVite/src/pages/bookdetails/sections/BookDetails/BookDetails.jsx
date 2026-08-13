@@ -33,6 +33,7 @@ function BookDetails() {
     handleReportComment,
     handleReportReason,
     handleSubmitReport,
+    currentUser,
   } = useBookDetailsContext();
 
   const formattedBook = formatBookData(book);
@@ -72,7 +73,7 @@ function BookDetails() {
 
           <div className={styles.buttons}>
             <ContinueReadingBtn bookId={bookId} readState={readState} />
-            <AddToLibraryBtn bookId={bookId} isBookInLibrary={isBookInLibrary} />
+            <AddToLibraryBtn bookId={bookId} isBookInLibrary={isBookInLibrary} currentUser={currentUser} />
             <button className={styles.reportBtn} onClick={handleReportBtn}>
               Report Book
             </button>

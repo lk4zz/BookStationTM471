@@ -4,11 +4,10 @@ import { checkIfGuest } from "../../utils/checkIfGuest";
 import toast from 'react-hot-toast';
 
 // add to library button component
-function AddToLibraryBtn({bookId, isBookInLibrary}) {
+function AddToLibraryBtn({ bookId, isBookInLibrary, currentUser }) {
     const isGuest = checkIfGuest();
     const addToLibraryMutation = useAddToLibrary();
     const removeFromLibraryMutation = useRemoveFromLibrary();
-
     const isLoading = addToLibraryMutation.isPending || removeFromLibraryMutation.isPending;
 
     const handleAddToLibrary = () => {
@@ -29,7 +28,10 @@ function AddToLibraryBtn({bookId, isBookInLibrary}) {
         if (isBookInLibrary) {
             removeFromLibraryMutation.mutate(bookId);
         } else {
-            addToLibraryMutation.mutate(bookId);
+            addToLibraryMutation.mutate({
+                bookId,
+                userId: currentUser.id,
+            });
         }
     };
 

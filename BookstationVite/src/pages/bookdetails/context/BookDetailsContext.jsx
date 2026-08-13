@@ -8,6 +8,7 @@ import { useRatings } from "../../../hooks/interactionHooks/useRatings";
 import { useCreateReport } from "../../../hooks/interactionHooks/useReports";
 import { useLibraryBooks } from "../../../hooks/useLibrary";
 import { checkIfGuest } from "@/utils/checkIfGuest";
+import { useCurrentUser } from "@/hooks/UserHooks/UseUser";
 import toast from "react-hot-toast";
 
 // 1. Create the Context
@@ -20,6 +21,7 @@ export function BookDetailsProvider({ children, bookId }) {
   const [reason, setReason] = useState("SPAM");
   const [comment, setComment] = useState("");
   const [commentInput, setCommentInput] = useState("");
+  const {currentUser, isCurrentUserLoading} = useCurrentUser();
   
   const isGuest = checkIfGuest();
 
@@ -130,6 +132,8 @@ export function BookDetailsProvider({ children, bookId }) {
     handleReportComment,
     handleReportReason,
     handleSubmitReport,
+    currentUser,
+    isCurrentUserLoading,
   };
 
   return (

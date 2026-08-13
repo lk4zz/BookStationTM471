@@ -10,7 +10,7 @@ export const removeBook = async (bookId) => {
   return response.data;
 };
 
-export const addBook = async (bookId) => {
+export const addBook = async ({bookId}) => {
   const response = await privateApi.post(`/library/books/${bookId}`);
   return response.data;
 };
