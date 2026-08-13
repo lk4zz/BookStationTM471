@@ -65,6 +65,8 @@ export const useUserRadar = (appliedId, enabled) => {
     queryKey: qk.user.radar(appliedId),
     queryFn: () => getUserRadar(Number(appliedId)),
     enabled,
+    refetchInterval: 3000,
+    placeholderData: (previousData) => previousData,
   });
 
   return {

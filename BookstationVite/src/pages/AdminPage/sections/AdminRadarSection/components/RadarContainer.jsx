@@ -43,7 +43,7 @@ export default function RadarContainer() {
   };
 
   // We show the loading state on initial load (isLoading) AND manual refetches (isFetching)
-  const showLoading = enabled && (isLoading || isFetching);
+  const showLoading = enabled && (isLoading);
 
   return (
     <div className={styles.container}>
